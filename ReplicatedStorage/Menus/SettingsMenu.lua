@@ -22,18 +22,22 @@ function SettingsMenu:new(_local_services)
 	
 	function self:cons()
 		_settings_ui = EnvironmentSetup:get_menu_protos_folder().SettingsUI:Clone()
-		local keybinds = _settings_ui.Keybinds
-		local offset = _settings_ui.Offset
-		local notespeed = _settings_ui.Notespeed
-		local back = _settings_ui.Back
+
+		local section_container = _settings_ui.SectionContainer
+		local tab_container = _settings_ui.TabContainer
+
+		local keybinds = section_container.Keybinds
+		local offset = section_container.Offset
+		local notespeed = section_container.Notespeed
+		local back = tab_container.BackButton
 		local keybind_buttons = {keybinds.Keybind1, keybinds.Keybind2, keybinds.Keybind3, keybinds.Keybind4}
 
 		local function updateNSMULT()
-			notespeed.Display.Text = string.format("x%.1f", Configuration.Preferences.NoteSpeedMultiplier)
+			notespeed.Display.Label.Text = string.format("x%.1f", Configuration.Preferences.NoteSpeedMultiplier)
 		end
 
 		local function updateADOFFSET()
-			offset.Display.Text = string.format("%dms",Configuration.Preferences.AudioOffset)
+			offset.Display.Label.Text = string.format("%dms",Configuration.Preferences.AudioOffset)
 		end
 		
 		local function updateKEYBINDS()
@@ -47,9 +51,9 @@ function SettingsMenu:new(_local_services)
 						str = str .. "/"
 					end
 				end
-				v.Text = str
+				v.KeybindLabel.Text = str
 				SPUtil:bind_input_fire(v, function()
-					v.Text = "Press Key..."
+					v.KeybindLabel.Text = "Press Key..."
 					local u = UserInputService.InputBegan:Wait()
 					Configuration.Preferences.Keybinds[itr_i] = {u.KeyCode}
 				end)
@@ -92,7 +96,7 @@ function SettingsMenu:new(_local_services)
 			end)
 		end
 		
-		SPUtil:bind_input_fire(_settings_ui.Reset, function()
+		SPUtil:bind_input_fire(tab_container.Reset, function()
 			Configuration.Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.DefaultSettings))
 			updateNSMULT()
 			updateADOFFSET()

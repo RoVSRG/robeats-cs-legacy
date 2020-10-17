@@ -22,14 +22,20 @@ function SongSelectMenu:new(_local_services)
 	local _selected_songkey = SongDatabase:invalid_songkey()
 	local _is_supporter = false
 
+	local section_container
+	local tab_container
+
 	local _input = _local_services._input
 
 	local _leaderboard_display
 	
 	function self:cons()
 		_song_select_ui = EnvironmentSetup:get_menu_protos_folder().SongSelectUI:Clone()
-		
-		local song_list = _song_select_ui.SongList
+
+		section_container = _song_select_ui.SectionContainer
+		tab_container = _song_select_ui.TabContainer
+
+		local song_list = section_container.SongSection.SongList
 		
 		--Expand the scrolling list to fit contents
 		song_list.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -42,11 +48,14 @@ function SongSelectMenu:new(_local_services)
 			local itr_list_element = song_list_element_proto:Clone()
 			itr_list_element.Parent = song_list
 			itr_list_element.LayoutOrder = itr_songkey
-			SongDatabase:render_coverimage_for_key(itr_list_element.SongCover, itr_list_element.SongCoverOverlay, itr_songkey)
-			itr_list_element.NameDisplay.Text = SongDatabase:get_title_for_key(itr_songkey)
-			itr_list_element.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(itr_songkey))
+
+			local song_cover = itr_list_element.SongCover
+
+			SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
+			song_cover.NameDisplay.Text = SongDatabase:get_title_for_key(itr_songkey)
+			song_cover.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(itr_songkey))
 			if SongDatabase:key_get_audiomod(itr_songkey) == SongDatabase.SongMode.SupporterOnly then
-				itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
+				song_cover.DifficultyDisplay.Text = song_cover.DifficultyDisplay.Text .. " (Supporter Only)"
 			end
 			
 			SPUtil:bind_input_fire(itr_list_element, function(input)
@@ -55,32 +64,28 @@ function SongSelectMenu:new(_local_services)
 		end
 		
 		_leaderboard_display = LeaderboardDisplay:new(
-			_song_select_ui.LeaderboardSection, 
-			_song_select_ui.LeaderboardSection.LeaderboardList.LeaderboardListElementProto
+			section_container.LeaderboardSection, 
+			section_container.LeaderboardSection.LeaderboardList.LeaderboardListElementProto
 		)
 		
-		_song_select_ui.SongInfoSection.NoSongSelectedDisplay.Visible = true
-		_song_select_ui.SongInfoSection.SongInfoDisplay.Visible = false
-		_song_select_ui.PlayButton.Visible = false
+		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = true
+		section_container.SongInfoSection.SongInfoDisplay.Visible = false
+		section_container.PlayButton.Visible = false
 
-		SPUtil:bind_input_fire(_song_select_ui.PlayButton, function()
+		SPUtil:bind_input_fire(section_container.PlayButton, function()
 			self:play_button_pressed()
 		end)
 		
-		SPUtil:bind_input_fire(_song_select_ui.RobeatsLogo, function()
-			_local_services._menus:push_menu(ConfirmationPopupMenu:new(_local_services, "Teleport to Robeats?", "Do you want to go to Robeats?", function()
-				game:GetService("TeleportService"):Teleport(698448212)
-			end))
-		end)
-		SPUtil:bind_input_fire(_song_select_ui.GamepassButton, function()
+		--[[SPUtil:bind_input_fire(_song_select_ui.GamepassButton, function()
 			self:show_gamepass_menu()
-		end)
-		SPUtil:bind_input_fire(_song_select_ui.SettingsButton, function()
+		end)]]--
+
+		SPUtil:bind_input_fire(tab_container.SettingsButton, function()
 			_local_services._menus:push_menu(SettingsMenu:new(_local_services))
 		end)
 
-		_song_select_ui.NameDisplay.Text = string.format("%s's Robeats Custom Server", CustomServerSettings.CreatorName)
-		_song_select_ui.SongInfoSection.NoSongSelectedDisplay.Visible = true
+		
+		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = true
 
 		MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, asset_id, is_purchased)
 			if asset_id == CustomServerSettings.SupporterGamepassID and is_purchased == true then
@@ -96,63 +101,26 @@ function SongSelectMenu:new(_local_services)
 		end)
 	end
 	
-	function self:show_gamepass_menu()
-		if _is_supporter then
-			_local_services._menus:push_menu(ConfirmationPopupMenu:new(_local_services, 
-				string.format("You are supporting %s!", CustomServerSettings.CreatorName), 
-				"Thank you for supporting this creator!", 
-				function() end):hide_back_button()
-			)
-		else
-			_local_services._menus:push_menu(ConfirmationPopupMenu:new(
-				_local_services, 
-				string.format("Support %s!", CustomServerSettings.CreatorName), 
-				"Roblox audios are expensive to upload!\nHelp this creator by buying the Supporter Game Pass.\nBy becoming a supporter, you will get access to every song they create!", 
-				function()
-					MarketplaceService:PromptGamePassPurchase(game.Players.LocalPlayer, CustomServerSettings.SupporterGamepassID)
-				end)
-			)
-		end
-	end
-	
 	function self:select_songkey(songkey)
 		if SongDatabase:contains_key(songkey) ~= true then return end
-		_song_select_ui.SongInfoSection.NoSongSelectedDisplay.Visible = false
+		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = false
 		_selected_songkey = songkey
 		
-		SongDatabase:render_coverimage_for_key(_song_select_ui.SongInfoSection.SongInfoDisplay.SongCover, _song_select_ui.SongInfoSection.SongInfoDisplay.SongCoverOverlay, _selected_songkey)
-		_song_select_ui.SongInfoSection.SongInfoDisplay.NameDisplay.Text = SongDatabase:get_title_for_key(_selected_songkey)
-		_song_select_ui.SongInfoSection.SongInfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(_selected_songkey))
-		_song_select_ui.SongInfoSection.SongInfoDisplay.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
-		_song_select_ui.SongInfoSection.SongInfoDisplay.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
+		SongDatabase:render_coverimage_for_key(section_container.SongInfoSection.SongInfoDisplay.SongCover, section_container.SongInfoSection.SongInfoDisplay.SongCover.SongCoverOverlay, _selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.SongCover.NameDisplay.Text = SongDatabase:get_title_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.SongCover.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(_selected_songkey))
+		section_container.SongInfoSection.SongInfoDisplay.SongCover.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.SongCover.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
 		
-		_song_select_ui.SongInfoSection.SongInfoDisplay.Visible = true
-		_song_select_ui.PlayButton.Visible = true
-		
-		if SongDatabase:key_get_audiomod(_selected_songkey) == SongDatabase.SongMode.SupporterOnly then
-			if _is_supporter then
-				_song_select_ui.PlayButton.Text = "Play!"
-			else
-				_song_select_ui.PlayButton.Text = "Become a Supporter to Play!"
-			end
-		else
-			_song_select_ui.PlayButton.Text = "Play!"
-		end
+		section_container.SongInfoSection.SongInfoDisplay.Visible = true
+		section_container.PlayButton.Visible = true
 		
 		_leaderboard_display:refresh_leaderboard(songkey)
 	end
 	
 	function self:play_button_pressed()
 		if SongDatabase:contains_key(_selected_songkey) then
-			if SongDatabase:key_get_audiomod(_selected_songkey) == SongDatabase.SongMode.Normal then
-				_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
-			elseif SongDatabase:key_get_audiomod(_selected_songkey) == SongDatabase.SongMode.SupporterOnly then
-				if _is_supporter then
-					_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
-				else
-					self:show_gamepass_menu()
-				end
-			end
+			_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
 		end
 	end
 	

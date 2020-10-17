@@ -27,7 +27,10 @@ function ResultsMenu:new(_local_services, _score_data)
 	function self:cons()
 		_results_menu_ui = EnvironmentSetup:get_menu_protos_folder().ResultsMenuUI:Clone()
 
-		SPUtil:bind_input_fire(_results_menu_ui.BackButton, function()
+		local section_container = _results_menu_ui.SectionContainer
+		local tab_container = _results_menu_ui.TabContainer
+
+		SPUtil:bind_input_fire(tab_container.BackButton, function()
 			_should_remove = true
 		end)
 		
@@ -45,31 +48,31 @@ function ResultsMenu:new(_local_services, _score_data)
 			end
 		end
 
-		_results_menu_ui.Grade.Image = img or ""
-		_results_menu_ui.Accuracy.Text = string.format("%0.2f%%", _score_data.accuracy*100)
+		section_container.Banner.GradeContainer.Grade.Image = img or ""
+		section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy*100)
 
 		--HANDLE SPREAD RENDERING
-		local _spread_display = _results_menu_ui.SpreadDisplay
+		local _spread_display = section_container.SpreadContainer.SpreadDisplay
 
 		local total_judges = #_key_data.HitObjects
-		_spread_display.Perfects.Size = UDim2.new(_score_data.perfects/total_judges,0,0.25,0)
-		_spread_display.PerfectCount.Text = _score_data.perfects
+		_spread_display.Perfect.Total.Size = UDim2.new(_score_data.perfects/total_judges,0,0.25,0)
+		_spread_display.Perfect.TotalNumber.Text = _score_data.perfects
 
-		_spread_display.Greats.Size = UDim2.new(_score_data.greats/total_judges,0,0.25,0)
-		_spread_display.GreatCount.Text = _score_data.greats
+		_spread_display.Great.Total.Size = UDim2.new(_score_data.greats/total_judges,0,0.25,0)
+		_spread_display.Great.TotalNumber.Text = _score_data.greats
 
-		_spread_display.Okays.Size = UDim2.new(_score_data.okays/total_judges,0,0.25,0)
-		_spread_display.OkayCount.Text = _score_data.okays
+		_spread_display.Bad.Total.Size = UDim2.new(_score_data.okays/total_judges,0,0.25,0)
+		_spread_display.Bad.TotalNumber.Text = _score_data.okays
 
-		_spread_display.Misses.Size = UDim2.new(_score_data.misses/total_judges,0,0.25,0)
-		_spread_display.MissCount.Text = _score_data.misses
+		_spread_display.Miss.Total.Size = UDim2.new(_score_data.misses/total_judges,0,0.25,0)
+		_spread_display.Miss.TotalNumber.Text = _score_data.misses
 
-		_results_menu_ui.PlayerInfo.Text = string.format("Played by %s at %s",
+		section_container.Banner.PlayerInfo.Text = string.format("Played by %s at %s",
 			game.Players.LocalPlayer.Name,
 			SPUtil:time_to_str(os.time())
 		);
 
-		_results_menu_ui.MapInfo.Text = string.format("%s - %s [%0d]",
+		section_container.Banner.MapInfo.Text = string.format("%s - %s [%0d]",
 			SongDatabase:get_title_for_key(_song_key),
 			SongDatabase:get_artist_for_key(_song_key),
 			SongDatabase:get_difficulty_for_key(_song_key)
