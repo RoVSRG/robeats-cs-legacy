@@ -34,16 +34,20 @@ function AudioManager:new(_game)
 	function self:get_note_prebuffer_time_ms() return _note_prebuffer_time end
 	
 	--Note timings: millisecond offset (positive is early, negative is late) mapping to what the note result is
-	local _note_okay_max = Configuration.Preferences.NoteOkayMaxMS * _rate --Default: 260
+	local _note_bad_max = Configuration.Preferences.NoteBadMaxMS * _rate
+	local _note_good_max = Configuration.Preferences.NoteGoodMaxMS * _rate --Default: 260
 	local _note_great_max = Configuration.Preferences.NoteGreatMaxMS * _rate --Default: 140
 	local _note_perfect_max = Configuration.Preferences.NotePerfectMaxMS * _rate --Default: 40
+	local _note_marvelous_max = Configuration.Preferences.NoteMarvelousMaxMS * _rate --Default: 40
+	local _note_marvelous_min = Configuration.Preferences.NoteMarvelousMinMS * _rate --Default: -20
 	local _note_perfect_min = Configuration.Preferences.NotePerfectMinMS * _rate --Default: -20
 	local _note_great_min = Configuration.Preferences.NoteGreatMinMS * _rate --Default: -70
-	local _note_okay_min = Configuration.Preferences.NoteOkayMinMS * _rate --Default: -140
+	local _note_good_min = Configuration.Preferences.NoteGoodMinMS * _rate
+	local _note_bad_min = Configuration.Preferences.NoteBadMinMS * _rate
 	
 	--Called in NoteResult:timedelta_to_result(time_to_end, _game)
 	function self:get_note_result_timing()
-		return _note_okay_max, _note_great_max, _note_perfect_max, _note_perfect_min, _note_great_min, _note_okay_min
+		return _note_bad_max, _note_good_max, _note_great_max, _note_perfect_max, _note_marvelous_max, _note_marvelous_min,  _note_perfect_min, _note_great_min, _note_good_min,_note_bad_min
 	end
 	
 	--Time in milliseconds after note expected hit time to remove note (and do a Time miss)

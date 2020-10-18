@@ -18,11 +18,7 @@ function TriggerNoteEffect:new(_game, _position, _result)
 	local _anim_t = 0
 
 	local function update_visual()
-		_effect_obj.Body.Transparency = CurveUtil:YForPointOf2PtLine(
-			Vector2.new(0,SPUtil:tra(STARTING_ALPHA)),
-			Vector2.new(1,SPUtil:tra(ENDING_ALPHA)),
-			_anim_t
-		)
+		_effect_obj.Body.Transparency = 1
 
 		local size_val = CurveUtil:YForPointOf2PtLine(
 			Vector2.new(0,2.25),
@@ -52,14 +48,20 @@ function TriggerNoteEffect:new(_game, _position, _result)
 		if _effect_obj == nil then
 			_effect_obj = EnvironmentSetup:get_element_protos_folder().TriggerHitEffectProto:Clone()
 		end
-
-		if _result == NoteResult.Okay then
+		
+		
+		if _result == NoteResult.Bad then
+			_effect_obj.PrimaryPart.BrickColor = BrickColor.new(224,46,255)
+		elseif _result == NoteResult.Good then
 			_effect_obj.PrimaryPart.BrickColor = BrickColor.new(243,237,0)
 		elseif _result == NoteResult.Great then
 			_effect_obj.PrimaryPart.BrickColor = BrickColor.new(0,255,0)
-		else
+		elseif _result == NoteResult.Perfect then
 			_effect_obj.PrimaryPart.BrickColor = BrickColor.new(0,207,256)
+		else
+			_effect_obj.PrimaryPart.BrickColor = BrickColor.new(255,255,255)
 		end
+		
 
 		_position = Vector3.new(_position.X, _game:get_game_environment_center_position().Y, _position.Z)
 		_effect_obj:SetPrimaryPartCFrame(

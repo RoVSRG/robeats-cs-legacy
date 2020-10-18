@@ -30,23 +30,22 @@ function NoteResultPopupEffect:new(_game, _position, _result)
 		end
 		
 		_frame = _effect_obj.Panel.SurfaceGui.Frame
-		_image = _frame.ImageLabel
+		_image = _frame.TextLabel
 
 		if _result == NoteResult.Miss then
-			_image.Image = "rbxassetid://662861662"
-
-		elseif _result == NoteResult.Okay then
-			_image.Image = "rbxassetid://662861666"
-
+			_image.Text = "Miss"
+		elseif _result == NoteResult.Bad then
+			_image.Text = "Bad"
+		elseif _result == NoteResult.Good then
+			_image.Text = "Good"
 		elseif _result == NoteResult.Great then
-			_image.Image = "rbxassetid://662861665"
-
+			_image.Text = "Great"
 		elseif _result == NoteResult.Perfect then
-			_image.Image = "rbxassetid://662861671"
-
+			_image.Text = "Perfect"
+		elseif _result == NoteResult.Marvelous then
+			_image.Text = "Marvelous"
 		else
-			_image.Image = ""
-			
+			_image.Text = ""
 		end
 		
 		_effect_obj:SetPrimaryPartCFrame(
@@ -70,7 +69,7 @@ function NoteResultPopupEffect:new(_game, _position, _result)
 			_anim_t
 		)
 		local transparency = SPUtil:tra(alpha)
-		_image.ImageTransparency = transparency
+		_image.TextTransparency = transparency
 	end
 
 	--[[Override--]] function self:add_to_parent(parent)

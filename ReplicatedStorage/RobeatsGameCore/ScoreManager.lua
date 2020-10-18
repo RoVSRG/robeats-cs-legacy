@@ -14,18 +14,24 @@ function ScoreManager:new(_game)
 	
 	local _chain = 0
 	function self:get_chain() return _chain end
-
+	
+	local _marv_count = 0
 	local _perfect_count = 0
 	local _great_count = 0
-	local _ok_count = 0
+	local _good_count = 0
+	local _bad_count = 0
 	local _miss_count = 0
 	local _max_chain = 0
-	function self:get_end_records() return _perfect_count,_great_count,_ok_count,_miss_count,_max_chain end
+	local _total_count = 0
+	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain end
 	function self:get_accuracy()
-		local total_count = _game._audio_manager:get_note_count() + _miss_count
-		
-		--Accuracy calculation formula
-		return ((_perfect_count * 1.0) + (_great_count * 0.75) + (_ok_count * 0.25)) / total_count
+		local _total_count = _game._audio_manager:get_note_count() + _miss_count
+		if _total_count == 0 then 
+			return 0
+		else
+			return 100*(_marv_count+_perfect_count+_great_count*0.66+_good_count*0.33+_bad_count*0.166) / _total_count
+			-- return ((_perfect_count * 1.0) + (_great_count * 0.75) + (_good_count * 0.25)) / total_count
+		end
 	end
 
 	local _frame_has_played_sfx = false
@@ -77,17 +83,24 @@ function ScoreManager:new(_game)
 		end
 		
 		--Increment stats
-		if note_result == NoteResult.Perfect then
+		if note_result == NoteResult.Marvelous then
+			_chain = _chain + 1
+			_marv_count = _marv_count + 1
+			
+		elseif note_result == NoteResult.Perfect then
 			_chain = _chain + 1
 			_perfect_count = _perfect_count + 1
-
+			
 		elseif note_result == NoteResult.Great then
-			_chain = _chain + 1
 			_great_count = _great_count + 1
-
-		elseif note_result == NoteResult.Okay then
-			_ok_count = _ok_count + 1
-
+			
+		elseif note_result == NoteResult.Good then
+			_good_count = _good_count + 1
+			
+		elseif note_result == NoteResult.Bad then
+			_chain = _chain + 1
+			_bad_count = _bad_count + 1
+				
 		else
 			if _chain > 0 then
 				_chain = 0
