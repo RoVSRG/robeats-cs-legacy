@@ -11,6 +11,7 @@ local ScoreManager = {}
 
 function ScoreManager:new(_game)
 	local self = {}
+	self.hit_deviance = {}
 	
 	local _chain = 0
 	function self:get_chain() return _chain end
@@ -32,6 +33,12 @@ function ScoreManager:new(_game)
 			return 100*( ( _marv_count + _perfect_count + (_great_count*0.66) + (_good_count*0.33) + (_bad_count*0.166) ) / _total_count)
 		end
 	end
+
+	function self:add_hit_to_deviance(expected_hit_time_ms, hit_time_ms, note_result)
+		self.hit_deviance[#self.hit_deviance+1] = {expected_hit_time_ms = expected_hit_time_ms, hit_time_ms = hit_time_ms, note_result = note_result}
+	end
+
+	function self:get_hit_deviance() return self.hit_deviance end
 
 	local _frame_has_played_sfx = false
 
@@ -108,6 +115,10 @@ function ScoreManager:new(_game)
 			elseif params.TimeMiss == true then
 				_miss_count = _miss_count + 1
 			end
+		end
+
+		if note_result ~= 0 then
+			self:add_hit_to_deviance(params.ExpectedHitTime, _game._audio_manager:get_current_time_ms(), note_result)
 		end
 		
 		_max_chain = math.max(_chain,_max_chain)
