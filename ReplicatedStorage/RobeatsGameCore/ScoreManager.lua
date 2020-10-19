@@ -53,7 +53,7 @@ function ScoreManager:new(_game)
 			
 			--Make sure only one sfx is played per frame
 			if _frame_has_played_sfx == false then
-				if note_result == NoteResult.Perfect then
+				if note_result == NoteResult.Perfect or note_result == NoteResult.Marvelous then
 					if params.IsHeldNoteBegin == true then
 						_game._audio_manager:get_hit_sfx_group():play_first()
 					else
@@ -62,7 +62,7 @@ function ScoreManager:new(_game)
 
 				elseif note_result == NoteResult.Great then
 					_game._audio_manager.get_hit_sfx_group():play_first()
-				elseif note_result == NoteResult.Okay then
+				elseif note_result == NoteResult.Good or note_result == NoteResult.Bad then
 					_game._sfx_manager:play_sfx(SFXManager.SFX_DRUM_OKAY)
 				else
 					_game._sfx_manager:play_sfx(SFXManager.SFX_MISS)
