@@ -1,5 +1,6 @@
-local DataStoreService = game:GetService("DataStoreService")
+local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
 local ScoreDatabase = DataStoreService:GetDataStore("ScoreDatabase")
+
 local HttpService = game:GetService("HttpService")
 local Networking = require(game.ReplicatedStorage.Networking)
 local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
