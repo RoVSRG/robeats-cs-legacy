@@ -47,7 +47,7 @@ function InGameMenu:new(_local_services, _game, _song_key)
 		end
 		
 		_stat_display_ui.ChainDisplay.Text = tostring(_game._score_manager:get_chain())
-		_stat_display_ui.GradeDisplay.Text = string.format("%.2f",_game._score_manager:get_accuracy()*100) .. "%"
+		_stat_display_ui.GradeDisplay.Text = string.format("%.2f",_game._score_manager:get_accuracy()) .. "%"
 
 		local song_length = _game._audio_manager:get_song_length_ms()
 		local song_time = _game._audio_manager:get_current_time_ms()
