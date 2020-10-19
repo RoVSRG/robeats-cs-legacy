@@ -5,6 +5,7 @@ function HitParams:new()
 	local self = {}
 	--Should play SFX for this hit
 	self.PlaySFX = true
+	self.ExpectedHitTime = 0
 	
 	--Should create Hit Effect
 	self.PlayHoldEffect = false
@@ -45,6 +46,11 @@ function HitParams:new()
 	function self:set_time_miss(val) 
 		self.TimeMiss = val
 		return self 
+	end
+
+	function self:set_expected_hit_time(val)
+		self.ExpectedHitTime = val
+		return self
 	end
 	
 	return self

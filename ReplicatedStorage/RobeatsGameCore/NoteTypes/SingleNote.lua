@@ -117,7 +117,7 @@ function SingleNote:new(_game, _track_index, _slot_index, _creation_time_ms, _hi
 					NoteResult.Miss,
 					_slot_index,
 					_track_index,
-					HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true)
+					HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_expected_hit_time(_hit_time_ms)
 				)
 			end
 		end
@@ -163,7 +163,7 @@ function SingleNote:new(_game, _track_index, _slot_index, _creation_time_ms, _hi
 			note_result,
 			_slot_index,
 			_track_index,
-			HitParams:new():set_play_hold_effect(true, _position)
+			HitParams:new():set_play_hold_effect(true, _position):set_expected_hit_time(_hit_time_ms)
 		)
 
 		_state = SingleNote.State.DoRemove
