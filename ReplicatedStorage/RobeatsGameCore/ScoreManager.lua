@@ -25,12 +25,11 @@ function ScoreManager:new(_game)
 	local _total_count = 0
 	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain end
 	function self:get_accuracy()
-		local _total_count = _game._audio_manager:get_note_count() + _miss_count
+		local _total_count = _marv_count + _perfect_count + _great_count + _good_count + _bad_count + _miss_count
 		if _total_count == 0 then 
 			return 0
 		else
-			return 100*(_marv_count+_perfect_count+_great_count*0.66+_good_count*0.33+_bad_count*0.166) / _total_count
-			-- return ((_perfect_count * 1.0) + (_great_count * 0.75) + (_good_count * 0.25)) / total_count
+			return 100*( ( _marv_count + _perfect_count + (_great_count*0.66) + (_good_count*0.33) + (_bad_count*0.166) ) / _total_count)
 		end
 	end
 
