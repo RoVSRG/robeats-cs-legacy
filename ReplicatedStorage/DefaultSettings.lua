@@ -10,13 +10,22 @@ return {
 		AudioOffset = 0;
 		NoteSpeedMultiplier = 1;
 		
-		--Configure these to change timing windows
-		NoteGreatMaxMS = 140;
-		NoteGreatMinMS = -70;
-		NoteOkayMaxMS = 260;
-		NoteOkayMinMS = -140;
-		NotePerfectMaxMS = 40;
-		NotePerfectMinMS = -20;
+		--Configure these to change timing windows		
+		
+		NoteGreatMaxMS = 90;
+		NoteGreatMinMS = -90;
+	
+		NoteGoodMaxMS = 135;
+		NoteGoodMinMS = -135;
+	
+		NoteBadMaxMS = 180;
+		NoteBadMinMS = -180;
+	
+		NotePerfectMaxMS = 52;
+		NotePerfectMinMS = -52;
+	
+		NoteMarvelousMaxMS = 22;
+		NoteMarvelousMinMS = -22;
 		
 		--You probably won't need to modify these
 		NoteRemoveTimeMS = -200;
