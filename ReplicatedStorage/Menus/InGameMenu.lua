@@ -48,6 +48,8 @@ function InGameMenu:new(_local_services, _game, _song_key)
 		
 		_stat_display_ui.ChainDisplay.Text = tostring(_game._score_manager:get_chain())
 		_stat_display_ui.GradeDisplay.Text = string.format("%.2f",_game._score_manager:get_accuracy()) .. "%"
+		_stat_display_ui.ScoreDisplay.Text = math.floor(_game._score_manager:get_score() + 0.5)
+		-- _stat_display_ui.JudgementDisplay.Text = "pain"
 
 		local song_length = _game._audio_manager:get_song_length_ms()
 		local song_time = _game._audio_manager:get_current_time_ms()
@@ -63,7 +65,7 @@ function InGameMenu:new(_local_services, _game, _song_key)
 	--[[Override--]] function self:do_remove()
 		_stat_display_ui:Destroy()
 		
-		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo = _game._score_manager:get_end_records()
+		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = _game._score_manager:get_end_records()
 		local accuracy = _game._score_manager:get_accuracy()
 
 
@@ -77,6 +79,7 @@ function InGameMenu:new(_local_services, _game, _song_key)
 			goods = good_count;
 			bads = bad_count;
 			misses = miss_count;
+			scores = score;
 		}
 
 		spawn(function()

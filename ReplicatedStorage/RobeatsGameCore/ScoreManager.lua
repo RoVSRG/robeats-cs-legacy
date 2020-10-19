@@ -16,6 +16,10 @@ function ScoreManager:new(_game)
 	local _chain = 0
 	function self:get_chain() return _chain end
 	
+	self._bonus = 100
+	self._score = 0
+	self._chain = 0
+	
 	local _marv_count = 0
 	local _perfect_count = 0
 	local _great_count = 0
@@ -24,7 +28,9 @@ function ScoreManager:new(_game)
 	local _miss_count = 0
 	local _max_chain = 0
 	local _total_count = 0
-	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain end
+	local maxscore = 1000000
+	
+	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain, self._score end
 	function self:get_accuracy()
 		local _total_count = _marv_count + _perfect_count + _great_count + _good_count + _bad_count + _miss_count
 		if _total_count == 0 then 
@@ -33,12 +39,50 @@ function ScoreManager:new(_game)
 			return 100*( ( _marv_count + _perfect_count + (_great_count*0.66) + (_good_count*0.33) + (_bad_count*0.166) ) / _total_count)
 		end
 	end
+	function self:get_score()
+		return self._score;
+	end
 
 	function self:add_hit_to_deviance(expected_hit_time_ms, hit_time_ms, note_result)
 		self.hit_deviance[#self.hit_deviance+1] = {expected_hit_time_ms = expected_hit_time_ms, hit_time_ms = hit_time_ms, note_result = note_result}
 	end
 
 	function self:get_hit_deviance() return self.hit_deviance end
+	
+	function self:calculate_note_score(totalnotes,hitvalue,hitbonusvalue,hitbonus,hitpunishment)
+		local prebonus = self._bonus + hitbonus - hitpunishment
+		if prebonus>100 then
+			self._bonus = 100
+		elseif prebonus<0 then
+			self._bonus = 0
+		else
+			self._bonus = prebonus
+		end
+		local basescore = (maxscore * 0.5 / totalnotes) * (hitvalue / 320)
+		local bonusscore = (maxscore * 0.5 / totalnotes) * (hitbonusvalue * math.sqrt(self._bonus) / 320)
+		local score = basescore + bonusscore
+		return score
+	end
+
+	function self:result_to_point_total(note_result,totalnotes)
+		if note_result == NoteResult.Marvelous then
+			return self:calculate_note_score(totalnotes,320,32,2,0)
+		elseif note_result == NoteResult.Perfect then
+			return self:calculate_note_score(totalnotes,300,32,1,0)
+		elseif note_result == NoteResult.Great then
+			return self:calculate_note_score(totalnotes,200,16,0,8)
+		elseif note_result == NoteResult.Good then
+			return self:calculate_note_score(totalnotes,100,8,0,24)
+		elseif note_result == NoteResult.Bad then
+			return self:calculate_note_score(totalnotes,50,4,0,44)
+		else
+			if _total_count > 0 then
+				return self:calculate_note_score(totalnotes,0,0,0,100)
+			else
+				return 0
+			end
+		end
+	end
 
 	local _frame_has_played_sfx = false
 
@@ -88,25 +132,22 @@ function ScoreManager:new(_game)
 			end
 		end
 		
-		--Increment stats
+		local totalnotes =_game._audio_manager:get_note_count()
+		
+		--Incregertment stats
 		if note_result == NoteResult.Marvelous then
 			_chain = _chain + 1
 			_marv_count = _marv_count + 1
-			
 		elseif note_result == NoteResult.Perfect then
 			_chain = _chain + 1
 			_perfect_count = _perfect_count + 1
-			
 		elseif note_result == NoteResult.Great then
 			_great_count = _great_count + 1
-			
 		elseif note_result == NoteResult.Good then
 			_good_count = _good_count + 1
-			
 		elseif note_result == NoteResult.Bad then
 			_chain = _chain + 1
 			_bad_count = _bad_count + 1
-				
 		else
 			if _chain > 0 then
 				_chain = 0
@@ -120,6 +161,9 @@ function ScoreManager:new(_game)
 		if note_result ~= 0 then
 			self:add_hit_to_deviance(params.ExpectedHitTime, _game._audio_manager:get_current_time_ms(), note_result)
 		end
+		
+		local totalnotes =_game._audio_manager:get_note_count()
+		self._score = self._score + self:result_to_point_total(note_result,totalnotes)
 		
 		_max_chain = math.max(_chain,_max_chain)
 	end

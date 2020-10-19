@@ -62,6 +62,8 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		section_container.Banner.GradeContainer.Grade.Image = img or ""
 		section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy)
+		section_container.DataContainer.Score.Data.Text = math.floor(_score_data.scores) + 0.5
+		
 
 		--HANDLE SPREAD RENDERING
 		local _spread_display = section_container.SpreadContainer.SpreadDisplay
