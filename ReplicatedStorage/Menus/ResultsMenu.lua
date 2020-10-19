@@ -100,7 +100,6 @@ function ResultsMenu:new(_local_services, _score_data)
 		)
 
 		for _, hit_data in pairs(_score_data.hitdeviance) do
-			print(hit_data.note_result)
 			local dot = Instance.new("Frame")
 			dot.BorderSizePixel = 0
 			dot.BackgroundColor3 = ResultsMenu.HitColor[hit_data.note_result]
