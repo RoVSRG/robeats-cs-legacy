@@ -9,6 +9,7 @@ local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
 local Configuration = require(game.ReplicatedStorage.Configuration)
+local TimingPresets = require(game.ReplicatedStorage.TimingPresets)
 
 local SingleNote = require(game.ReplicatedStorage.RobeatsGameCore.NoteTypes.SingleNote)
 local HeldNote = require(game.ReplicatedStorage.RobeatsGameCore.NoteTypes.HeldNote)
@@ -34,16 +35,17 @@ function AudioManager:new(_game)
 	function self:get_note_prebuffer_time_ms() return _note_prebuffer_time end
 	
 	--Note timings: millisecond offset (positive is early, negative is late) mapping to what the note result is
-	local _note_bad_max = Configuration.Preferences.NoteBadMaxMS * _rate
-	local _note_good_max = Configuration.Preferences.NoteGoodMaxMS * _rate --Default: 260
-	local _note_great_max = Configuration.Preferences.NoteGreatMaxMS * _rate --Default: 140
-	local _note_perfect_max = Configuration.Preferences.NotePerfectMaxMS * _rate --Default: 40
-	local _note_marvelous_max = Configuration.Preferences.NoteMarvelousMaxMS * _rate --Default: 40
-	local _note_marvelous_min = Configuration.Preferences.NoteMarvelousMinMS * _rate --Default: -20
-	local _note_perfect_min = Configuration.Preferences.NotePerfectMinMS * _rate --Default: -20
-	local _note_great_min = Configuration.Preferences.NoteGreatMinMS * _rate --Default: -70
-	local _note_good_min = Configuration.Preferences.NoteGoodMinMS * _rate
-	local _note_bad_min = Configuration.Preferences.NoteBadMinMS * _rate
+	local window = TimingPresets:getCurrentTimingWindow(Configuration.Preferences.Preset)
+	local _note_bad_max = window.NoteBadMaxMS * _rate
+	local _note_good_max = window.NoteGoodMaxMS * _rate --Default: 260
+	local _note_great_max = window.NoteGreatMaxMS * _rate --Default: 140
+	local _note_perfect_max = window.NotePerfectMaxMS * _rate --Default: 40
+	local _note_marvelous_max = window.NoteMarvelousMaxMS * _rate --Default: 40
+	local _note_marvelous_min = window.NoteMarvelousMinMS * _rate --Default: -20
+	local _note_perfect_min = window.NotePerfectMinMS * _rate --Default: -20
+	local _note_great_min = window.NoteGreatMinMS * _rate --Default: -70
+	local _note_good_min = window.NoteGoodMinMS * _rate
+	local _note_bad_min = window.NoteBadMinMS * _rate
 	
 	--Called in NoteResult:timedelta_to_result(time_to_end, _game)
 	function self:get_note_result_timing()
