@@ -75,7 +75,7 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		average_offset /= (#_score_data.hitdeviance == 0 and 1 or #_score_data.hitdeviance)
 
-		section_container.DataContainer.Rating.Data.Text = string.format("%0.2fSR", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key)))
+		section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key)))
 
 		section_container.DataContainer.Mean.Data.Text = math.round(average_offset).."ms"
 		
