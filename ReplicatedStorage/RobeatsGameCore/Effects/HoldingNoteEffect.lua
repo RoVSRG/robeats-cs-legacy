@@ -7,8 +7,8 @@ local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.Environm
 local HoldingNoteEffect = {}
 HoldingNoteEffect.Type = "HoldingNoteEffect"
 
-local STARTING_ALPHA = 0.1
-local ENDING_ALPHA = 0
+local STARTING_ALPHA = 1
+local ENDING_ALPHA = 1
 
 function HoldingNoteEffect:new(
 	_game,
@@ -22,18 +22,9 @@ function HoldingNoteEffect:new(
 	self._anim_t = 0
 	
 	local function update_visual()
-		self._effect_obj.Body.Transparency = CurveUtil:YForPointOf2PtLine(
-			Vector2.new(0,SPUtil:tra(STARTING_ALPHA)),
-			Vector2.new(1,SPUtil:tra(ENDING_ALPHA)),
-			self._anim_t
-		)
+		self._effect_obj.Body.Transparency = 1
 		
-		local size_val = CurveUtil:YForPointOf2PtLine(
-			Vector2.new(0,2),
-			Vector2.new(1,3.4),
-			self._anim_t
-		)
-		self._effect_obj.Body.Size = Vector3.new(size_val,size_val,size_val)
+		self._effect_obj.Body.Size = Vector3.new(0,0,0)
 	end	
 	
 	function self:cons()
@@ -51,6 +42,8 @@ function HoldingNoteEffect:new(
 		else
 			self._effect_obj.PrimaryPart.BrickColor = BrickColor.new(0,207,256)
 		end	
+		
+		self._effect_obj.PrimaryPart.Transparency = 1
 		
 		self._anim_t = 0
 		update_visual()
