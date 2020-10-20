@@ -63,7 +63,20 @@ function ResultsMenu:new(_local_services, _score_data)
 		section_container.Banner.GradeContainer.Grade.Image = img or ""
 		section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy)
 		section_container.DataContainer.Score.Data.Text = math.floor(_score_data.scores) + 0.5
+
+		local average_offset = 0
+
+		for i, v in pairs(_score_data.hitdeviance) do
+			average_offset += (v.hit_time_ms - v.expected_hit_time_ms)
+		end
+
+		average_offset /= (#_score_data.hitdeviance == 0 and 1 or #_score_data.hitdeviance)
+
+		section_container.DataContainer.Rating.Data.Text = string.format("%0.2fSR", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key)))
+
+		section_container.DataContainer.Mean.Data.Text = math.round(average_offset).."ms"
 		
+		section_container.DataContainer.MaxCombo.Data.Text = _score_data.maxcombo.."x"
 
 		--HANDLE SPREAD RENDERING
 		local _spread_display = section_container.SpreadContainer.SpreadDisplay
