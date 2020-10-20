@@ -342,7 +342,7 @@ function HeldNote:new(
 						NoteResult.Miss,
 						_slot_index,
 						_track_index,
-						HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_expected_hit_time(_hit_time_ms)
+						HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_expected_hit_time(_hit_time_ms+_duration_time_ms)
 					)
 				end
 
@@ -416,7 +416,7 @@ function HeldNote:new(
 				note_result,
 				_slot_index,
 				_track_index,
-				HitParams:new():set_play_hold_effect(true, get_tail_position()):set_expected_hit_time(_hit_time_ms)
+				HitParams:new():set_play_hold_effect(true, get_tail_position()):set_expected_hit_time(_hit_time_ms+_duration_time_ms)
 			)
 
 			_did_trigger_tail = true
@@ -464,7 +464,7 @@ function HeldNote:new(
 					note_result,
 					_slot_index,
 					_track_index,
-					HitParams:new():set_play_hold_effect(true, get_tail_position()):set_expected_hit_time(_hit_time_ms)
+					HitParams:new():set_play_hold_effect(true, get_tail_position()):set_expected_hit_time(_hit_time_ms+_duration_time_ms)
 				)
 				_did_trigger_tail = true
 				_state = HeldNote.State.Passed
