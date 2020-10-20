@@ -29,6 +29,7 @@ function SettingsMenu:new(_local_services)
 		local keybinds = section_container.Keybinds
 		local offset = section_container.Offset
 		local notespeed = section_container.Notespeed
+		local timing = section_container.TimingPresets
 		local back = tab_container.BackButton
 		local keybind_buttons = {keybinds.Keybind1, keybinds.Keybind2, keybinds.Keybind3, keybinds.Keybind4}
 
@@ -38,6 +39,19 @@ function SettingsMenu:new(_local_services)
 
 		local function updateADOFFSET()
 			offset.Display.Label.Text = string.format("%dms",Configuration.Preferences.AudioOffset)
+		end
+		
+		local function updateTIMING()
+			for i,v in pairs(timing:GetChildren()) do
+				if v.ClassName == "TextButton" then
+					v.BackgroundColor3 = Color3.fromRGB(15,15,15)
+					v.KeybindLabel.Text = "Set"
+					if v.Label.Text == Configuration.Preferences.Preset then
+						v.BackgroundColor3 = Color3.fromRGB(16,212,82)
+						v.KeybindLabel.Text = "Enabled"
+					end
+				end
+			end
 		end
 		
 		local function updateKEYBINDS()
@@ -56,6 +70,17 @@ function SettingsMenu:new(_local_services)
 					v.KeybindLabel.Text = "Press Key..."
 					local u = UserInputService.InputBegan:Wait()
 					Configuration.Preferences.Keybinds[itr_i] = {u.KeyCode}
+				end)
+			end
+		end
+		
+		--//TIMING PRESETS
+		
+		for i,v in pairs(timing:GetChildren()) do
+			if v.ClassName == "TextButton" then
+				SPUtil:bind_input_fire(v, function()
+					Configuration.Preferences.Preset = v.Label.Text
+					updateTIMING(v)
 				end)
 			end
 		end
@@ -101,11 +126,13 @@ function SettingsMenu:new(_local_services)
 			updateNSMULT()
 			updateADOFFSET()
 			updateKEYBINDS()
+			updateTIMING()
 		end)
 
 		updateNSMULT()
 		updateADOFFSET()
 		updateKEYBINDS()
+		updateTIMING()
 	end
 
 	function self:save_settings()

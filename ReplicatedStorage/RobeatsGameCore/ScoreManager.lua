@@ -39,8 +39,24 @@ function ScoreManager:new(_game)
 			return 100*( ( _marv_count + _perfect_count + (_great_count*0.66) + (_good_count*0.33) + (_bad_count*0.166) ) / _total_count)
 		end
 	end
+	
+	function self:get_global_accuracy(marv,perf,great,good,bad,miss)
+		local _total_count = marv + perf + great + good + bad + miss
+		if _total_count == 0 then 
+			return 0
+		else
+			return 100*( ( marv + perf + (great*0.66) + (good*0.33) + (bad*0.166) ) / _total_count)
+		end
+	end
+	
 	function self:get_score()
-		return self._score;
+		local spread = {_marv_count, _perfect_count, _great_count, _good_count, _bad_count}
+		return self:calculate_total_score(spread)
+	end
+	
+	function self:get_global_score(marv,perf,great,good,bad)
+		local spread = {marv,perf,great,good,bad}
+		return self:calculate_total_score(spread)
 	end
 
 	function self:add_hit_to_deviance(expected_hit_time_ms, hit_time_ms, note_result)
@@ -48,6 +64,31 @@ function ScoreManager:new(_game)
 	end
 
 	function self:get_hit_deviance() return self.hit_deviance end
+	
+	function self:calculate_total_score(spread)
+		local totalnotes =_game._audio_manager:get_note_count()
+		local marv = 0
+		for total = 1, spread[1] do
+			marv = marv + self:result_to_point_total(NoteResult.Marvelous,totalnotes)
+		end
+		local perf = 0
+		for total = 1, spread[2] do
+			perf = perf + self:result_to_point_total(NoteResult.Perfect,totalnotes)
+		end
+		local great = 0
+		for total = 1, spread[3] do
+			great = great + self:result_to_point_total(NoteResult.Great,totalnotes)
+		end
+		local good = 0
+		for total = 1, spread[4] do
+			good = good + self:result_to_point_total(NoteResult.Good,totalnotes)
+		end
+		local bad = 0
+		for total = 1, spread[5] do
+			bad = bad + self:result_to_point_total(NoteResult.Bad,totalnotes)
+		end
+		return marv + perf + great + good + bad
+	end
 	
 	function self:calculate_note_score(totalnotes,hitvalue,hitbonusvalue,hitbonus,hitpunishment)
 		local prebonus = self._bonus + hitbonus - hitpunishment
