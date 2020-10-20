@@ -4,6 +4,9 @@ local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 
+local Graph = require(game.ReplicatedStorage.Libraries.Graph)
+local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
+
 local ResultsMenu = {}
 
 ResultsMenu.HitColor = {
@@ -112,13 +115,18 @@ function ResultsMenu:new(_local_services, _score_data)
 			SongDatabase:get_difficulty_for_key(_song_key)
 		)
 
+		local hit_graph = Graph.Dot:new()
+
+		hit_graph:attach_to_instance(section_container.HitContainer.Hits)
+		hit_graph:set_bounds(_song_length_ms, -300, 0, 300)
+		--hit_graph:add_markers(15000, -20) -- ADD LATER!!!!!
+
 		for _, hit_data in pairs(_score_data.hitdeviance) do
-			local dot = Instance.new("Frame")
-			dot.BorderSizePixel = 0
-			dot.BackgroundColor3 = ResultsMenu.HitColor[hit_data.note_result]
-			dot.Size = UDim2.new(0,3.5,0,3.5)
-			dot.Position = UDim2.new(hit_data.hit_time_ms/_song_length_ms,0,((hit_data.hit_time_ms-hit_data.expected_hit_time_ms)/240)+0.5,0)
-			dot.Parent = section_container.HitContainer.Hits
+			hit_graph:add_data_point({
+				x = hit_data.hit_time_ms;
+				y = hit_data.hit_time_ms - hit_data.expected_hit_time_ms;
+				color = ResultsMenu.HitColor[hit_data.note_result];
+			})
 		end
 	end
 
