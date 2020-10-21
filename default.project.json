@@ -1,62 +1,54 @@
 {
-	"name": "RobeatsCustomServerTemplate",
+	"name": "RoBeatsCS",
 	"tree": {
-		"$className": "DataModel",
-
-		"ReplicatedStorage": {
-			"$className": "ReplicatedStorage",
-			"$path": "ReplicatedStorage"
-		},
-		"StarterPlayer": {
-			"$className": "StarterPlayer",
-			"$path": "StarterPlayer",
-			"StarterPlayerScripts": {
-				"$className": "StarterPlayerScripts",
-				"$path": "StarterPlayer/StarterPlayerScripts"
-			},
-			"StarterCharacterScripts": {
-				"$className": "StarterCharacterScripts",
-				"$path": "StarterPlayer/StarterCharacterScripts"
-			}
-		},
-
-		"ServerScriptService": {
-			"$className": "ServerScriptService",
-			"$path": "ServerScriptService"
-		},
-
-		"Workspace": {
-			"$className": "Workspace",
-			"$path": "Workspace",
-			"$properties": {
-				"FilteringEnabled": true
-			}
-		},
-		"Lighting": {
-			"$className": "Lighting",
-			"$properties": {
-				"Ambient": [
-					0,
-					0,
-					0
-				],
-				"Brightness": 2,
-				"GlobalShadows": true,
-				"Outlines": false,
-				"Technology": "Voxel"
-			}
-		},
-		"SoundService": {
-			"$className": "SoundService",
-			"$properties": {
-				"RespectFilteringEnabled": true
-			}
-		},
-		"HttpService": {
-			"$className": "HttpService",
-			"$properties": {
-				"HttpEnabled": true
-			}
+	  "$className": "DataModel",
+  
+	  "ReplicatedStorage": {
+		"$className": "ReplicatedStorage",
+  
+		"Common": {
+		  "$path": "src/shared"
 		}
+	  },
+  
+	  "ServerScriptService": {
+		"$className": "ServerScriptService",
+  
+		"Server": {
+		  "$path": "src/server"
+		}
+	  },
+  
+	  "StarterPlayer": {
+		"$className": "StarterPlayer",
+  
+		"StarterPlayerScripts": {
+		  "$className": "StarterPlayerScripts",
+  
+		  "Client": {
+			"$path": "src/client"
+		  }
+		}
+	  },
+  
+	  "Workspace": {
+		"$className": "Workspace",
+		"$properties": {
+		  "FilteringEnabled": true
+		},
+		"$path": "src/services/workspace"
+	  },
+	  "SoundService": {
+		"$className": "SoundService",
+		"$properties": {
+		  "RespectFilteringEnabled": true
+		}
+	  },
+	  "HttpService": {
+		"$className": "HttpService",
+		"$properties": {
+		  "HttpEnabled": true
+		}
+	  }
 	}
-}
+  }
