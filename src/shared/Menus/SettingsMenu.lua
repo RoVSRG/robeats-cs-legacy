@@ -3,7 +3,7 @@ local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.Environm
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local RobeatsGame = require(game.ReplicatedStorage.RobeatsGameCore.RobeatsGame)
 local AudioManager = require(game.ReplicatedStorage.RobeatsGameCore.AudioManager)
-local Networking = require(game.ReplicatedStorage.Networking)
+local Network = require(game.ReplicatedStorage.Network)
 local Configuration = require(game.ReplicatedStorage.Configuration)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
@@ -138,8 +138,7 @@ function SettingsMenu:new(_local_services)
 	function self:save_settings()
 		spawn(function()
 			DebugOut:puts("Saving settings...")
-			Networking.Client:Execute("SaveSettings", Configuration.Preferences)
-			DebugOut:puts("Settings have been saved!")
+			Network.SaveSettings:Fire(Configuration.Preferences)
 		end)
 	end
 	

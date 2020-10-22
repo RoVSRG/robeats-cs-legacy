@@ -4,7 +4,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local RobeatsGame = require(game.ReplicatedStorage.RobeatsGameCore.RobeatsGame)
 local AudioManager = require(game.ReplicatedStorage.RobeatsGameCore.AudioManager)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
-local Networking = require(game.ReplicatedStorage.Networking)
+local Network = require(game.ReplicatedStorage.Network)
 
 local InGameMenu = {}
 
@@ -85,7 +85,7 @@ function InGameMenu:new(_local_services, _game, _song_key)
 		spawn(function()
 			if not _force_quit then
 				DebugOut:puts("Writing score...")
-				Networking.Client:Execute("SubmitScore", data)
+				Network.SubmitScore:Fire(data)
 				DebugOut:puts("Score has been written!")
 			else
 				print("Score not submitted because you force quitted!")

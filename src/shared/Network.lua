@@ -1,8 +1,7 @@
 local module = {}
 
 local ReplicatedStorage = game.ReplicatedStorage
-local Remotes = Instance.new("Folder")
-Remotes.Parent = ReplicatedStorage
+local Remotes = script
 
 local IsServer = game:GetService("RunService"):IsServer()
 

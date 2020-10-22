@@ -1,4 +1,4 @@
-local Networking = require(game.ReplicatedStorage.Networking)
+local Network = require(game.ReplicatedStorage.Network)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
@@ -36,7 +36,7 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
 			end
 
 			--// GET NEW LEADERBOARD
-			local leaderboardData = Networking.Client:Execute("GetLeaderboard", {
+			local leaderboardData = Network.GetLeaderboard:Invoke({
 				mapid = songkey
 			}) or {}
 			if load_start_time ~= _last_load_start_time then
