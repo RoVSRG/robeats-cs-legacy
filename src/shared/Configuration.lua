@@ -18,7 +18,8 @@ end
 
 function Configuration:load_from_save()
 	local suc, err = pcall(function()
-		local settings = Network.RetrieveSettings:Invoke()
+		local settings = Network.Get("RetrieveSettings"):Invoke()
+		print(settings)
 		local deserialized = DatastoreSerializer:deserialize_table(settings or {})
 		if settings ~= nil then
 			for i, v in pairs(deserialized) do

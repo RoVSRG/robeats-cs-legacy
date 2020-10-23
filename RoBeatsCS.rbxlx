@@ -87814,21 +87814,14 @@ script:Destroy()]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="Folder" referent="RBX21C5927F7AAE41BFBE29A8A9FBE0C279">
+			<Item class="Script" referent="RBXEC37D981869142548488AB43C3520969">
 				<Properties>
 					<BinaryString name="AttributesSerialize"></BinaryString>
-					<string name="Name">GameServer</string>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-				</Properties>
-				<Item class="Script" referent="RBXC4FA01E2A63545149915E8C19C1330DC">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<bool name="Disabled">false</bool>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">ScoreServer</string>
-						<string name="ScriptGuid">{8111B9DF-3E78-404A-AC5B-D3CEFB991B3A}</string>
-						<ProtectedString name="Source"><![CDATA[local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">ScoreServer</string>
+					<string name="ScriptGuid">{DDD7DAB6-8E01-4103-8ED2-B119203921E4}</string>
+					<ProtectedString name="Source"><![CDATA[local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
 local ScoreDatabase = DataStoreService:GetDataStore("ScoreDatabase")
 
 --TODO: REPLACE KISPERAL'S NETWORKING MODULE WITH "sl0th"'s
@@ -87909,18 +87902,18 @@ Network.AddFunction("GetLeaderboard"):Set(function(player, request)
 	return lb
 end)
 ]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-					</Properties>
-				</Item>
-				<Item class="Script" referent="RBXC0F69FCD3C024B0EB3D74F6F186697B3">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<bool name="Disabled">false</bool>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">SettingsServer</string>
-						<string name="ScriptGuid">{2816E075-24E5-4331-865E-31D3073DF0A9}</string>
-						<ProtectedString name="Source"><![CDATA[local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="Script" referent="RBXC2C57C5135C447FAB969F1F508C1539F">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">SettingsServer</string>
+					<string name="ScriptGuid">{96CA948C-27DD-4401-8ED7-FEFC0BB620DC}</string>
+					<ProtectedString name="Source"><![CDATA[local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
 local SettingsDatabase = DataStoreService:GetDataStore("ScoreDatabase")
 local HttpService = game:GetService("HttpService")
 local DatastoreSerializer = require(game.ReplicatedStorage.Serialization.Datastore)
@@ -87968,8 +87961,270 @@ Network.AddFunction("RetrieveSettings"):Set(function(player)
 
 	return toReturn
 end)
+]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="Script" referent="RBXA9A0055556B84943A8BE586426EBC5E4">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">MultiplayerServer</string>
+					<string name="ScriptGuid">{B7C9E332-7262-4BC2-85D0-9E2909B3736A}</string>
+					<ProtectedString name="Source"><![CDATA[local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
 
-wait(5)
+local Network = require(game.ReplicatedStorage.Network)
+local Multiplayer = game.ServerScriptService.Multiplayer
+local RoomManager = require(Multiplayer.RoomManager):new()
+
+Network.AddFunction("AddRoom"):Set(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.name, "Name must be a string!")
+    AssertType:is_classname(player, "Player")
+
+    data.player = player
+
+    RoomManager:add_room(data)
+end)
+]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+			<Item class="Folder" referent="RBX272CD039C5844DF7B2CF759ADF5EBC3C">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<string name="Name">Multiplayer</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+				<Item class="ModuleScript" referent="RBXFE1122EF9A8241449A6E9F959C474B42">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">Player</string>
+						<string name="ScriptGuid">{F006AE27-1BCE-4768-B6D2-DAD1E0BBB2DC}</string>
+						<ProtectedString name="Source"><![CDATA[local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+
+local Player = {}
+
+function Player:new(player)
+    AssertType:is_non_nil(player, "Player passed cannot be nil!")
+    AssertType:is_classname(player, "Player")
+    local self = {}
+    self.marvelous_count = 0
+    self.perfect_count = 0
+    self.great_count = 0
+    self.good_count = 0
+    self.bad_count = 0
+    self.miss_count = 0
+    self.accuracy = 0
+    self.combo = 0
+    self.max_combo = 0
+    self.score = 0
+    self.name = ""
+    self.player = player
+
+    self.is_ready = false
+    self.loading = false
+    self.is_finished = false
+
+    function self:cons()
+        self.name = self.player.Name
+    end
+
+    function self:update_stats(stats)
+        AssertType:is_non_nil(stats, "Stats cannot be nil!")
+        AssertType:is_number(stats.marvelous_count, "Marvelous count must be a number!")
+        AssertType:is_number(stats.perfect_count, "Perfect count must be a number!")
+        AssertType:is_number(stats.great_count, "Great count must be a number!")
+        AssertType:is_number(stats.good_count, "Good count must be a number!")
+        AssertType:is_number(stats.bad_count, "Bad count must be a number!")
+        AssertType:is_number(stats.miss_count, "Miss count must be a number!")
+        AssertType:is_number(stats.accuracy, "Accuracy must be a number!")
+        AssertType:is_number(stats.max_combo, "Max combo must be a number!")
+        AssertType:is_number(stats.score, "Score must be a number!")
+        AssertType:is_number(stats.combo, "Combo must be a number!")
+
+        self.marvelous_count = stats.marvelous_count
+        self.perfect_count = stats.perfect_count
+        self.great_count = stats.great_count
+        self.good_count = stats.good_count
+        self.bad_count = stats.bad_count
+        self.miss_count = stats.miss_count
+        self.accuracy = stats.accuracy
+        self.max_combo = stats.max_combo
+        self.score = stats.score
+        self.combo = stats.combo
+    end
+
+    function self:set_loading(val)
+        AssertType:is_bool(val)
+        self.loading = val
+    end
+
+    function self:set_finished(val)
+        AssertType:is_bool(val)
+        self.is_finished = val
+    end
+
+    function self:set_ready(val)
+        AssertType:is_bool(val)
+        self.is_ready = val
+    end
+
+    self:cons()
+
+    return self
+end
+
+return Player
+]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBX4AD80F2BB5764698B2699BD04619B6C4">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">Room</string>
+						<string name="ScriptGuid">{12D58027-EF37-4E26-ADE6-C8A789E87D54}</string>
+						<ProtectedString name="Source"><![CDATA[local SPDict = require(game.ReplicatedStorage.Shared.SPDict)
+local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+
+local Player = require(game.ServerScriptService.Multiplayer.Player)
+
+local Room = {}
+
+function Room:new(id)
+    local self = {}
+    self.players = SPDict:new()
+    self.host = 0
+    self.selected_song_key = 1
+    self.name = "Room"
+    self.id = id
+
+    function self:set_host(host)
+        AssertType:is_number(host, "Host must be a UserId number!")
+        self.host = host
+    end
+
+    function self:random_host()
+        local _key = self.players:key_list():random()
+        self.host = self.players:get(_key)
+    end
+
+    function self:add_player(plr)
+        AssertType:is_classname(plr, "Player")
+        self.players:add(plr.UserId, Player:new(plr))
+    end
+
+    function self:get_players_list()
+        local ret = {}
+        for i, v in self.players:key_itr() do
+            ret[#ret+1] = v
+        end
+        return ret
+    end
+
+    function self:remove_player(plr)
+        AssertType:is_classname(plr, "Player")
+        self.players:remove(plr.UserId)
+    end
+
+    function self:update_stats_for_player(plr, stats)
+        AssertType:is_classname(plr, "Player")
+        self:get_player(plr):update_stats(stats)
+    end
+
+    function self:get_player(plr)
+        AssertType:is_classname(plr, "Player")
+        return self.players:get(plr.UserId)
+    end
+
+    function self:update_song_key(key)
+        self.selected_song_key = key
+    end
+
+    function self:is_host(id)
+        return self.host == id
+    end
+
+    function self:get_metadata()
+        return {
+            name = self.name;
+            id = self.id;
+            selected_song_key = self.selected_song_key;
+            host = self.host;
+            players = self.players:key_list();
+        }
+    end
+
+    return self
+end
+
+return Room
+]]></ProtectedString>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+				</Item>
+				<Item class="ModuleScript" referent="RBXE6F76EF5206B4727BBFF53414AE2F961">
+					<Properties>
+						<BinaryString name="AttributesSerialize"></BinaryString>
+						<Content name="LinkedSource"><null></null></Content>
+						<string name="Name">RoomManager</string>
+						<string name="ScriptGuid"></string>
+						<ProtectedString name="Source"><![CDATA[local HttpService = game:GetService("HttpService")
+
+local SPDict = require(game.ReplicatedStorage.Shared.SPDict)
+local SPList = require(game.ReplicatedStorage.Shared.SPList)
+local Room = require(game.ServerScriptService.Multiplayer.Room)
+local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+
+local RoomManager = {}
+
+function RoomManager:new()
+    local self = {}
+    self.rooms = SPDict:new()
+
+    function self:add_room(data)
+        AssertType:is_non_nil(data, "Data table cannot be nil!")
+        AssertType:is_string(data.name, "Name must be a string!")
+        AssertType:is_classname(data.player, "Player")
+
+        local room_id = HttpService:GenerateGUID()
+
+        local _room = Room:new(room_id)
+        _room:add_player(data.player)
+        _room:set_host(data.player.UserId)
+        self.rooms:add(room_id, _room)
+        print(HttpService:JSONEncode(self:get_rooms()))
+        return room_id
+    end
+
+    function self:player_exists_in_room(plr)
+        AssertType:is_classname(plr, "Player")
+        return false
+    end
+
+    function self:get_rooms()
+        local room_tree = SPList:new()
+        
+        for i, room in self.rooms:key_itr() do
+            room_tree:push_back(room:get_metadata())
+        end
+
+        return room_tree._table
+    end
+
+    return self
+end
+
+return RoomManager
 ]]></ProtectedString>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
@@ -91503,6 +91758,66 @@ return LeaderboardDisplay]]></ProtectedString>
 					</Properties>
 				</Item>
 			</Item>
+			<Item class="ModuleScript" referent="RBX70058674B57148AABD8FC34FE707053B">
+				<Properties>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<Content name="LinkedSource"><null></null></Content>
+					<string name="Name">MultiplayerLobbyMenu</string>
+					<string name="ScriptGuid"></string>
+					<ProtectedString name="Source"><![CDATA[local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
+local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
+
+local MultiplayerLobbyMenu = {}
+
+function MultiplayerLobbyMenu:new(_local_services, _header_text, _sub_text, _callback)
+	local self = MenuBase:new()
+	
+	local _multiplayer_lobby_ui
+	
+	function self:cons()
+		_multiplayer_lobby_ui = EnvironmentSetup:get_menu_protos_folder().ConfirmationPopupUI:Clone()
+		_multiplayer_lobby_ui.TitleDisplay.Text = _header_text
+		_multiplayer_lobby_ui.SubDisplay.Text = _sub_text
+		_multiplayer_lobby_ui.OkayButton.Activated:Connect(function()
+			_callback()
+			_local_services._menus:remove_menu(self)
+		end)
+		_multiplayer_lobby_ui.BackButton.Activated:Connect(function()
+			_local_services._menus:remove_menu(self)
+		end)
+	end
+	
+	function self:hide_okay_button()
+		_multiplayer_lobby_ui.OkayButton.Visible = false
+		return self
+	end
+	
+	function self:hide_back_button()
+		_multiplayer_lobby_ui.BackButton.Visible = false
+		return self
+	end
+	
+	--[[Override--]] function self:do_remove()
+		_multiplayer_lobby_ui:Destroy()
+	end
+	
+	--[[Override--]] function self:set_is_top_element(val)
+		if val then
+			_multiplayer_lobby_ui.Parent = EnvironmentSetup:get_player_gui_root()
+		else
+			_multiplayer_lobby_ui.Parent = nil
+		end
+	end
+	
+	self:cons()
+	return self
+end
+
+return MultiplayerLobbyMenu]]></ProtectedString>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
 		</Item>
 		<Item class="Folder" referent="RBXB7947E858BA1406C9B038BE90BA32DB0">
 			<Properties>
@@ -94483,8 +94798,16 @@ function module.AddFunction(name)
 	return module[name]
 end
 
+function module.Get(name)
+	repeat
+		wait()
+	until module[name] ~= nil
+	return module[name]
+end
+
 if IsServer == false then
 	local function ChildHandler(child)
+		print(child.Name)
 		local ChildName = child.Name
 		if child:IsA("RemoteEvent") then
 			module[ChildName] = NewNetworkEvent(child)
@@ -96009,7 +96332,8 @@ end
 
 function Configuration:load_from_save()
 	local suc, err = pcall(function()
-		local settings = Network.RetrieveSettings:Invoke()
+		local settings = Network.Get("RetrieveSettings"):Invoke()
+		print(settings)
 		local deserialized = DatastoreSerializer:deserialize_table(settings or {})
 		if settings ~= nil then
 			for i, v in pairs(deserialized) do

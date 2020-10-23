@@ -46,5 +46,3 @@ Network.AddFunction("RetrieveSettings"):Set(function(player)
 
 	return toReturn
 end)
-
-wait(5)

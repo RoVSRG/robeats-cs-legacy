@@ -92,8 +92,16 @@ function module.AddFunction(name)
 	return module[name]
 end
 
+function module.Get(name)
+	repeat
+		wait()
+	until module[name] ~= nil
+	return module[name]
+end
+
 if IsServer == false then
 	local function ChildHandler(child)
+		print(child.Name)
 		local ChildName = child.Name
 		if child:IsA("RemoteEvent") then
 			module[ChildName] = NewNetworkEvent(child)
