@@ -11,5 +11,16 @@ Network.AddFunction("AddRoom"):Set(function(player, data)
 
     data.player = player
 
-    RoomManager:add_room(data)
+    local _id = RoomManager:add_room(data)
+    return _id
+end)
+
+Network.AddEvent("JoinRoom"):Connect(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+
+end)
+
+Network.AddFunction("GetRooms"):Get(function()
+    return RoomManager:get_rooms()
 end)
