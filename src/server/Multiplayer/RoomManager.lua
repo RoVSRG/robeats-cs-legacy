@@ -22,7 +22,6 @@ function RoomManager:new()
         _room:add_player(data.player)
         _room:set_host(data.player.UserId)
         self.rooms:add(room_id, _room)
-        print(HttpService:JSONEncode(self:get_rooms()))
         return room_id
     end
 
@@ -39,6 +38,22 @@ function RoomManager:new()
         end
 
         return room_tree._table
+    end
+
+    function self:join_room(data)
+        AssertType:is_non_nil(data, "Data table cannot be nil!")
+        AssertType:is_string(data.id, "ID must be a string GUID!")
+        AssertType:is_classname(data.player, "Player")
+
+        self.rooms:get(data.id):add_player(data.player)
+    end
+
+    function self:leave_room(data)
+        AssertType:is_non_nil(data, "Data table cannot be nil!")
+        AssertType:is_string(data.id, "ID must be a string GUID!")
+        AssertType:is_classname(data.player, "Player")
+
+        self.rooms:get(data.id):remove_player(data.player)
     end
 
     return self
