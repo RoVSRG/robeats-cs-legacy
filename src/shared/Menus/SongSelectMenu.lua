@@ -10,6 +10,7 @@ local LeaderboardDisplay = require(game.ReplicatedStorage.Menus.Utils.Leaderboar
 local SongStartMenu = require(game.ReplicatedStorage.Menus.SongStartMenu)
 local ConfirmationPopupMenu = require(game.ReplicatedStorage.Menus.ConfirmationPopupMenu)
 local SettingsMenu = require(game.ReplicatedStorage.Menus.SettingsMenu)
+local MultiplayerLobbyMenu = require(game.ReplicatedStorage.Menus.MultiplayerLobbyMenu)
 local Configuration	= require(game.ReplicatedStorage.Configuration)
 local CustomServerSettings = require(game.Workspace.CustomServerSettings)
 
@@ -82,6 +83,10 @@ function SongSelectMenu:new(_local_services)
 
 		SPUtil:bind_input_fire(tab_container.SettingsButton, function()
 			_local_services._menus:push_menu(SettingsMenu:new(_local_services))
+		end)
+
+		SPUtil:bind_input_fire(tab_container.MultiplayerButton, function()
+			_local_services._menus:push_menu(MultiplayerLobbyMenu:new(_local_services))
 		end)
 
 		
