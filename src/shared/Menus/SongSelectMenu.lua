@@ -52,16 +52,18 @@ function SongSelectMenu:new(_local_services)
 
 			local song_cover = itr_list_element.SongCover
 
-			SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
-			song_cover.NameDisplay.Text = SongDatabase:get_title_for_key(itr_songkey)
-			song_cover.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(itr_songkey))
+			--SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
+			itr_list_element.SongCover.Image = SongDatabase:get_image_for_key(itr_songkey)
+			itr_list_element.NameDisplay.Text = SongDatabase:get_title_for_key(itr_songkey)
+			itr_list_element.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(itr_songkey))
 			if SongDatabase:key_get_audiomod(itr_songkey) == SongDatabase.SongMode.SupporterOnly then
-				song_cover.DifficultyDisplay.Text = song_cover.DifficultyDisplay.Text .. " (Supporter Only)"
+				itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
 			end
 			
 			SPUtil:bind_input_fire(itr_list_element, function(input)
 				self:select_songkey(itr_songkey)
 			end)
+			
 		end
 		
 		_leaderboard_display = LeaderboardDisplay:new(
@@ -111,11 +113,11 @@ function SongSelectMenu:new(_local_services)
 		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = false
 		_selected_songkey = songkey
 		
-		SongDatabase:render_coverimage_for_key(section_container.SongInfoSection.SongInfoDisplay.SongCover, section_container.SongInfoSection.SongInfoDisplay.SongCover.SongCoverOverlay, _selected_songkey)
-		section_container.SongInfoSection.SongInfoDisplay.SongCover.NameDisplay.Text = SongDatabase:get_title_for_key(_selected_songkey)
-		section_container.SongInfoSection.SongInfoDisplay.SongCover.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(_selected_songkey))
-		section_container.SongInfoSection.SongInfoDisplay.SongCover.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
-		section_container.SongInfoSection.SongInfoDisplay.SongCover.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
+		--SongDatabase:render_coverimage_for_key(section_container.SongInfoSection.SongInfoDisplay.SongCover, section_container.SongInfoSection.SongInfoDisplay.SongCover.SongCoverOverlay, _selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.NameDisplay.Text = SongDatabase:get_title_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(_selected_songkey))
+		section_container.SongInfoSection.SongInfoDisplay.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
 		
 		section_container.SongInfoSection.SongInfoDisplay.Visible = true
 		section_container.PlayButton.Visible = true

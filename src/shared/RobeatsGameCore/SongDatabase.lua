@@ -91,6 +91,12 @@ function SongDatabase:new()
 		local songdata = self:get_data_for_key(key)
 		return songdata.AudioDescription
 	end
+	
+	function self:get_image_for_key(key)
+		local songdata = self:get_data_for_key(key)
+		return songdata.AudioCoverImageAssetId
+	end
+
 
 	function self:get_song_length_for_key(key)
 		local data = self:get_data_for_key(key)
