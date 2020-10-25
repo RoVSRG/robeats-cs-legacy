@@ -64066,9 +64066,9 @@ Network.AddEvent("JoinRoom"):Connect(function(player, data)
 
 end)
 
---[[Network.AddFunction("GetRooms"):Get(function()
+Network.AddFunction("GetRooms"):Set(function()
     return RoomManager:get_rooms()
-end)]]
+end)
 ]]></ProtectedString>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
@@ -66622,6 +66622,29 @@ function EnumItemHandler:deserialize(item)
 end
 
 return EnumItemHandler]]></ProtectedString>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+					</Item>
+					<Item class="ModuleScript" referent="RBXF53AE2B3B8D64DCD94823741EF85F8DA">
+						<Properties>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<Content name="LinkedSource"><null></null></Content>
+							<string name="Name">Vector3</string>
+							<string name="ScriptGuid">{EB81B4ED-F55B-42B6-A11C-F610A2DB47B6}</string>
+							<ProtectedString name="Source"><![CDATA[local EnumHandler = require(script.Parent.Parent.System.EnumHandler)
+local Vector3Handler = EnumHandler:new()
+
+function Vector3Handler:serialize(item)
+		return self:new_object("Vector3", {X = item.X, Y = item.Y, Z = item.Z})
+		
+end
+
+function Vector3Handler:deserialize(item)
+		return Vector3.new(item.X, item.Y, item.Z)
+end
+
+return Vector3Handler]]></ProtectedString>
 							<int64 name="SourceAssetId">-1</int64>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
