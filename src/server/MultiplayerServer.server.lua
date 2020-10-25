@@ -21,6 +21,6 @@ Network.AddEvent("JoinRoom"):Connect(function(player, data)
 
 end)
 
-Network.AddFunction("GetRooms"):Get(function()
+Network.AddFunction("GetRooms"):Set(function()
     return RoomManager:get_rooms()
 end)
