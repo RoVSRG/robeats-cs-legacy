@@ -59,6 +59,14 @@ function RoomManager:new()
         AssertType:is_classname(data.player, "Player")
 
         self.rooms:get(data.id):remove_player(data.player)
+        return #self.rooms:get(data.id):get_metadata().players == 0
+    end
+
+    function self:remove_room(data)
+        AssertType:is_non_nil(data, "Data table cannot be nil!")
+        AssertType:is_string(data.id, "ID must be a string GUID!")
+
+        self.rooms:remove(data.id)
     end
 
     return self

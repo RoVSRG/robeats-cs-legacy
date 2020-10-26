@@ -31,7 +31,7 @@ function MultiplayerLobbyMenu:new(_local_services, _header_text, _sub_text, _cal
         _multiplayer_slot_proto.Parent = nil
 
         SPUtil:bind_input_fire(tab_container.CreateRoomButton, function()
-            local _room_id = Network.AddRoom:Invoke({
+            local _room_id = MultiplayerClient:add_room({
                 name = "big chungus"
             })
 
@@ -42,12 +42,17 @@ function MultiplayerLobbyMenu:new(_local_services, _header_text, _sub_text, _cal
             _local_services._menus:push_menu(MultiplayerGameMenu:new(_local_services, _game_client))
         end)
 
-        for _, room in pairs(Network.GetRooms:Invoke() or {}) do
+        --[[for _, room in pairs(Network.GetRooms:Invoke() or {}) do
+            print("br")
             self:add_lobby(room)
-        end
+        end]]--
 
-        Network.RoomCreated:Connect(function(data)
+        Network.RoomCreated:Connect(function(data) -- this fires retroactively???????????????
             self:add_lobby(data)
+        end)
+
+        Network.RoomDeleted:Connect(function(data)
+            self:remove_lobby(data)
         end)
 	end
 	
@@ -68,6 +73,15 @@ function MultiplayerLobbyMenu:new(_local_services, _header_text, _sub_text, _cal
         itr_multiplayer_slot.MultiNameDisplay.Text = data.name
         itr_multiplayer_slot.MultiInfoDisplay.Text = string.format("%0d players", #data.players)
         itr_multiplayer_slot.Parent = section_container.MultiSection.MultiList
+        itr_multiplayer_slot.Name = data.id or ""
+        SPUtil:bind_input_fire(itr_multiplayer_slot, function() end)
+    end
+
+    function self:remove_lobby(data)
+        local room_proto = section_container.MultiSection.MultiList:FindFirstChild(data.id)
+        if room_proto then
+            room_proto:Destroy()
+        end
     end
     
     function self:should_remove()

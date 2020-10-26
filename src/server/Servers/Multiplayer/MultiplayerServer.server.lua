@@ -36,7 +36,15 @@ Network.AddEvent("LeaveRoom"):Connect(function(player, data)
 
     data.player = player
 
-    RoomManager:leave_room(data)
+    local should_remove = RoomManager:leave_room(data)
+
+    if should_remove then
+        data.player = nil
+        RoomManager:remove_room(data)
+        Network.RoomDeleted:FireAll(data)
+        return
+    end
+
     Network.PlayerLeftRoom:FireAll(data)
 end)
 

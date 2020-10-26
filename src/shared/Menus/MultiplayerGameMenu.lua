@@ -22,6 +22,8 @@ function MultiplayerLobbyMenu:new(_local_services, _game_client)
     local section_container
     local tab_container
 
+    local _should_remove = false
+
     local _test_toggle = false
 
     local test_toggle_flash = FlashEvery:new(1)
@@ -42,7 +44,16 @@ function MultiplayerLobbyMenu:new(_local_services, _game_client)
             itr_player_slot_cover.NameDisplay.Text = SPUtil:player_name_from_id(player_id)
             itr_player_slot.Parent = section_container.PlayerSection.PlayerList
         end
-	end
+
+        SPUtil:bind_input_fire(tab_container.LeaveRoomButton, function()
+            _should_remove = true
+            _game_client:leave_room()
+        end)
+    end
+    
+    --[[Override--]] function self:should_remove()
+        return _should_remove
+    end
 	
 	--[[Override--]] function self:do_remove()
 		_multiplayer_game_ui:Destroy()

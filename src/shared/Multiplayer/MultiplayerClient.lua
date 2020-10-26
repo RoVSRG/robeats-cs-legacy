@@ -36,7 +36,17 @@ function MultiplayerClient:new(data)
 
     end
 
+    function self:leave_room()
+        Network.LeaveRoom:Fire({
+            id = data.id
+        })
+    end
+
     return self
+end
+
+function MultiplayerClient:add_room(data)
+    return Network.AddRoom:Invoke(data)
 end
 
 return MultiplayerClient
