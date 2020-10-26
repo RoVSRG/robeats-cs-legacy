@@ -5,6 +5,7 @@ local RobeatsGame = require(game.ReplicatedStorage.RobeatsGameCore.RobeatsGame)
 local AudioManager = require(game.ReplicatedStorage.RobeatsGameCore.AudioManager)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local Network = require(game.ReplicatedStorage.Network)
+local Configuration = require(game.ReplicatedStorage.Configuration)
 
 local InGameMenu = {}
 
@@ -21,6 +22,14 @@ function InGameMenu:new(_local_services, _game, _song_key)
 	function self:cons()
 		_stat_display_ui = EnvironmentSetup:get_menu_protos_folder().InGameMenuStatDisplayUI:Clone()
 		_stat_display_ui.Parent = EnvironmentSetup:get_player_gui_root()
+		
+		_stat_display_ui.ScrollPlusButton.Activated:Connect(function()
+			Configuration.Preferences.NoteSpeedMultiplier = Configuration.Preferences.NoteSpeedMultiplier + 0.5
+		end)
+		
+		_stat_display_ui.ScrollMinusButton.Activated:Connect(function()
+			Configuration.Preferences.NoteSpeedMultiplier = Configuration.Preferences.NoteSpeedMultiplier - 0.5
+		end)
 		
 		_stat_display_ui.ExitButton.Activated:Connect(function()
 			if _game._audio_manager:get_mode() == AudioManager.Mode.Playing then

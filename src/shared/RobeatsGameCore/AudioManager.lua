@@ -31,8 +31,19 @@ function AudioManager:new(_game)
 	
 	--Note speed in milliseconds, from time it takes to spawn the note to time the note is hit. Default value is 1500, or 1.5 seconds.
 	--To add a multiplier to this, set Configuration.Preferences.NoteSpeedMultiplier
+	
+	local _current_audio_data
+	
 	local _note_prebuffer_time = 0
-	function self:get_note_prebuffer_time_ms() return _note_prebuffer_time end
+	
+	local _song_key = 0
+	function self:get_song_key() return _song_key end
+	
+	function self:get_note_prebuffer_time_ms() 
+		_current_audio_data = SongDatabase:get_data_for_key(_song_key)
+		_note_prebuffer_time = (_current_audio_data.AudioNotePrebufferTime / Configuration.Preferences.NoteSpeedMultiplier)*_rate
+		return _note_prebuffer_time 
+	end
 	
 	--Note timings: millisecond offset (positive is early, negative is late) mapping to what the note result is
 	local window = TimingPresets:getCurrentTimingWindow(Configuration.Preferences.Preset)
@@ -88,9 +99,6 @@ function AudioManager:new(_game)
 	local _pre_start_time_ms = 0
 	local _post_playing_time_ms = 0
 	local _audio_volume = 0.5
-
-	local _song_key = 0
-	function self:get_song_key() return _song_key end
 
 	local _note_count = 0
 	function self:get_note_count() return _note_count end
