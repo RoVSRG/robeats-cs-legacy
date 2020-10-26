@@ -50,8 +50,6 @@ function SongSelectMenu:new(_local_services)
 			itr_list_element.Parent = song_list
 			itr_list_element.LayoutOrder = itr_songkey
 
-			local song_cover = itr_list_element.SongCover
-
 			--SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
 			itr_list_element.SongCover.Image = SongDatabase:get_image_for_key(itr_songkey)
 			itr_list_element.NameDisplay.Text = SongDatabase:get_title_for_key(itr_songkey)

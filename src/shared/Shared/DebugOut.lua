@@ -1,4 +1,10 @@
+local HttpService = game:GetService("HttpService")
+
 local DebugOut = {}
+
+function DebugOut:puts_table(tab)
+	print(HttpService:JSONEncode(tab))
+end
 
 function DebugOut:puts(str,...)
 	local out_str =	 string.format(str,...)

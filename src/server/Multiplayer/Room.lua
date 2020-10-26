@@ -65,7 +65,7 @@ function Room:new(id)
             id = self.id;
             selected_song_key = self.selected_song_key;
             host = self.host;
-            players = self.players:key_list();
+            players = self.players:key_list()._table;
         }
     end
 

@@ -16,6 +16,8 @@ function RoomManager:new()
         AssertType:is_string(data.name, "Name must be a string!")
         AssertType:is_classname(data.player, "Player")
 
+        if self:player_exists_in_room(data.player) then return false end
+
         local room_id = HttpService:GenerateGUID()
 
         local _room = Room:new(room_id)
@@ -27,6 +29,9 @@ function RoomManager:new()
 
     function self:player_exists_in_room(plr)
         AssertType:is_classname(plr, "Player")
+        for i, room in self.rooms:key_itr() do
+            if room.host == plr.UserId then return true end
+        end
         return false
     end
 

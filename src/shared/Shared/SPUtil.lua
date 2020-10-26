@@ -161,4 +161,12 @@ function SPUtil:copy_table(datatable)
 	return tblRes
 end
 
+function SPUtil:player_name_from_id(id)
+	local name
+	local suc, err = pcall(function()
+		name = game.Players:GetNameFromUserIdAsync(id)
+	end)
+	return suc and name or "N/A"
+end
+
 return SPUtil
