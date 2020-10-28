@@ -4,6 +4,7 @@ local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local GameSlot = require(game.ReplicatedStorage.RobeatsGameCore.Enums.GameSlot)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
+local SFXManager = require(game.ReplicatedStorage.RobeatsGameCore.SFXManager)
 local MarketplaceService = game:GetService("MarketplaceService")
 
 local LeaderboardDisplay = require(game.ReplicatedStorage.Menus.Utils.LeaderboardDisplay)
@@ -59,6 +60,7 @@ function SongSelectMenu:new(_local_services)
 			end
 			
 			SPUtil:bind_input_fire(itr_list_element, function(input)
+				_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
 				self:select_songkey(itr_songkey)
 			end)
 			
@@ -74,12 +76,9 @@ function SongSelectMenu:new(_local_services)
 		section_container.PlayButton.Visible = false
 
 		SPUtil:bind_input_fire(section_container.PlayButton, function()
+			_local_services._sfx_manager:play_sfx(SFXManager.SFX_MENU_OPEN)
 			self:play_button_pressed()
 		end)
-		
-		--[[SPUtil:bind_input_fire(_song_select_ui.GamepassButton, function()
-			self:show_gamepass_menu()
-		end)]]--
 
 		SPUtil:bind_input_fire(tab_container.SettingsButton, function()
 			_local_services._menus:push_menu(SettingsMenu:new(_local_services))
@@ -117,6 +116,29 @@ function SongSelectMenu:new(_local_services)
 		section_container.SongInfoSection.SongInfoDisplay.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
 		section_container.SongInfoSection.SongInfoDisplay.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
 		section_container.SongInfoSection.SongInfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(_selected_songkey)
+
+		for _, itr_nps_ob in pairs(section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items:GetChildren()) do
+			if itr_nps_ob:IsA("Frame") then
+				itr_nps_ob:Destroy()
+			end
+		end
+
+		local nps_graph = SongDatabase:get_nps_graph_for_key(_selected_songkey)
+		local max_nps = 0
+		for _, nps in pairs(nps_graph) do
+			max_nps = math.max(nps, max_nps)
+		end
+
+		for _, nps in pairs(nps_graph) do
+			local nps_point = Instance.new("Frame")
+			nps_point.BorderSizePixel = 0
+			nps_point.Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0)
+			nps_point.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+			nps_point.Parent = section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items
+		end
+
+		section_container.SongInfoSection.SongInfoDisplay.NpsGraph.MaxNps.Text = string.format("MAX NPS: %d", max_nps)
+		
 		
 		section_container.SongInfoSection.SongInfoDisplay.Visible = true
 		section_container.PlayButton.Visible = true
