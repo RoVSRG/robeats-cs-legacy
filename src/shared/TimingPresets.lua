@@ -65,7 +65,7 @@ local TimingPresets = {
 	}
 }
 
-function TimingPresets:getCurrentTimingWindow(_preset)
+function TimingPresets:get_timing_window(_preset)
 	return TimingPresets[_preset];
 end
 
