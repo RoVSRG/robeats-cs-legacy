@@ -93,6 +93,9 @@ function SFXManager:new()
 		create_pooled(SFXManager.SFX_COUNTDOWN_GO)
 
 		create_pooled(SFXManager.SFX_WOOSH)
+		for i=0,5 do
+			create_pooled(SFXManager.SFX_BUTTONPRESS)
+		end
 	end
 
 	function self:preload(sfx_key, count, volume)
