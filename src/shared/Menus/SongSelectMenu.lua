@@ -63,6 +63,17 @@ function SongSelectMenu:new(_local_services)
 				_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
 				self:select_songkey(itr_songkey)
 			end)
+
+			local original_size = itr_list_element.Size
+
+			itr_list_element.MouseEnter:Connect(function()
+				itr_list_element:TweenSize(original_size+UDim2.new(0,4,0,20), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
+				--_local_services._sfx_manager:play_sfx(SFXManager.SFX_HOVER)
+			end)
+
+			itr_list_element.MouseLeave:Connect(function()
+				itr_list_element:TweenSize(original_size, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
+			end)
 			
 		end
 		
@@ -76,7 +87,6 @@ function SongSelectMenu:new(_local_services)
 		section_container.PlayButton.Visible = false
 
 		SPUtil:bind_input_fire(section_container.PlayButton, function()
-			_local_services._sfx_manager:play_sfx(SFXManager.SFX_MENU_OPEN)
 			self:play_button_pressed()
 		end)
 
@@ -109,11 +119,15 @@ function SongSelectMenu:new(_local_services)
 		if SongDatabase:contains_key(songkey) ~= true then return end
 		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = false
 		_selected_songkey = songkey
+
+		local total_notes, total_holds = SongDatabase:get_note_metrics_for_key(_selected_songkey)
 		
 		--SongDatabase:render_coverimage_for_key(section_container.SongInfoSection.SongInfoDisplay.SongCover, section_container.SongInfoSection.SongInfoDisplay.SongCover.SongCoverOverlay, _selected_songkey)
-		section_container.SongInfoSection.SongInfoDisplay.NameDisplay.Text = SongDatabase:get_title_for_key(_selected_songkey)
-		section_container.SongInfoSection.SongInfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(_selected_songkey))
-		section_container.SongInfoSection.SongInfoDisplay.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.Metadata.NameDisplay.Text = SongDatabase:get_title_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.Metadata.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(_selected_songkey))
+		section_container.SongInfoSection.SongInfoDisplay.Metadata.ArtistDisplay.Text = SongDatabase:get_artist_for_key(_selected_songkey)
+		section_container.SongInfoSection.SongInfoDisplay.Metadata.TotalNotesDisplay.Text = string.format("Total Notes: %d", total_notes)
+		section_container.SongInfoSection.SongInfoDisplay.Metadata.TotalHoldsDisplay.Text = string.format("Total Holds: %d", total_holds)
 		section_container.SongInfoSection.SongInfoDisplay.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
 		section_container.SongInfoSection.SongInfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(_selected_songkey)
 
@@ -129,11 +143,14 @@ function SongSelectMenu:new(_local_services)
 			max_nps = math.max(nps, max_nps)
 		end
 
+		local _lime = Color3.fromRGB(186, 252, 3)
+		local _red = Color3.fromRGB(224, 18, 32)
+
 		for _, nps in pairs(nps_graph) do
 			local nps_point = Instance.new("Frame")
 			nps_point.BorderSizePixel = 0
 			nps_point.Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0)
-			nps_point.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+			nps_point.BackgroundColor3 = _lime:Lerp(_red, math.clamp(nps/40, 0, 1))
 			nps_point.Parent = section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items
 		end
 
@@ -147,6 +164,7 @@ function SongSelectMenu:new(_local_services)
 	end
 	
 	function self:play_button_pressed()
+		_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
 		if SongDatabase:contains_key(_selected_songkey) then
 			_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
 		end
