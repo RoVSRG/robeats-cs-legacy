@@ -73,7 +73,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		local average_offset = 0
 
 		for i, v in pairs(_score_data.hitdeviance) do
-			average_offset += (v.hit_time_ms - v.expected_hit_time_ms)
+			average_offset += v.time_to_end
 		end
 
 		average_offset /= (#_score_data.hitdeviance == 0 and 1 or #_score_data.hitdeviance)
@@ -109,7 +109,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		for _, hit_data in pairs(_score_data.hitdeviance) do
 			hit_graph:add_data_point({
 				x = hit_data.hit_time_ms;
-				y = hit_data.hit_time_ms - hit_data.expected_hit_time_ms;
+				y = hit_data.time_to_end;
 				color = ResultsMenu.HitColor[hit_data.note_result];
 			})
 		end

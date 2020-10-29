@@ -85,9 +85,9 @@ function NoteTrackSystem:new(_game, _game_slot)
 		for i=1,_notes:count() do
 			local itr_note = _notes:get(i)
 			if itr_note:get_track_index() == track_index then
-				local did_hit, note_result = itr_note:test_hit()
+				local did_hit, note_result, time_to_end = itr_note:test_hit()
 				if did_hit then
-					itr_note:on_hit(note_result,i)
+					itr_note:on_hit(note_result,i,time_to_end)
 					hit_found = true
 					break
 				end
@@ -111,9 +111,9 @@ function NoteTrackSystem:new(_game, _game_slot)
 		for i=1,_notes:count() do
 			local itr_note = _notes:get(i)
 			if itr_note:get_track_index() == track_index then
-				local did_release, note_result = itr_note:test_release()
+				local did_release, note_result, time_to_end = itr_note:test_release()
 				if did_release then
-					itr_note:on_release(note_result,i)
+					itr_note:on_release(note_result,i,time_to_end)
 					break
 				end
 			end

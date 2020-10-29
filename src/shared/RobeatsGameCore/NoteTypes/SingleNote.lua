@@ -117,7 +117,7 @@ function SingleNote:new(_game, _track_index, _slot_index, _creation_time_ms, _hi
 					NoteResult.Miss,
 					_slot_index,
 					_track_index,
-					HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_expected_hit_time(_hit_time_ms)
+					HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_hit_time(_hit_time_ms):set_time_to_end(self:get_time_to_end())
 				)
 			end
 		end
@@ -146,13 +146,13 @@ function SingleNote:new(_game, _track_index, _slot_index, _creation_time_ms, _hi
 		local did_hit, note_result = NoteResult:timedelta_to_result(time_to_end, _game)
 
 		if did_hit then
-			return did_hit, note_result
+			return did_hit, note_result, time_to_end
 		end
 
 		return false, NoteResult.Miss
 	end
 
-	--[[Override--]] function self:on_hit(note_result, i_notes)
+	--[[Override--]] function self:on_hit(note_result, i_notes, time_to_end)
 		_game._effects:add_effect(TriggerNoteEffect:new(
 			_game,
 			_position,
@@ -163,7 +163,7 @@ function SingleNote:new(_game, _track_index, _slot_index, _creation_time_ms, _hi
 			note_result,
 			_slot_index,
 			_track_index,
-			HitParams:new():set_play_hold_effect(true, _position):set_expected_hit_time(_hit_time_ms)
+			HitParams:new():set_play_hold_effect(true, _position):set_hit_time(_hit_time_ms):set_time_to_end(time_to_end)
 		)
 
 		_state = SingleNote.State.DoRemove
