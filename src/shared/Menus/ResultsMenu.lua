@@ -104,7 +104,7 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		hit_graph:attach_to_instance(section_container.HitContainer.Hits)
 		hit_graph:set_bounds(_song_length_ms, -300, 0, 300)
-		hit_graph:add_markers(15000, -20) -- ADD LATER!!!!!
+		hit_graph:add_y_markers(-60)
 
 		for _, hit_data in pairs(_score_data.hitdeviance) do
 			hit_graph:add_data_point({
