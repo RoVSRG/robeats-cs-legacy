@@ -30,10 +30,16 @@ function MultiplayerClient:new(data)
         return Network.GetPlayersInRoom:Invoke({
             id = data.id
         })
-    end
+	end
+	
+	function self:get_room_data()
+		return Network.GetRoomData:Invoke({
+			id = data.id
+		})
+	end
 
     function self:get_player_data()
-
+		
     end
 
     function self:leave_room()

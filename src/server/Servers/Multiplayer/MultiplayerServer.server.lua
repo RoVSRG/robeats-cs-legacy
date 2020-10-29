@@ -63,3 +63,9 @@ Network.AddFunction("GetPlayersInRoom"):Set(function(player, data)
     AssertType:is_string(data.id, "ID must be a string GUID!")
     return RoomManager.rooms:get(data.id).players:key_list()._table
 end)
+
+Network.AddFunction("GetRoomData"):Set(function(player, data)
+	AssertType:is_non_nil(data, "Data table cannot be nil!")
+	AssertType:is_string(data.id, "ID must be a string GUID!")
+	return RoomManager.rooms:get(data.id)
+end)

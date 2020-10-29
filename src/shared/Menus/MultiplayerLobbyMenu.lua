@@ -3,6 +3,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local RBXScriptSignalManager = require(game.ReplicatedStorage.Shared.RBXScriptSignalManager)
+local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
 local MultiplayerClient = require(game.ReplicatedStorage.Multiplayer.MultiplayerClient)
 
@@ -16,7 +17,8 @@ function MultiplayerLobbyMenu:new(_local_services)
     local MultiplayerGameMenu = require(game.ReplicatedStorage.Menus.MultiplayerGameMenu)
 	
     local _multiplayer_lobby_ui
-    local _multiplayer_slot_proto
+	local _multiplayer_slot_proto
+	local _player_slot_proto
     local _should_remove = false
 
     local section_container
@@ -33,7 +35,10 @@ function MultiplayerLobbyMenu:new(_local_services)
         tab_container = _multiplayer_lobby_ui.TabContainer
 
         _multiplayer_slot_proto = section_container.MultiSection.MultiList.MultiListElementProto
-        _multiplayer_slot_proto.Parent = nil
+		_multiplayer_slot_proto.Parent = nil
+		
+		_player_slot_proto = section_container.MultiInfoSection.MultiInfoDisplay.PlayerList.PlayerListElementProto
+		_player_slot_proto.Parent = nil
 
         SPUtil:bind_input_fire(section_container.JoinButton, function()
             if _currently_selected_lobby then
@@ -87,16 +92,41 @@ function MultiplayerLobbyMenu:new(_local_services)
         else
 			_multiplayer_lobby_ui.Parent = nil
 		end
-    end
+	end
+	
+	function self:add_player(data)
+		if not section_container.MultiInfoSection.MultiInfoDisplay.PlayerList:FindFirstChild(data.userid) then
+			local itr_player_slot = _player_slot_proto:Clone()
+			itr_player_slot.Name = data.userid or ""
+			itr_player_slot.PlayerCover.NameDisplay.Text = game.Players:GetNameFromUserIdAsync(data.userid)
+			itr_player_slot.PlayerCover.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. data.userid .. "&width=420&height=420&format=png"
+		end
+	end
 
     function self:add_lobby(data)
         if not section_container.MultiSection.MultiList:FindFirstChild(data.id) then
             local itr_multiplayer_slot = _multiplayer_slot_proto:Clone()
             itr_multiplayer_slot.MultiNameDisplay.Text = data.name
-            itr_multiplayer_slot.MultiInfoDisplay.Text = string.format("%0d players", #data.players)
+			itr_multiplayer_slot.MultiInfoDisplay.Text = string.format("%0d players", #data.players)
+			itr_multiplayer_slot.SongCover.Image = SongDatabase:get_image_for_key(data.selected_song_key)
+			itr_multiplayer_slot.SongDisplay.Text = SongDatabase:get_title_for_key(data.selected_song_key)
+			itr_multiplayer_slot.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(data.selected_song_key))
             itr_multiplayer_slot.Parent = section_container.MultiSection.MultiList
             itr_multiplayer_slot.Name = data.id or ""
-            SPUtil:bind_input_fire(itr_multiplayer_slot, function()
+			SPUtil:bind_input_fire(itr_multiplayer_slot, function()
+				if SongDatabase:contains_key(data.selected_song_key) ~= true then return end
+				section_container.MultiInfoSection.MultiInfoDisplay.Visible = true
+				section_container.MultiInfoSection.MultiInfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(data.selected_song_key))
+				section_container.MultiInfoSection.MultiInfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(data.selected_song_key)
+				section_container.MultiInfoSection.MultiInfoDisplay.MultiNameDisplay.Text = data.name
+				section_container.MultiInfoSection.MultiInfoDisplay.SongDisplay.Text = SongDatabase:get_title_for_key(data.selected_song_key)
+				section_container.MultiInfoSection.MultiInfoDisplay.MultiInfoDisplay.Text = string.format("%0d players", #data.players)
+				--[[for i, player_id in pairs(Network.GetPlayersInRoom:Invoke() or {}) do
+					self:add_player({
+						userid = data[i].UserId
+					})
+					print(data[i].UserId)
+				end]]
                 _currently_selected_lobby = data.id
             end)
         end

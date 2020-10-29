@@ -16,7 +16,12 @@ function Room:new(id)
     function self:set_host(host)
         AssertType:is_number(host, "Host must be a UserId number!")
         self.host = host
-    end
+	end
+	
+	function self:set_name(name)
+		AssertType:is_string(name, "Name must be a valid string!")
+		self.name = name
+	end
 
     function self:random_host()
         local _key = self.players:key_list():random()

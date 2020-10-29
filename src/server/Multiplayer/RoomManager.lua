@@ -22,7 +22,8 @@ function RoomManager:new()
 
         local _room = Room:new(room_id)
         _room:add_player(data.player)
-        _room:set_host(data.player.UserId)
+		_room:set_host(data.player.UserId)
+		_room:set_name(data.player.Name .. "'s Room")
         self.rooms:add(room_id, _room)
         return room_id
     end
