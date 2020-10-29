@@ -129,6 +129,22 @@ function SongDatabase:new()
 
 		return nps_graph
 	end
+
+	function self:get_note_metrics_for_key(key)
+		local data = self:get_data_for_key(key)
+		local total_notes = 0
+		local total_holds = 0
+
+		for _, hit_object in pairs(data.HitObjects) do
+			if hit_object.Type == 1 then
+				total_notes += 1
+			elseif hit_object.Type == 2 then
+				total_holds += 1
+			end
+		end
+
+		return total_notes, total_holds
+	end
 	
 	function self:invalid_songkey() return -1 end
 
