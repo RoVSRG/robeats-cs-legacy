@@ -23,6 +23,9 @@ function ResultsMenu:new(_local_services, _score_data)
 	local _results_menu_ui
 	local _input = _local_services._input
 
+	local _spread_display
+	local total_judges
+
 	local _should_remove = false
 
 	local _grade_images = {
@@ -82,27 +85,9 @@ function ResultsMenu:new(_local_services, _score_data)
 		section_container.DataContainer.MaxCombo.Data.Text = _score_data.maxcombo.."x"
 
 		--HANDLE SPREAD RENDERING
-		local _spread_display = section_container.SpreadContainer.SpreadDisplay
+		_spread_display = section_container.SpreadContainer.SpreadDisplay
 
-		local total_judges = #_key_data.HitObjects
-
-		_spread_display.Marvelous.Total.Size = UDim2.new(_score_data.marvelouses/total_judges,0,1,0)
-		_spread_display.Marvelous.TotalNumber.Text = _score_data.marvelouses
-
-		_spread_display.Perfect.Total.Size = UDim2.new(_score_data.perfects/total_judges,0,1,0)
-		_spread_display.Perfect.TotalNumber.Text = _score_data.perfects
-
-		_spread_display.Great.Total.Size = UDim2.new(_score_data.greats/total_judges,0,1,0)
-		_spread_display.Great.TotalNumber.Text = _score_data.greats
-
-		_spread_display.Good.Total.Size = UDim2.new(_score_data.goods/total_judges,0,1,0)
-		_spread_display.Good.TotalNumber.Text = _score_data.goods
-
-		_spread_display.Bad.Total.Size = UDim2.new(_score_data.bads/total_judges,0,1,0)
-		_spread_display.Bad.TotalNumber.Text = _score_data.bads
-
-		_spread_display.Miss.Total.Size = UDim2.new(_score_data.misses/total_judges,0,1,0)
-		_spread_display.Miss.TotalNumber.Text = _score_data.misses
+		total_judges = #_key_data.HitObjects
 
 		section_container.Banner.PlayerInfo.Text = string.format("Played by %s at %s",
 			game.Players.LocalPlayer.Name,
@@ -119,7 +104,7 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		hit_graph:attach_to_instance(section_container.HitContainer.Hits)
 		hit_graph:set_bounds(_song_length_ms, -300, 0, 300)
-		--hit_graph:add_markers(15000, -20) -- ADD LATER!!!!!
+		hit_graph:add_markers(15000, -20) -- ADD LATER!!!!!
 
 		for _, hit_data in pairs(_score_data.hitdeviance) do
 			hit_graph:add_data_point({
@@ -134,6 +119,26 @@ function ResultsMenu:new(_local_services, _score_data)
 		local str = "%.2f%% | %0d / %0d / %0d / %0d"
 		return string.format(str, data.accuracy*100, data.perfects, data.greats, data.okays, data.misses)
 	end
+
+	function self:render_spread()
+		_spread_display.Marvelous.Total:TweenSize(UDim2.new(_score_data.marvelouses/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		_spread_display.Marvelous.TotalNumber.Text = _score_data.marvelouses
+
+		_spread_display.Perfect.Total:TweenSize(UDim2.new(_score_data.perfects/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		_spread_display.Perfect.TotalNumber.Text = _score_data.perfects
+
+		_spread_display.Great.Total:TweenSize(UDim2.new(_score_data.greats/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		_spread_display.Great.TotalNumber.Text = _score_data.greats
+
+		_spread_display.Good.Total:TweenSize(UDim2.new(_score_data.goods/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		_spread_display.Good.TotalNumber.Text = _score_data.goods
+
+		_spread_display.Bad.Total:TweenSize(UDim2.new(_score_data.bads/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		_spread_display.Bad.TotalNumber.Text = _score_data.bads
+
+		_spread_display.Miss.Total:TweenSize(UDim2.new(_score_data.misses/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		_spread_display.Miss.TotalNumber.Text = _score_data.misses
+	end
 	
 	--[[Override--]] function self:should_remove()
 		return _should_remove
@@ -147,6 +152,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		if val then
 			EnvironmentSetup:set_mode(EnvironmentSetup.Mode.Menu)
 			_results_menu_ui.Parent = EnvironmentSetup:get_player_gui_root()
+			self:render_spread()
 		else
 			_results_menu_ui.Parent = nil
 		end
