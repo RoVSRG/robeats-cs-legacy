@@ -59,6 +59,10 @@ function MultiplayerLobbyMenu:new(_local_services)
             _local_services._menus:push_menu(MultiplayerGameMenu:new(_local_services, _game_client))
         end)
 
+        SPUtil:bind_input_fire(tab_container.BackButton, function()
+            _should_remove = true
+        end)
+
         for _, room in pairs(Network.GetRooms:Invoke() or {}) do
             self:add_lobby(room)
         end
