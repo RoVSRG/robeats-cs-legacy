@@ -36,7 +36,43 @@ function MultiplayerClient:new(data)
 
     end
 
+    function self:leave_room()
+        Network.LeaveRoom:Fire({
+            id = data.id
+        })
+    end
+
+    function self:bind_to_player_joined_room(_callback)
+        return Network.PlayerJoinedRoom:Connect(function(passed_data)
+            if self:was_id_this_room(passed_data.id) and passed_data.userid ~= game.Players.LocalPlayer.UserId then
+                _callback(passed_data)
+            end
+        end)
+    end
+
+    function self:bind_to_player_left_room(_callback)
+        return Network.PlayerLeftRoom:Connect(function(passed_data)
+            if self:was_id_this_room(passed_data.id) and passed_data.userid ~= game.Players.LocalPlayer.UserId then
+                _callback(passed_data)
+            end
+        end)
+    end
+
+    function self:was_id_this_room(id)
+        return id == data.id
+    end
+
     return self
+end
+
+function MultiplayerClient:add_room(data)
+    return Network.AddRoom:Invoke(data)
+end
+
+function MultiplayerClient:join_room(data)
+    Network.JoinRoom:Fire({
+        id = data.id
+    })
 end
 
 return MultiplayerClient

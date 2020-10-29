@@ -46,7 +46,7 @@ function AudioManager:new(_game)
 	end
 	
 	--Note timings: millisecond offset (positive is early, negative is late) mapping to what the note result is
-	local window = TimingPresets:getCurrentTimingWindow(Configuration.Preferences.Preset)
+	local window = TimingPresets:get_timing_window(Configuration.Preferences.Preset)
 	local _note_bad_max = window.NoteBadMaxMS * _rate
 	local _note_good_max = window.NoteGoodMaxMS * _rate --Default: 260
 	local _note_great_max = window.NoteGreatMaxMS * _rate --Default: 140

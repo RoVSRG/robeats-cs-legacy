@@ -32,13 +32,14 @@ SFXManager.SFX_COUNTDOWN_GO = "rbxassetid://770373595"
 
 SFXManager.SFX_WOOSH = "rbxassetid://770375537"
 SFXManager.SFX_ACQUIRE = "rbxassetid://770372288"
-SFXManager.SFX_BUTTONPRESS = "rbxassetid://770372471"
+SFXManager.SFX_BUTTONPRESS = "rbxassetid://395321405"
 SFXManager.SFX_COMBINE = "rbxassetid://770372702"
+SFXManager.SFX_HOVER = "rbxassetid://4740147336"
 
 SFXManager.SFX_FANFARE = "rbxassetid://770373343"
 SFXManager.SFX_MENU_BUY = "rbxassetid://770373814"
-SFXManager.SFX_MENU_CLOSE = "rbxassetid://770373986"
-SFXManager.SFX_MENU_OPEN = "rbxassetid://770374860"
+SFXManager.SFX_MENU_CLOSE = "rbxassetid://3566589257"
+SFXManager.SFX_MENU_OPEN = "rbxassetid://3566589257"
 SFXManager.SFX_MENU_CLOSE_LONG = "rbxassetid://770374214"
 SFXManager.SFX_MENU_OPEN_LONG = "rbxassetid://770374514"
 SFXManager.SFX_USE = "rbxassetid://770375349"
@@ -93,6 +94,12 @@ function SFXManager:new()
 		create_pooled(SFXManager.SFX_COUNTDOWN_GO)
 
 		create_pooled(SFXManager.SFX_WOOSH)
+		for i=0,5 do
+			create_pooled(SFXManager.SFX_BUTTONPRESS, 1.5)
+		end
+		for i=0,10 do
+			create_pooled(SFXManager.SFX_HOVER, 0.2)
+		end
 	end
 
 	function self:preload(sfx_key, count, volume)

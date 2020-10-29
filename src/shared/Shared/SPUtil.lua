@@ -163,6 +163,11 @@ end
 
 function SPUtil:player_name_from_id(id)
 	local name
+
+	for _, itr_plr in pairs(game.Players:GetChildren()) do
+		if itr_plr.UserId == id then return itr_plr.Name end
+	end
+
 	local suc, err = pcall(function()
 		name = game.Players:GetNameFromUserIdAsync(id)
 	end)

@@ -59,8 +59,8 @@ function ScoreManager:new(_game)
 		return self:calculate_total_score(spread)
 	end
 
-	function self:add_hit_to_deviance(expected_hit_time_ms, hit_time_ms, note_result)
-		self.hit_deviance[#self.hit_deviance+1] = {expected_hit_time_ms = expected_hit_time_ms, hit_time_ms = hit_time_ms, note_result = note_result}
+	function self:add_hit_to_deviance(hit_time_ms, time_to_end, note_result)
+		self.hit_deviance[#self.hit_deviance+1] = {hit_time_ms = hit_time_ms, time_to_end = time_to_end, note_result = note_result}
 	end
 
 	function self:get_hit_deviance() return self.hit_deviance end
@@ -200,7 +200,7 @@ function ScoreManager:new(_game)
 		end
 
 		if note_result ~= 0 then
-			self:add_hit_to_deviance(params.ExpectedHitTime, _game._audio_manager:get_current_time_ms(), note_result)
+			self:add_hit_to_deviance(params.HitTime, params.TimeToEnd, note_result)
 		end
 		
 		local totalnotes =_game._audio_manager:get_note_count()

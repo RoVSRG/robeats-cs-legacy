@@ -27,6 +27,9 @@ Network.AddEvent("JoinRoom"):Connect(function(player, data)
     data.player = player
 
     RoomManager:join_room(data)
+
+    data.userid = player.UserId
+
     Network.PlayerJoinedRoom:FireAll(data)
 end)
 
@@ -36,7 +39,18 @@ Network.AddEvent("LeaveRoom"):Connect(function(player, data)
 
     data.player = player
 
-    RoomManager:leave_room(data)
+    local should_remove = RoomManager:leave_room(data)
+
+    if should_remove then
+        data.player = nil
+        RoomManager:remove_room(data)
+        Network.RoomDeleted:FireAll(data)
+        return
+    end
+
+    data.player = nil
+    data.userid = player.UserId
+
     Network.PlayerLeftRoom:FireAll(data)
 end)
 

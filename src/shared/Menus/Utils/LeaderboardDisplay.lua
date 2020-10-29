@@ -48,8 +48,8 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
 			for itr, itr_data in pairs(leaderboardData) do
 				local itr_leaderboard_proto = _leaderboard_proto:Clone()
 
-				itr_leaderboard_proto.Player.Text = string.format("%s at %s", itr_data.playername, SPUtil:time_to_str(itr_data.time))
-				itr_leaderboard_proto.Data.Text = get_formatted_data(itr_data)
+				itr_leaderboard_proto.UserThumbnail.Player.Text = string.format("%s at %s", itr_data.playername, SPUtil:time_to_str(itr_data.time))
+				itr_leaderboard_proto.UserThumbnail.Data.Text = get_formatted_data(itr_data)
 				itr_leaderboard_proto.UserThumbnail.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", itr_data.userid)
 
 				itr_leaderboard_proto.Parent = _leaderboard_list_root

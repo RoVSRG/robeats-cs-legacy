@@ -301,7 +301,7 @@ function HeldNote:new(
 					NoteResult.Miss,
 					_slot_index,
 					_track_index,
-					HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_expected_hit_time(_hit_time_ms)
+					HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true)
 				)
 
 				_game._effects:add_effect(HoldingNoteEffect:new(
@@ -342,7 +342,7 @@ function HeldNote:new(
 						NoteResult.Miss,
 						_slot_index,
 						_track_index,
-						HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true):set_expected_hit_time(_hit_time_ms+_duration_time_ms)
+						HitParams:new():set_play_sfx(false):set_play_hold_effect(false):set_time_miss(true)
 					)
 				end
 
@@ -365,7 +365,7 @@ function HeldNote:new(
 			local did_hit, note_result = NoteResult:timedelta_to_result(time_to_end, _game)
 
 			if did_hit then
-				return did_hit, note_result
+				return did_hit, note_result, time_to_end
 			end
 
 			return false, NoteResult.Miss
@@ -375,7 +375,7 @@ function HeldNote:new(
 			local did_hit, note_result = NoteResult:timedelta_to_result(time_to_end, _game)
 
 			if did_hit then
-				return did_hit, note_result
+				return did_hit, note_result, time_to_end
 			end
 
 			return false, NoteResult.Miss
@@ -385,7 +385,7 @@ function HeldNote:new(
 		return false, NoteResult.Miss
 	end
 
-	--[[Override--]] function self:on_hit(note_result, i_notes)
+	--[[Override--]] function self:on_hit(note_result, i_notes, time_to_end)
 		if _state == HeldNote.State.Pre then
 			_game._effects:add_effect(TriggerNoteEffect:new(
 				_game,
@@ -398,7 +398,7 @@ function HeldNote:new(
 				note_result, 
 				_slot_index, 
 				_track_index, 
-				HitParams:new():set_play_hold_effect(false):set_held_note_begin(true):set_expected_hit_time(_hit_time_ms)
+				HitParams:new():set_play_hold_effect(false):set_held_note_begin(true):set_hit_time(_hit_time_ms):set_time_to_end(time_to_end)
 			)
 
 			_did_trigger_head = true
@@ -416,7 +416,7 @@ function HeldNote:new(
 				note_result,
 				_slot_index,
 				_track_index,
-				HitParams:new():set_play_hold_effect(true, get_tail_position()):set_expected_hit_time(_hit_time_ms+_duration_time_ms)
+				HitParams:new():set_play_hold_effect(true, get_tail_position()):set_hit_time(_hit_time_ms):set_time_to_end(time_to_end)
 			)
 
 			_did_trigger_tail = true
@@ -464,7 +464,7 @@ function HeldNote:new(
 					note_result,
 					_slot_index,
 					_track_index,
-					HitParams:new():set_play_hold_effect(true, get_tail_position()):set_expected_hit_time(_hit_time_ms+_duration_time_ms)
+					HitParams:new():set_play_hold_effect(true, get_tail_position())
 				)
 				_did_trigger_tail = true
 				_state = HeldNote.State.Passed

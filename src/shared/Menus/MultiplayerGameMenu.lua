@@ -1,8 +1,11 @@
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
+local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
 local FlashEvery = require(game.ReplicatedStorage.Shared.FlashEvery)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
+
+local RBXScriptSignalManager = require(game.ReplicatedStorage.Shared.RBXScriptSignalManager)
 
 local Network = require(game.ReplicatedStorage.Network)
 
@@ -13,7 +16,7 @@ MultiplayerLobbyMenu.ButtonColors = { --smh my head
     change_song = Color3.fromRGB(20, 20, 20)
 }
 
-function MultiplayerLobbyMenu:new(_local_services, _game_client)
+function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
 	local self = MenuBase:new()
 	
     local _multiplayer_game_ui
@@ -22,9 +25,9 @@ function MultiplayerLobbyMenu:new(_local_services, _game_client)
     local section_container
     local tab_container
 
-    local _test_toggle = false
+    local _should_remove = false
 
-    local test_toggle_flash = FlashEvery:new(1)
+    local _signals = RBXScriptSignalManager:new()
 	
 	function self:cons()
         _multiplayer_game_ui = EnvironmentSetup:get_menu_protos_folder().MultiplayerGameUI:Clone()
@@ -35,16 +38,53 @@ function MultiplayerLobbyMenu:new(_local_services, _game_client)
         _multiplayer_player_slot_proto = section_container.PlayerSection.PlayerList.PlayerListElementProto
         _multiplayer_player_slot_proto.Parent = nil
 
-        for i, player_id in pairs(_game_client:get_players()) do
+        for i, player_id in pairs(_multiplayer_client:get_players()) do
+            self:add_player({
+                userid = player_id
+            })
+        end
+
+        SPUtil:bind_input_fire(tab_container.LeaveRoomButton, function()
+            _should_remove = true
+            _multiplayer_client:leave_room()
+        end)
+
+        _signals:add_signal("PlayerJoinedRoomSignal", _multiplayer_client:bind_to_player_joined_room(function(data)
+            self:add_player(data)
+        end))
+
+        _signals:add_signal("PlayerLeftRoomSignal", _multiplayer_client:bind_to_player_left_room(function(data)
+            self:remove_player(data)
+        end))
+    end
+
+    function self:add_player(data)
+        if not section_container.PlayerSection.PlayerList:FindFirstChild(data.userid) then
+            AssertType:is_non_nil(data, "Data table cannot be nil!")
+            AssertType:is_number(data.userid, "UserId must be a valid UserId number!")
             local itr_player_slot = _multiplayer_player_slot_proto:Clone()
             local itr_player_slot_cover = itr_player_slot.PlayerCover
-            itr_player_slot_cover.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", player_id)
-            itr_player_slot_cover.NameDisplay.Text = SPUtil:player_name_from_id(player_id)
+            itr_player_slot_cover.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png",  data.userid)
+            itr_player_slot_cover.NameDisplay.Text = SPUtil:player_name_from_id(data.userid)
+            itr_player_slot.Name = data.userid
             itr_player_slot.Parent = section_container.PlayerSection.PlayerList
         end
-	end
+    end
+
+    function self:remove_player(data)
+        local _player_slot = section_container.PlayerSection.PlayerList:FindFirstChild(tostring(data.userid))
+
+        if _player_slot then
+            _player_slot:Destroy()
+        end
+    end
+    
+    --[[Override--]] function self:should_remove()
+        return _should_remove
+    end
 	
-	--[[Override--]] function self:do_remove()
+    --[[Override--]] function self:do_remove()
+        _signals:disconnect_all()
 		_multiplayer_game_ui:Destroy()
 	end
 	
@@ -57,10 +97,7 @@ function MultiplayerLobbyMenu:new(_local_services, _game_client)
     end
 
     --[[Override--]] function self:update(dt_scale)
-        test_toggle_flash:update(dt_scale)
-        if test_toggle_flash:do_flash() then
-            
-        end
+
     end
     
     function self:toggle_host_perms(val)
