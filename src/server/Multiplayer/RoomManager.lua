@@ -73,4 +73,4 @@ function RoomManager:new()
     return self
 end
 
-return RoomManager
+return RoomManager:new()

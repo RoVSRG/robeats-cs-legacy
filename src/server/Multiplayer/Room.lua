@@ -12,6 +12,7 @@ function Room:new(id)
     self.selected_song_key = 1
     self.name = "Room"
     self.id = id
+    self.is_playing = false
 
     function self:set_host(host)
         AssertType:is_number(host, "Host must be a UserId number!")
@@ -35,7 +36,7 @@ function Room:new(id)
 
     function self:get_players_list()
         local ret = {}
-        for i, v in self.players:key_itr() do
+        for _, v in self.players:key_itr() do
             ret[#ret+1] = v
         end
         return ret
@@ -56,12 +57,17 @@ function Room:new(id)
         return self.players:get(plr.UserId)
     end
 
-    function self:update_song_key(key)
+    function self:change_song_key(key)
         self.selected_song_key = key
     end
 
-    function self:is_host(id)
-        return self.host == id
+    function self:is_host(player)
+        AssertType:is_classname(player, "Player")
+        return self.host == player.UserId
+    end
+
+    function self:set_playing(val)
+        self.is_playing = val
     end
 
     function self:get_metadata()

@@ -1,7 +1,6 @@
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
 local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
-local FlashEvery = require(game.ReplicatedStorage.Shared.FlashEvery)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
@@ -10,15 +9,17 @@ local RBXScriptSignalManager = require(game.ReplicatedStorage.Shared.RBXScriptSi
 
 local Network = require(game.ReplicatedStorage.Network)
 
-local MultiplayerLobbyMenu = {}
+local MultiplayerGameMenu = {}
 
-MultiplayerLobbyMenu.ButtonColors = { --smh my head
+MultiplayerGameMenu.ButtonColors = { --smh my head
 	transfer_host = Color3.fromRGB(50, 188, 0);
 	change_song = Color3.fromRGB(20, 20, 20)
 }
 
-function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
+function MultiplayerGameMenu:new(_local_services, _multiplayer_client)
 	local self = MenuBase:new()
+
+	local SongSelectMenu = require(game.ReplicatedStorage.Menus.SongSelectMenu)
 
 	local _multiplayer_game_ui
 	local _multiplayer_player_slot_proto
@@ -26,7 +27,11 @@ function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
 	local section_container
 	local tab_container
 
+	local _selected_song_key = SongDatabase:invalid_songkey()
+
 	local _should_remove = false
+
+	local is_host = false
 
 	local _signals = RBXScriptSignalManager:new()
 
@@ -50,13 +55,36 @@ function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
 			_multiplayer_client:leave_room()
 		end)
 
+		SPUtil:bind_input_fire(tab_container.ChangeSongButton, function()
+			if is_host then
+				_local_services._menus:push_menu(SongSelectMenu:new(_local_services, _multiplayer_client))
+			end
+		end)
+
 		_signals:add_signal("PlayerJoinedRoomSignal", _multiplayer_client:bind_to_player_joined_room(function(data)
+			DebugOut:puts(string.format("Player(%d) added!", data.userid))
 			self:add_player(data)
 		end))
 
 		_signals:add_signal("PlayerLeftRoomSignal", _multiplayer_client:bind_to_player_left_room(function(data)
+			DebugOut:puts(string.format("Player(%d) left!", data.userid))
 			self:remove_player(data)
 		end))
+
+		_signals:add_signal("SongChangedRoomSignal", _multiplayer_client:bind_to_song_changed_room(function(data)
+			DebugOut:puts(string.format("Song changed(%d)", data.song_key))
+			self:change_song(data.song_key)
+		end))
+
+		_signals:add_signal("HostChangedRoomSignal", _multiplayer_client:bind_to_host_changed_room(function(data)
+			DebugOut:puts(string.format("Host changed(%d)", data.userid))
+			self:change_song(data.song_key)
+		end))
+
+		self:update_player_count(#_multiplayer_client:get_players())
+
+		is_host = _multiplayer_client:is_host()
+		self:toggle_host_perms(is_host)
 	end
 
 	function self:add_player(data)
@@ -70,11 +98,6 @@ function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
 			itr_player_slot_cover.NameDisplay.Text = SPUtil:player_name_from_id(data.userid)
 			itr_player_slot.Name = data.userid
 			itr_player_slot.Parent = section_container.PlayerSection.PlayerList
-			section_container.InfoSection.InfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(room_data.selected_song_key))
-			section_container.InfoSection.InfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(room_data.selected_song_key)
-			section_container.InfoSection.InfoDisplay.MultiNameDisplay.Text = room_data.name
-			section_container.InfoSection.InfoDisplay.SongDisplay.Text = SongDatabase:get_title_for_key(room_data.selected_song_key)
-			section_container.InfoSection.InfoDisplay.DescriptionDisplay.Text = string.format("%0d players", #_multiplayer_client:get_players())
 		end
 	end
 
@@ -84,6 +107,22 @@ function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
 		if _player_slot then
 			_player_slot:Destroy()
 		end
+	end
+
+	function self:change_song(song_key)
+		_selected_song_key = song_key
+
+		section_container.InfoSection.InfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(song_key))
+		section_container.InfoSection.InfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(song_key)
+		section_container.InfoSection.InfoDisplay.SongDisplay.Text = SongDatabase:get_title_for_key(song_key)
+	end
+
+	function self:change_multi_name(name)
+		section_container.InfoSection.InfoDisplay.MultiNameDisplay.Text = name
+	end
+
+	function self:update_player_count(count)
+		section_container.InfoSection.InfoDisplay.DescriptionDisplay.Text = string.format("%0d players", count)
 	end
 
 	--[[Override--]] function self:should_remove()
@@ -108,14 +147,13 @@ function MultiplayerLobbyMenu:new(_local_services, _multiplayer_client)
 	end
 
 	function self:toggle_host_perms(val)
-		--BEFORE YOU ASK, THIS IS A CLIENT SIDED METHOD THAT CHANGES THE APPEARANCE OF THE GUI IF THE USER IS A HOST OR NOT, IT DOES NOT GIVE HOST PERMISSIONS IN AND OF ITSELF
 		local grey_out_color_3 = Color3.fromRGB(59, 59, 59)
-		tab_container.TransferHostButton.BackgroundColor3 = val and MultiplayerLobbyMenu.ButtonColors.transfer_host or grey_out_color_3
-		tab_container.ChangeSongButton.BackgroundColor3 = val and MultiplayerLobbyMenu.ButtonColors.change_song or grey_out_color_3
+		tab_container.TransferHostButton.BackgroundColor3 = val and MultiplayerGameMenu.ButtonColors.transfer_host or grey_out_color_3
+		tab_container.ChangeSongButton.BackgroundColor3 = val and MultiplayerGameMenu.ButtonColors.change_song or grey_out_color_3
 	end
 
 	self:cons()
 	return self
 end
 
-return MultiplayerLobbyMenu
+return MultiplayerGameMenu

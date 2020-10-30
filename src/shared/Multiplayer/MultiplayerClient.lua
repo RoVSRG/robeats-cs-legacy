@@ -48,6 +48,19 @@ function MultiplayerClient:new(data)
         })
     end
 
+    function self:was_id_this_room(id)
+        return id == data.id
+    end
+
+    function self:change_song_key(song_key)
+        Network.ChangeSong:Fire({
+            id = data.id;
+            song_key = song_key;
+        })
+    end
+
+    --Binding functions
+    
     function self:bind_to_player_joined_room(_callback)
         return Network.PlayerJoinedRoom:Connect(function(passed_data)
             if self:was_id_this_room(passed_data.id) and passed_data.userid ~= game.Players.LocalPlayer.UserId then
@@ -64,8 +77,18 @@ function MultiplayerClient:new(data)
         end)
     end
 
-    function self:was_id_this_room(id)
-        return id == data.id
+    function self:bind_to_song_changed_room(_callback)
+        return Network.SongChangedRoom:Connect(_callback)
+    end
+
+    function self:bind_to_host_changed_room(_callback)
+        return Network.HostChangedRoom:Connect(_callback)
+    end
+
+    function self:is_host()
+        return Network.IsHost:Invoke({
+            id = data.id
+        })
     end
 
     return self

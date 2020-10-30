@@ -1,8 +1,9 @@
 local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
 local Network = require(game.ReplicatedStorage.Network)
 local Multiplayer = game.ServerScriptService.Multiplayer
-local RoomManager = require(Multiplayer.RoomManager):new()
+local RoomManager = require(Multiplayer.RoomManager)
 
 Network.AddFunction("AddRoom"):Set(function(player, data)
     AssertType:is_non_nil(data, "Data table cannot be nil!")
@@ -20,40 +21,6 @@ Network.AddFunction("AddRoom"):Set(function(player, data)
     return _id
 end)
 
-Network.AddEvent("JoinRoom"):Connect(function(player, data)
-    AssertType:is_non_nil(data, "Data table cannot be nil!")
-    AssertType:is_string(data.id, "ID must be a string GUID!")
-
-    data.player = player
-
-    RoomManager:join_room(data)
-
-    data.userid = player.UserId
-
-    Network.PlayerJoinedRoom:FireAll(data)
-end)
-
-Network.AddEvent("LeaveRoom"):Connect(function(player, data)
-    AssertType:is_non_nil(data, "Data table cannot be nil!")
-    AssertType:is_string(data.id, "ID must be a string GUID!")
-
-    data.player = player
-
-    local should_remove = RoomManager:leave_room(data)
-
-    if should_remove then
-        data.player = nil
-        RoomManager:remove_room(data)
-        Network.RoomDeleted:FireAll(data)
-        return
-    end
-
-    data.player = nil
-    data.userid = player.UserId
-
-    Network.PlayerLeftRoom:FireAll(data)
-end)
-
 Network.AddFunction("GetRooms"):Set(function()
     return RoomManager:get_rooms()
 end)
@@ -68,4 +35,15 @@ Network.AddFunction("GetRoomData"):Set(function(player, data)
 	AssertType:is_non_nil(data, "Data table cannot be nil!")
 	AssertType:is_string(data.id, "ID must be a string GUID!")
 	return RoomManager.rooms:get(data.id)
+end)
+
+Network.AddFunction("IsHost"):Set(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+    
+    return RoomManager.rooms:get(data.id):is_host(player)
+end)
+
+Network.AddFunction("GetPlayerLoadedStatus"):Set(function(player, data)
+    
 end)

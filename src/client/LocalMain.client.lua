@@ -6,6 +6,8 @@ local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local MenuSystem = require(game.ReplicatedStorage.Menus.System.MenuSystem)
 
+local Network = require(game.ReplicatedStorage.Network)
+
 local SongSelectMenu = require(game.ReplicatedStorage.Menus.SongSelectMenu)
 
 local function game_init()

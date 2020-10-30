@@ -17,7 +17,7 @@ local CustomServerSettings = require(game.Workspace.CustomServerSettings)
 
 local SongSelectMenu = {}
 
-function SongSelectMenu:new(_local_services)
+function SongSelectMenu:new(_local_services, _multiplayer_client)
 	local self = MenuBase:new()
 
 	local _song_select_ui
@@ -26,6 +26,7 @@ function SongSelectMenu:new(_local_services)
 
 	local section_container
 	local tab_container
+	local should_remove = false
 
 	local _input = _local_services._input
 
@@ -162,11 +163,20 @@ function SongSelectMenu:new(_local_services)
 		
 		_leaderboard_display:refresh_leaderboard(songkey)
 	end
+
+	function self:should_remove()
+		return should_remove
+	end
 	
 	function self:play_button_pressed()
 		_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
 		if SongDatabase:contains_key(_selected_songkey) then
-			_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
+			if _multiplayer_client then
+				_multiplayer_client:change_song_key(_selected_songkey)
+				should_remove = true
+			else
+				_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
+			end
 		end
 	end
 	
