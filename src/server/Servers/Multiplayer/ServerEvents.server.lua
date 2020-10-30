@@ -84,6 +84,7 @@ Network.AddEvent("StartGame"):Connect(function(player, data)
        room:set_playing(true)
 
        for _, plr in room.players:key_itr() do
+            plr:set_finished(false)
             plr:set_loading(true)
        end
 
@@ -124,5 +125,5 @@ Network.AddEvent("PlayerFinished"):Connect(function(player, data)
     AssertType:is_non_nil(data, "Data table cannot be nil!")
     AssertType:is_string(data.id, "ID must be a string GUID!")
 
-    local room = RoomManager:get_room(data.id)
+    RoomManager:get_room(data.id):get_player(player):set_finished(true)
 end)

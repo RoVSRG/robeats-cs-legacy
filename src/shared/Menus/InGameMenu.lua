@@ -9,7 +9,7 @@ local Configuration = require(game.ReplicatedStorage.Configuration)
 
 local InGameMenu = {}
 
-function InGameMenu:new(_local_services, _game, _song_key)
+function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 
 	local ResultsMenu = require(game.ReplicatedStorage.Menus.ResultsMenu)
 

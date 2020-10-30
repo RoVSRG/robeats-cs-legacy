@@ -44,7 +44,8 @@ function SongStartMenu:new(_local_services, _start_song_key, _local_player_slot,
 			_server_poll_flash_every:update(dt_scale)
 			if _server_poll_flash_every:do_flash() then
 				--Send status to server if we haven't already
-				if not did_send_ready and _game._audio_manager:is_ready_to_play() == true then
+				if (not did_send_ready and _game._audio_manager:is_ready_to_play() == true) then
+					did_send_ready = true
 					_multiplayer_client:loaded()
 				end
 
@@ -56,12 +57,15 @@ function SongStartMenu:new(_local_services, _start_song_key, _local_player_slot,
 	end
 	
 	--[[Override--]] function self:should_remove()
-		return (_game._audio_manager:is_ready_to_play() == true or _back_button_pressed) and all_players_loaded
+		return (_game._audio_manager:is_ready_to_play() == true and all_players_loaded) or _back_button_pressed 
 	end
 	
 	--[[Override--]] function self:do_remove()
 		_loading_ui:Destroy()
 		if _back_button_pressed == true then
+			if _multiplayer_client then
+				_multiplayer_client:loaded()
+			end
 			_game:teardown()
 		else
 			_game:start_game()
