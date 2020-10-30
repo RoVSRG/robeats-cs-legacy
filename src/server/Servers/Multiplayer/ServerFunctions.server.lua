@@ -44,6 +44,13 @@ Network.AddFunction("IsHost"):Set(function(player, data)
     return RoomManager.rooms:get(data.id):is_host(player)
 end)
 
-Network.AddFunction("GetPlayerLoadedStatus"):Set(function(player, data)
-    
+Network.AddFunction("AllPlayersLoaded"):Set(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+
+    for _, plr in RoomManager:get_room(data.id).players:key_itr() do
+        if not plr.loaded then return false end
+    end
+
+    return true
 end)

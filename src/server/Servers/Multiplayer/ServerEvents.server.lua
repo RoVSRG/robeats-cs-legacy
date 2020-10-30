@@ -44,7 +44,7 @@ Network.AddEvent("ChangeSong"):Connect(function(player, data)
     AssertType:is_string(data.id, "ID must be a string GUID!")
     AssertType:is_number(data.song_key, "Song key must be passed!")
 
-    local room = RoomManager.rooms:get(data.id)
+    local room = RoomManager:get_room(data.id)
     local is_host = room:is_host(player)
 
     if is_host and SongDatabase:contains_key(data.song_key) then
@@ -61,7 +61,7 @@ Network.AddEvent("ChangeHost"):Connect(function(player, data)
     AssertType:is_string(data.id, "ID must be a string GUID!")
     AssertType:is_number(data.userid, "UserID must be a number!")
 
-    local room = RoomManager.rooms:get(data.id)
+    local room = RoomManager:get_room(data.id)
     local is_host = room:is_host(player)
 
     if is_host then
@@ -76,4 +76,53 @@ end)
 Network.AddEvent("StartGame"):Connect(function(player, data)
     AssertType:is_non_nil(data, "Data table cannot be nil!")
     AssertType:is_string(data.id, "ID must be a string GUID!")
+
+    local room = RoomManager:get_room(data.id)
+    local is_host = room:is_host(player)
+
+    if is_host then
+       room:set_playing(true)
+
+       for _, plr in room.players:key_itr() do
+            plr:set_loading(true)
+       end
+
+       Network.GameStartedRoom:FireAll({
+           id = data.id;
+       })
+    end
+end)
+
+Network.AddEvent("AbortGame"):Connect(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+
+    local room = RoomManager:get_room(data.id)
+    local is_host = room:is_host(player)
+
+    if is_host then
+       room:set_playing(false)
+
+       for _, plr in room.players:key_itr() do
+            plr:set_loading(false)
+       end
+
+       --[[Network.GameStartedRoom:FireAll({
+           id = data.id;
+       })]]--
+    end
+end)
+
+Network.AddEvent("PlayerLoaded"):Connect(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+
+    RoomManager:get_room(data.id):get_player(player):set_loading(false)
+end)
+
+Network.AddEvent("PlayerFinished"):Connect(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+
+    local room = RoomManager:get_room(data.id)
 end)

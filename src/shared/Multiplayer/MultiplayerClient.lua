@@ -19,7 +19,9 @@ function MultiplayerClient:new(data)
     end
 
     function self:are_all_players_loaded()
-
+        return Network.AllPlayersLoaded:Invoke({
+            id = data.id;
+        })
     end
 
     function self:are_all_players_finished()
@@ -48,6 +50,12 @@ function MultiplayerClient:new(data)
         })
     end
 
+    function self:loaded()
+        Network.PlayerLoaded:Fire({
+            id = data.id;
+        })
+    end
+
     function self:was_id_this_room(id)
         return id == data.id
     end
@@ -56,6 +64,12 @@ function MultiplayerClient:new(data)
         Network.ChangeSong:Fire({
             id = data.id;
             song_key = song_key;
+        })
+    end
+
+    function self:start_game()
+        Network.StartGame:Fire({
+            id = data.id;
         })
     end
 
@@ -83,6 +97,14 @@ function MultiplayerClient:new(data)
 
     function self:bind_to_host_changed_room(_callback)
         return Network.HostChangedRoom:Connect(_callback)
+    end
+
+    function self:bind_to_game_started_room(_callback)
+        return Network.GameStartedRoom:Connect(function(passed_data)
+            if passed_data.id == data.id then
+                _callback(passed_data)
+            end
+        end)
     end
 
     function self:is_host()

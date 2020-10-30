@@ -19,9 +19,9 @@ function Player:new(player)
     self.name = ""
     self.player = player
 
-    self.is_ready = false
     self.loading = false
     self.is_finished = false
+    self.is_playing = false
 
     function self:cons()
         self.name = self.player.Name
@@ -62,9 +62,9 @@ function Player:new(player)
         self.is_finished = val
     end
 
-    function self:set_ready(val)
+    function self:set_playing(val)
         AssertType:is_bool(val)
-        self.is_ready = val
+        self.is_playing = val
     end
 
     self:cons()

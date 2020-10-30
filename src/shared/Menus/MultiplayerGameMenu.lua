@@ -4,6 +4,9 @@ local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
+local GameSlot = require(game.ReplicatedStorage.RobeatsGameCore.Enums.GameSlot)
+
+local SongStartMenu = require(game.ReplicatedStorage.Menus.SongStartMenu)
 
 local RBXScriptSignalManager = require(game.ReplicatedStorage.Shared.RBXScriptSignalManager)
 
@@ -27,7 +30,7 @@ function MultiplayerGameMenu:new(_local_services, _multiplayer_client)
 	local section_container
 	local tab_container
 
-	local _selected_song_key = SongDatabase:invalid_songkey()
+	local _selected_songkey = SongDatabase:invalid_songkey()
 
 	local _should_remove = false
 
@@ -61,6 +64,10 @@ function MultiplayerGameMenu:new(_local_services, _multiplayer_client)
 			end
 		end)
 
+		SPUtil:bind_input_fire(section_container.PlayButton, function()
+			_multiplayer_client:start_game()
+		end)
+
 		_signals:add_signal("PlayerJoinedRoomSignal", _multiplayer_client:bind_to_player_joined_room(function(data)
 			DebugOut:puts(string.format("Player(%d) added!", data.userid))
 			self:add_player(data)
@@ -79,6 +86,10 @@ function MultiplayerGameMenu:new(_local_services, _multiplayer_client)
 		_signals:add_signal("HostChangedRoomSignal", _multiplayer_client:bind_to_host_changed_room(function(data)
 			DebugOut:puts(string.format("Host changed(%d)", data.userid))
 			self:change_song(data.song_key)
+		end))
+
+		_signals:add_signal("GameStartedSignal", _multiplayer_client:bind_to_game_started_room(function(data)
+			_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1, _multiplayer_client))
 		end))
 
 		self:update_player_count(#_multiplayer_client:get_players())
@@ -110,7 +121,7 @@ function MultiplayerGameMenu:new(_local_services, _multiplayer_client)
 	end
 
 	function self:change_song(song_key)
-		_selected_song_key = song_key
+		_selected_songkey = song_key
 
 		section_container.InfoSection.InfoDisplay.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(song_key))
 		section_container.InfoSection.InfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(song_key)

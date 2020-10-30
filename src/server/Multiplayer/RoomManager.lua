@@ -46,6 +46,10 @@ function RoomManager:new()
         return room_tree._table
     end
 
+    function self:get_room(id)
+        return self.rooms:get(id)
+    end
+
     function self:join_room(data)
         AssertType:is_non_nil(data, "Data table cannot be nil!")
         AssertType:is_string(data.id, "ID must be a string GUID!")
