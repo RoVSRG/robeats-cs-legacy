@@ -30,12 +30,6 @@ function MultiplayerClient:new(data)
         })
     end
 
-    function self:are_all_players_loaded()
-        return Network.AllPlayersLoaded:Invoke({
-            id = data.id;
-        })
-    end
-
     function self:are_all_players_finished()
 
     end
@@ -52,19 +46,15 @@ function MultiplayerClient:new(data)
 		})
 	end
 
-    function self:get_player_data()
-		
+    function self:get_player_stats()
+		return Network.GetAllStats:Invoke({
+            id = data.id;
+        })
     end
 
     function self:leave_room()
         Network.LeaveRoom:Fire({
             id = data.id
-        })
-    end
-
-    function self:loaded()
-        Network.PlayerLoaded:Fire({
-            id = data.id;
         })
     end
 

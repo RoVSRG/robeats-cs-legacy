@@ -76,6 +76,7 @@ function Player:new(player)
             combo = self.combo;
             max_combo = self.max_combo;
             score = self.score;
+            userid = self.player.UserId;
         }
     end
 

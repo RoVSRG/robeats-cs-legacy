@@ -74,5 +74,12 @@ Network.AddFunction("GetStats"):Set(function(player, data)
     AssertType:is_string(data.id, "ID must be a string GUID!")
     AssertType:is_number(data.userid, "User ID must be a number!")
     
-    return RoomManager:get_room(data.id):get_player(player):get_stats()
+    return RoomManager:get_room(data.id):get_player(player):get_stats() --broken
+end)
+
+Network.AddFunction("GetAllStats"):Set(function(player, data)
+    AssertType:is_non_nil(data, "Data table cannot be nil!")
+    AssertType:is_string(data.id, "ID must be a string GUID!")
+
+    return RoomManager:get_room(data.id):get_player_stats()
 end)

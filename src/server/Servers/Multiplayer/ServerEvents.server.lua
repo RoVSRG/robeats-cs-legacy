@@ -146,17 +146,3 @@ Network.AddEvent("UploadStats"):Connect(function(player, data)
         combo = data.combo;
     })
 end)
-
-Network.AddEvent("PlayerLoaded"):Connect(function(player, data)
-    AssertType:is_non_nil(data, "Data table cannot be nil!")
-    AssertType:is_string(data.id, "ID must be a string GUID!")
-
-    RoomManager:get_room(data.id):get_player(player):set_loading(false)
-end)
-
-Network.AddEvent("PlayerFinished"):Connect(function(player, data)
-    AssertType:is_non_nil(data, "Data table cannot be nil!")
-    AssertType:is_string(data.id, "ID must be a string GUID!")
-
-    RoomManager:get_room(data.id):get_player(player):set_finished(true)
-end)

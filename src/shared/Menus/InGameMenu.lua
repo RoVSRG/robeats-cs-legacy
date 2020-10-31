@@ -101,6 +101,7 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 
 		if _multiplayer_client then
 			if _multi_send_retrieve_data:do_flash() then
+				--Upload stats to server
 				_multiplayer_client:upload_stats({
 					marvelous_count = marv_count;
 					perfect_count = perf_count;
@@ -113,6 +114,33 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 					score = score;
 					combo = _game._score_manager:get_chain();
 				})
+
+				--Retrieve others' stats
+
+				local _player_stats = _multiplayer_client:get_player_stats()
+
+				table.sort(_player_stats, function(a, b)
+					return a.score > b.score
+				end)
+
+				for i, plr in pairs(_player_stats) do
+					if not _multiplayer_protos:contains(plr.userid) then
+						local itr_proto = _player_slot_proto:Clone()
+						itr_proto.Place.Text = string.format("#%d", i)
+						itr_proto.PlayerName.Text = SPUtil:player_name_from_id(tonumber(plr.userid))
+						itr_proto.Data.Text = string.format("Score: %0.0f | Accuracy = %0.2f", plr.score, plr.accuracy)
+						itr_proto.Parent = _stat_display_ui.MultiListDisplay
+						itr_proto.LayoutOrder = i
+						_multiplayer_protos:add(plr.userid, itr_proto)
+						return
+					else
+						local itr_proto = _multiplayer_protos:get(plr.userid)
+						itr_proto.Place.Text = string.format("#%d", i)
+						itr_proto.PlayerName.Text = SPUtil:player_name_from_id(tonumber(plr.userid))
+						itr_proto.LayoutOrder = i
+						itr_proto.Data.Text = string.format("Score: %0.0f | Accuracy = %0.2f", plr.score, plr.accuracy)
+					end
+				end
 			end
 		end
 
