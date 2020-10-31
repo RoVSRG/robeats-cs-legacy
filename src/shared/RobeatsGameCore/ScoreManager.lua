@@ -174,6 +174,8 @@ function ScoreManager:new(_game)
 		end
 		
 		local totalnotes =_game._audio_manager:get_note_count()
+
+		local _add_to_devaince = true
 		
 		--Incregertment stats
 		if note_result == NoteResult.Marvelous then
@@ -196,10 +198,12 @@ function ScoreManager:new(_game)
 
 			elseif params.TimeMiss == true then
 				_miss_count = _miss_count + 1
+			else
+				_add_to_devaince = false
 			end
 		end
 
-		if note_result ~= 0 then
+		if _add_to_devaince then
 			self:add_hit_to_deviance(params.HitTime, params.TimeToEnd, note_result)
 		end
 		
