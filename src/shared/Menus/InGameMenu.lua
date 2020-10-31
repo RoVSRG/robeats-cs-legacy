@@ -18,6 +18,8 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 	local _stat_display_ui
 
 	local _force_quit = false
+
+	local is_first_frame = true
 	
 	function self:cons()
 		_stat_display_ui = EnvironmentSetup:get_menu_protos_folder().InGameMenuStatDisplayUI:Clone()
@@ -50,13 +52,37 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 		_stat_display_ui.ChainDisplay.Text = tostring(_game._score_manager:get_chain())
 		_stat_display_ui.GradeDisplay.Text = string.format("%.2f",_game._score_manager:get_accuracy()) .. "%"
 		_stat_display_ui.ScoreDisplay.Text = math.floor(_game._score_manager:get_score() + 0.5)
-		-- _stat_display_ui.JudgementDisplay.Text = "pain"
+
+		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = _game._score_manager:get_end_records()
+		local total_count = marv_count + perf_count + great_count + good_count + bad_count + miss_count
+
+		if total_count == 0 and not is_first_frame then return end
+
+		_stat_display_ui.SpreadDisplay.Marvs.Total:TweenSize(UDim2.new(marv_count/total_count, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2)
+		_stat_display_ui.SpreadDisplay.Marvs.Count.Text = marv_count
+
+		_stat_display_ui.SpreadDisplay.Perfs.Total:TweenSize(UDim2.new(perf_count/total_count, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2)
+		_stat_display_ui.SpreadDisplay.Perfs.Count.Text = perf_count
+
+		_stat_display_ui.SpreadDisplay.Greats.Total:TweenSize(UDim2.new(great_count/total_count, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2)
+		_stat_display_ui.SpreadDisplay.Greats.Count.Text = great_count
+
+		_stat_display_ui.SpreadDisplay.Goods.Total:TweenSize(UDim2.new(good_count/total_count, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2)
+		_stat_display_ui.SpreadDisplay.Goods.Count.Text = good_count
+
+		_stat_display_ui.SpreadDisplay.Bads.Total:TweenSize(UDim2.new(bad_count/total_count, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2)
+		_stat_display_ui.SpreadDisplay.Bads.Count.Text = bad_count
+
+		_stat_display_ui.SpreadDisplay.Misses.Total:TweenSize(UDim2.new(miss_count/total_count, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2)
+		_stat_display_ui.SpreadDisplay.Misses.Count.Text = miss_count
 
 		local song_length = _game._audio_manager:get_song_length_ms()
 		local song_time = _game._audio_manager:get_current_time_ms()
 
 		local ms_remaining = song_length - song_time
 		_stat_display_ui.TimeLeftDisplay.Text = SPUtil:format_ms_time(ms_remaining)
+
+		is_first_frame = false
 	end
 	
 	--[[Override--]] function self:should_remove()
