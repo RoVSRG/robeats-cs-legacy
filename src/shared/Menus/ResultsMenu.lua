@@ -138,6 +138,9 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		_spread_display.Miss.Total:TweenSize(UDim2.new(_score_data.misses/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
 		_spread_display.Miss.TotalNumber.Text = _score_data.misses
+
+		_spread_display.Marvelous.MA.Text = string.format("RATIO: %0.1f:1", _score_data.marvelouses/_score_data.perfects)
+		_spread_display.Perfect.PA.Text = string.format("RATIO: %0.1f:1", _score_data.perfects/_score_data.greats)
 	end
 	
 	--[[Override--]] function self:should_remove()
