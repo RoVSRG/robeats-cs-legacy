@@ -107,11 +107,18 @@ function ResultsMenu:new(_local_services, _score_data)
 		hit_graph:add_y_markers(-60)
 
 		for _, hit_data in pairs(_score_data.hitdeviance) do
-			hit_graph:add_data_point({
-				x = hit_data.hit_time_ms;
-				y = hit_data.time_to_end;
-				color = ResultsMenu.HitColor[hit_data.note_result];
-			})
+			print(hit_data.note_result)
+			if hit_data.note_result == 0 then
+				hit_graph:add_line({
+					x = hit_data.hit_time_ms;
+				})
+			else
+				hit_graph:add_data_point({
+					x = hit_data.hit_time_ms;
+					y = hit_data.time_to_end;
+					color = ResultsMenu.HitColor[hit_data.note_result];
+				})
+			end
 		end
 	end
 
