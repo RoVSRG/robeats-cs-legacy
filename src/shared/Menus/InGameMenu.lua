@@ -1,5 +1,7 @@
 local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
+local SPDict = require(game.ReplicatedStorage.Shared.SPDict)
+local FlashEvery = require(game.ReplicatedStorage.Shared.FlashEvery)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local RobeatsGame = require(game.ReplicatedStorage.RobeatsGameCore.RobeatsGame)
 local AudioManager = require(game.ReplicatedStorage.RobeatsGameCore.AudioManager)
@@ -20,10 +22,18 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 	local _force_quit = false
 
 	local is_first_frame = true
+
+	local _player_slot_proto
+
+	local _multi_send_retrieve_data = FlashEvery:new(2)
+	local _multiplayer_protos = SPDict:new()
 	
 	function self:cons()
 		_stat_display_ui = EnvironmentSetup:get_menu_protos_folder().InGameMenuStatDisplayUI:Clone()
 		_stat_display_ui.Parent = EnvironmentSetup:get_player_gui_root()
+
+		_player_slot_proto = _stat_display_ui.MultiListDisplay.PlayerSlotProto
+		_player_slot_proto.Parent = nil
 		
 		_stat_display_ui.ExitButton.Activated:Connect(function()
 			if _game._audio_manager:get_mode() == AudioManager.Mode.Playing then
@@ -31,10 +41,15 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 				_game:set_mode(RobeatsGame.Mode.GameEnded)
 			end
 		end)
+
+		if _multiplayer_client then
+			
+		end
 	end
 	
 	--[[Override--]] function self:update(dt_scale)
 		_game:update(dt_scale)
+		_multi_send_retrieve_data:update(dt_scale)
 		
 		if _game._audio_manager:get_mode() == AudioManager.Mode.PreStart then
 			local did_raise_pre_start_trigger, raise_pre_start_trigger_val, raise_pre_start_trigger_duration = _game._audio_manager:raise_pre_start_trigger()
@@ -81,6 +96,25 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 
 		local ms_remaining = song_length - song_time
 		_stat_display_ui.TimeLeftDisplay.Text = SPUtil:format_ms_time(ms_remaining)
+
+		--Handle multiplayer data
+
+		if _multiplayer_client then
+			if _multi_send_retrieve_data:do_flash() then
+				_multiplayer_client:upload_stats({
+					marvelous_count = marv_count;
+					perfect_count = perf_count;
+					great_count = great_count;
+					good_count = good_count;
+					bad_count = bad_count;
+					miss_count = miss_count;
+					accuracy = _game._score_manager:get_accuracy();
+					max_combo = max_combo;
+					score = score;
+					combo = _game._score_manager:get_chain();
+				})
+			end
+		end
 
 		is_first_frame = false
 	end
