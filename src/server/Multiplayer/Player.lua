@@ -51,6 +51,34 @@ function Player:new(player)
         self.combo = stats.combo
     end
 
+    function self:reset_stats()
+        self.marvelous_count = 0
+        self.perfect_count = 0
+        self.great_count = 0
+        self.good_count = 0
+        self.bad_count = 0
+        self.miss_count = 0
+        self.accuracy = 0
+        self.combo = 0
+        self.max_combo = 0
+        self.score = 0
+    end
+
+    function self:get_stats()
+        return {
+            marvelous_count = self.marvelous_count;
+            perfect_count = self.perfect_count;
+            great_count = self.great_count;
+            good_count = self.good_count;
+            bad_count = self.bad_count;
+            miss_count = self.miss_count;
+            accuracy = self.accuracy;
+            combo = self.combo;
+            max_combo = self.max_combo;
+            score = self.score;
+        }
+    end
+
     function self:set_loading(val)
         AssertType:is_bool(val)
         self.loading = val
