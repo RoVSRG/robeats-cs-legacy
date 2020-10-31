@@ -22,6 +22,21 @@ function Dot:new()
         return dot_instance
     end
 
+    function self:add_line(params)
+        assert(params.x ~= nil, "X must not be nil")
+        assert(self.attached_instance ~= nil, "You must attach an Instance first!")
+
+        local line_instance = Instance.new("Frame")
+        line_instance.BorderSizePixel = 0
+        line_instance.Size = UDim2.new(0,1,1,0)
+        line_instance.Position = UDim2.new(NumberUtil.InverseLerp(self.x_lower_bound, self.x_upper_bound, params.x), 0, 0, 0)
+        line_instance.AnchorPoint = Vector2.new(0.5, 0)
+        line_instance.BackgroundColor3 = params.color or Color3.fromRGB(255, 21, 0)
+        line_instance.Parent = self.attached_instance
+
+        return line_instance
+    end
+
     function self:add_y_markers(y_int)
         assert(self.attached_instance ~= nil, "You must attach an Instance first!")
         assert(y_int ~= nil, "You must pass in an y-interval!")
@@ -32,7 +47,6 @@ function Dot:new()
         for cury = self.y_lower_bound, self.y_upper_bound, y_int do
             local text_marker = Instance.new("TextLabel")
 
-            print(NumberUtil.InverseLerp(self.y_lower_bound, self.y_upper_bound, cury))
             text_marker.Size = UDim2.new(0.2,0,1/num_y_markers,0)
             text_marker.Position = UDim2.new(0.01,0,NumberUtil.InverseLerp(self.y_lower_bound, self.y_upper_bound, cury),0)
             text_marker.BorderSizePixel = 0
