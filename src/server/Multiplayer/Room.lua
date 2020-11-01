@@ -61,6 +61,16 @@ function Room:new(id)
         self.selected_song_key = key
     end
 
+    function self:get_player_stats()
+        local ret = {}
+
+        for i, plr in self.players:key_itr() do
+            ret[#ret+1] = plr:get_stats()
+        end
+
+        return ret
+    end
+
     function self:is_host(player)
         AssertType:is_classname(player, "Player")
         return self.host == player.UserId

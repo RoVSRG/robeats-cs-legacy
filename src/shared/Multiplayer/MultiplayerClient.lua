@@ -14,13 +14,19 @@ function MultiplayerClient:new(data)
 
     end
 
-    function self:upload_stats(data)
-
-    end
-
-    function self:are_all_players_loaded()
-        return Network.AllPlayersLoaded:Invoke({
+    function self:upload_stats(score_data)
+        Network.UploadStats:Fire({
             id = data.id;
+            marvelous_count = score_data.marvelous_count;
+            perfect_count = score_data.perfect_count;
+            great_count = score_data.great_count;
+            good_count = score_data.good_count;
+            bad_count = score_data.bad_count;
+            miss_count = score_data.miss_count;
+            accuracy = score_data.accuracy;
+            max_combo = score_data.max_combo;
+            score = score_data.score;
+            combo = score_data.combo;
         })
     end
 
@@ -40,19 +46,15 @@ function MultiplayerClient:new(data)
 		})
 	end
 
-    function self:get_player_data()
-		
+    function self:get_player_stats()
+		return Network.GetAllStats:Invoke({
+            id = data.id;
+        })
     end
 
     function self:leave_room()
         Network.LeaveRoom:Fire({
             id = data.id
-        })
-    end
-
-    function self:loaded()
-        Network.PlayerLoaded:Fire({
-            id = data.id;
         })
     end
 

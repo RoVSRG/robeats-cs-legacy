@@ -1,3 +1,4 @@
+local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
@@ -84,6 +85,7 @@ Network.AddEvent("StartGame"):Connect(function(player, data)
        room:set_playing(true)
 
        for _, plr in room.players:key_itr() do
+            plr:set_finished(false)
             plr:set_loading(true)
        end
 
@@ -105,6 +107,7 @@ Network.AddEvent("AbortGame"):Connect(function(player, data)
 
        for _, plr in room.players:key_itr() do
             plr:set_loading(false)
+            plr:reset_stats()
        end
 
        --[[Network.GameStartedRoom:FireAll({
@@ -113,16 +116,33 @@ Network.AddEvent("AbortGame"):Connect(function(player, data)
     end
 end)
 
-Network.AddEvent("PlayerLoaded"):Connect(function(player, data)
+Network.AddEvent("UploadStats"):Connect(function(player, data)
     AssertType:is_non_nil(data, "Data table cannot be nil!")
     AssertType:is_string(data.id, "ID must be a string GUID!")
-
-    RoomManager:get_room(data.id):get_player(player):set_loading(false)
-end)
-
-Network.AddEvent("PlayerFinished"):Connect(function(player, data)
-    AssertType:is_non_nil(data, "Data table cannot be nil!")
-    AssertType:is_string(data.id, "ID must be a string GUID!")
+    AssertType:is_number(data.marvelous_count, "Marvelous count must be a number!")
+    AssertType:is_number(data.perfect_count, "Perfect count must be a number!")
+    AssertType:is_number(data.great_count, "Great count must be a number!")
+    AssertType:is_number(data.good_count, "Good count must be a number!")
+    AssertType:is_number(data.bad_count, "Bad count must be a number!")
+    AssertType:is_number(data.miss_count, "Miss count must be a number!")
+    AssertType:is_number(data.accuracy, "Accuracy must be a number!")
+    AssertType:is_number(data.max_combo, "Max combo must be a number!")
+    AssertType:is_number(data.score, "Score must be a number!")
+    AssertType:is_number(data.combo, "Combo must be a number!")
 
     local room = RoomManager:get_room(data.id)
+    local player = room:get_player(player)
+
+    player:update_stats({
+        marvelous_count = data.marvelous_count;
+        perfect_count = data.perfect_count;
+        great_count = data.great_count;
+        good_count = data.good_count;
+        bad_count = data.bad_count;
+        miss_count = data.miss_count;
+        accuracy = data.accuracy;
+        max_combo = data.max_combo;
+        score = data.score;
+        combo = data.combo;
+    })
 end)
