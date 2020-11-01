@@ -9,7 +9,8 @@ print(Configuration.Preferences.NoteSpeedMultiplier) --To access player NoteSpee
 ]]--
 
 local Configuration = {
-		Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.DefaultSettings))
+		Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.DefaultSettings));
+		SessionSettings = SPUtil:copy_table(require(game.ReplicatedStorage.SessionSettings));
 }
 
 function Configuration:modify(key, value)
