@@ -2,6 +2,7 @@ local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
+local InputUtil = require(game.ReplicatedStorage.Shared.InputUtil)
 local GameSlot = require(game.ReplicatedStorage.RobeatsGameCore.Enums.GameSlot)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local SFXManager = require(game.ReplicatedStorage.RobeatsGameCore.SFXManager)
@@ -162,6 +163,16 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		section_container.PlayButton.Visible = true
 		
 		_leaderboard_display:refresh_leaderboard(songkey)
+	end
+
+	function self:update(dt_scale)
+		if _local_services._input:control_just_pressed(InputUtil.KEYCODE_UPRATE) then
+			Configuration.SessionSettings.Rate += 5
+		elseif _local_services._input:control_just_pressed(InputUtil.KEYCODE_DOWNRATE) then
+			Configuration.SessionSettings.Rate -= 5
+		end
+
+		section_container.SongInfoSection.SongInfoDisplay.Rate.Text = string.format("RATE: %0.2fx", Configuration.SessionSettings.Rate/100)
 	end
 
 	function self:should_remove()
