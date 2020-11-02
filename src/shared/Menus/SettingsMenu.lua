@@ -87,12 +87,12 @@ function SettingsMenu:new(_local_services)
 
 		--//NOTESPEED
 		SPUtil:bind_input_fire(notespeed.Minus, function()
-			Configuration.Preferences.NoteSpeed -= 15
+			Configuration.Preferences.NoteSpeed -= 10
 			updateNSMULT()
 		end)
 
 		SPUtil:bind_input_fire(notespeed.Plus, function()
-			Configuration.Preferences.NoteSpeed += 15
+			Configuration.Preferences.NoteSpeed += 10
 			updateNSMULT()
 		end)
 
