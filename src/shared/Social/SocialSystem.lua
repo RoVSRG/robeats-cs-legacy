@@ -1,8 +1,8 @@
 local MessagingService = game:GetService("MessagingService")
 
-local Chat = {}
+local Social = {}
 
-function Chat:new()
+function Social:new()
 	
 	local self = {}
 	
@@ -33,4 +33,4 @@ function Chat:new()
 
 end
 
-return Chat
+return Social

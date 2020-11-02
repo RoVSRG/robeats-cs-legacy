@@ -9,6 +9,7 @@ local MenuSystem = require(game.ReplicatedStorage.Menus.System.MenuSystem)
 local Network = require(game.ReplicatedStorage.Network)
 
 local SongSelectMenu = require(game.ReplicatedStorage.Menus.SongSelectMenu)
+local SocialMenu = require(game.ReplicatedStorage.Menus.SocialMenu)
 
 local function game_init()
 	EnvironmentSetup:initial_setup()
@@ -20,6 +21,7 @@ local function game_init()
 		_menus = MenuSystem:new();
 	}
 	local_services._menus:push_menu(SongSelectMenu:new(local_services))
+	local_services._menus:push_menu(SocialMenu:new(local_services))
 
 	local update_connection
 	update_connection = game:GetService("RunService").Heartbeat:Connect(function(tick_delta)

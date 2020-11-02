@@ -1,60 +1,73 @@
-local Players = game:GetService("Players")
-local httpService = game:GetService("HttpService")
-local messagingService = game:GetService("MessagingService")
-local TextService = game:GetService("TextService")
+local MenuBase = require(game.ReplicatedStorage.Menus.System.MenuBase)
+local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 
-local deb = true
-local name
+local Social = {}
 
-game.Players.PlayerAdded:Connect(function(p)
-	name = p.Name
-end)
+function Social:new(_local_services)
+	
+	local self = MenuBase:new()
 
-local function getTextObject(message, fromPlayerId)
-	local textObject
-	local success, errorMessage = pcall(function()
-		textObject = TextService:FilterStringAsync(message, fromPlayerId)
-	end)
-	if success then
-		return textObject
+	local _chat_ui
+	
+	local _enabled = false
+	local _debounce = false
+
+	function self:cons()
+		_chat_ui = EnvironmentSetup:get_menu_protos_folder().SocialUI:Clone()
+		_chat_ui.Parent = EnvironmentSetup:get_player_gui_root()
+		
+		for i,v in pairs(game.Players:GetChildren()) do
+			self:add_player(v)
+		end
+		
+		game.Players.PlayerAdded:Connect(function(plr)
+			self:add_player(plr)
+		end)
+		
+		game.Players.PlayerRemoving:Connect(function(plr)
+			script.Parent.UserList[plr.Name]:Destroy()
+		end)
+		
+		game:GetService("UserInputService").InputEnded:Connect(function(input, gameProcessed)
+			if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.F8 then
+				self:handle_ui()
+			end
+		end)
 	end
-	return false
-end
- 
-local function getFilteredMessage(textObject, toPlayerId)
-	local filteredMessage
-	local success, errorMessage = pcall(function()
-		filteredMessage = textObject:GetChatForUserAsync(toPlayerId)
-	end)
-	if success then
-		return filteredMessage
+	
+	function self:add_player(plr)
+		local player = _chat_ui.UserFrame.UserFrame:Clone()
+		player.Icon.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. plr.UserId .. "&width=420&height=420&format=png"
+		player.Icon.Player.Text = plr.Name
+		player.Name = plr.Name
+		player.Parent = _chat_ui.UserFrame.UserList
 	end
-	return false
-end
-
-function callbackFunction(serviceData)
-	print(serviceData)
-	local decodedData = httpService:JSONDecode(serviceData.Data)
-	print(decodedData.sender)
-	print(decodedData.message)
-	print(decodedData.channel)
-	game.ReplicatedStorage.FilterText:FireAllClients(decodedData.sender, decodedData.message, decodedData.channel)
-end
-
-game.ReplicatedStorage.FilterText.OnServerEvent:Connect(function(plr,msg,channel)
-	if msg ~= "" then
-		local messageObject = getTextObject(msg, plr.UserId)
-		if messageObject then
-			local filteredMessage = getFilteredMessage(messageObject,plr.UserId)
-			local messageData = {
-				sender = plr.Name,
-				message = filteredMessage,
-				channel = channel,
-			}
-			local encoded = httpService:JSONEncode(messageData)
-			messagingService:PublishAsync("chatservice", encoded)
+	
+	function self:remote_player(plr)
+		_chat_ui.UserFrame.UserList[plr.Name]:Destroy()
+		
+	end
+	
+	function self:handle_ui()
+		if _enabled and _debounce then
+			_debounce = not _debounce
+			_enabled = not _enabled
+			_chat_ui.ChatFrame:TweenPosition(UDim2.new(0,0,1,0),"Out","Quad",0.5)
+			_chat_ui.UserFrame:TweenPosition(UDim2.new(0,0,-0.65,0),"Out","Quad",0.5)
+			wait(1)
+			_debounce = not _debounce
+		else
+			_debounce = not _debounce
+			_enabled = not _enabled
+			_chat_ui.ChatFrame:TweenPosition(UDim2.new(0,0,0.65,0),"Out","Quad",0.5)
+			_chat_ui.UserFrame:TweenPosition(UDim2.new(0,0,0,0),"Out","Quad",0.5)
+			wait(1)
+			_debounce = not _debounce
 		end
 	end
-end)
+	
+	self:cons()
+	return self
+end
 
-messagingService:SubscribeAsync("chatservice", callbackFunction)
+return Social
