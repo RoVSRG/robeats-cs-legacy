@@ -181,7 +181,7 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 		data.mean = average_offset
 
 		spawn(function()
-			if _force_quit then
+			if not _force_quit then
 				DebugOut:puts("Writing score...")
 				local _to_send = SPUtil:copy_table(data)
 				Network.SubmitScore:Fire(_to_send)
