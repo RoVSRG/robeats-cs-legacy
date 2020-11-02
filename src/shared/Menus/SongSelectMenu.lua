@@ -16,6 +16,8 @@ local MultiplayerLobbyMenu = require(game.ReplicatedStorage.Menus.MultiplayerLob
 local Configuration	= require(game.ReplicatedStorage.Configuration)
 local CustomServerSettings = require(game.Workspace.CustomServerSettings)
 
+local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+
 local SongSelectMenu = {}
 
 function SongSelectMenu:new(_local_services, _multiplayer_client)
@@ -133,6 +135,30 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		section_container.SongInfoSection.SongInfoDisplay.DescriptionDisplay.Text = SongDatabase:get_description_for_key(_selected_songkey)
 		section_container.SongInfoSection.SongInfoDisplay.SongCover.Image = SongDatabase:get_image_for_key(_selected_songkey)
 
+		section_container.SongInfoSection.SongInfoDisplay.Visible = true
+		section_container.PlayButton.Visible = true
+		
+		_leaderboard_display:refresh_leaderboard(songkey)
+
+		self:update_nps_graph()
+		self:update_length()
+	end
+
+	function self:update(dt_scale)
+		if _local_services._input:control_just_pressed(InputUtil.KEYCODE_UPRATE) then
+			Configuration.SessionSettings.Rate += 5
+			self:update_nps_graph()
+			self:update_length()
+		elseif _local_services._input:control_just_pressed(InputUtil.KEYCODE_DOWNRATE) then
+			Configuration.SessionSettings.Rate -= 5
+			self:update_nps_graph()
+			self:update_length()
+		end
+
+		section_container.SongInfoSection.SongInfoDisplay.Rate.Text = string.format("RATE: %0.2fx", Configuration.SessionSettings.Rate/100)
+	end
+
+	function self:update_nps_graph()
 		for _, itr_nps_ob in pairs(section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items:GetChildren()) do
 			if itr_nps_ob:IsA("Frame") then
 				itr_nps_ob:Destroy()
@@ -145,35 +171,27 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			max_nps = math.max(nps, max_nps)
 		end
 
-		local _lime = Color3.fromRGB(186, 252, 3)
-		local _red = Color3.fromRGB(224, 18, 32)
+		local _rate = Configuration.SessionSettings.Rate/100
 
 		for i, nps in pairs(nps_graph) do
+			nps *= _rate
 			local nps_point = Instance.new("Frame")
 			nps_point.Parent = section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items
 			nps_point.BorderSizePixel = 0
 			nps_point.Size = UDim2.new(1/#nps_graph,0,0,0)
 			nps_point:TweenSize(UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0), Enum.EasingDirection.Out, Enum.EasingStyle.Elastic, (i/#nps_graph)*1.222, true)
-			nps_point.BackgroundColor3 = _lime:Lerp(_red, math.clamp(nps/40, 0, 1))
+
+			local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
+			nps_point.BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100)
 		end
 
-		section_container.SongInfoSection.SongInfoDisplay.NpsGraph.MaxNps.Text = string.format("MAX NPS: %d", max_nps)
-		
-		
-		section_container.SongInfoSection.SongInfoDisplay.Visible = true
-		section_container.PlayButton.Visible = true
-		
-		_leaderboard_display:refresh_leaderboard(songkey)
+		section_container.SongInfoSection.SongInfoDisplay.NpsGraph.MaxNps.Text = string.format("MAX NPS: %d", max_nps*_rate)
 	end
 
-	function self:update(dt_scale)
-		if _local_services._input:control_just_pressed(InputUtil.KEYCODE_UPRATE) then
-			Configuration.SessionSettings.Rate += 5
-		elseif _local_services._input:control_just_pressed(InputUtil.KEYCODE_DOWNRATE) then
-			Configuration.SessionSettings.Rate -= 5
-		end
-
-		section_container.SongInfoSection.SongInfoDisplay.Rate.Text = string.format("RATE: %0.2fx", Configuration.SessionSettings.Rate/100)
+	function self:update_length()
+		section_container.SongInfoSection.SongInfoDisplay.Metadata.TotalLengthDisplay.Text = string.format("Total Length: %s",
+			SPUtil:format_ms_time(SongDatabase:get_song_length_for_key(_selected_songkey)/(Configuration.SessionSettings.Rate/100))
+		)
 	end
 
 	function self:should_remove()
