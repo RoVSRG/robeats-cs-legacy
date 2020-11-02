@@ -11,7 +11,6 @@ local TweenService = game:GetService("TweenService")
 
 local LeaderboardDisplay = require(game.ReplicatedStorage.Menus.Utils.LeaderboardDisplay)
 local SongStartMenu = require(game.ReplicatedStorage.Menus.SongStartMenu)
-local ConfirmationPopupMenu = require(game.ReplicatedStorage.Menus.ConfirmationPopupMenu)
 local SettingsMenu = require(game.ReplicatedStorage.Menus.SettingsMenu)
 local MultiplayerLobbyMenu = require(game.ReplicatedStorage.Menus.MultiplayerLobbyMenu)
 local Configuration	= require(game.ReplicatedStorage.Configuration)
