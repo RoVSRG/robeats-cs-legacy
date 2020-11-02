@@ -148,11 +148,14 @@ function SongDatabase:new()
 
 	function self:get_searchable_string_for_key(key)
 		local data = self:get_data_for_key(key)
-		return string.format("%s %s %s %s",
+		return string.format("%s %s %s %s artist=%s name=%s difficulty=%s",
 			data.AudioArtist,
 			data.AudioFilename,
 			data.AudioDifficulty,
-			data.AudioDescription
+			data.AudioDescription,
+			data.AudioArtist,
+			data.AudioFilename,
+			data.AudioDifficulty
 		)
 	end
 	
