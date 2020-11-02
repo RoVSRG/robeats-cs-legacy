@@ -6,6 +6,14 @@ local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.EnvironmentSetup)
 
 local NoteResultPopupEffect = {}
+NoteResultPopupEffect.HitColor = {
+	[0] = Color3.fromRGB(255, 0, 0);
+	[1] = Color3.fromRGB(190, 10, 240);
+	[2] = Color3.fromRGB(56, 10, 240);
+	[3] = Color3.fromRGB(7, 232, 74);
+	[4] = Color3.fromRGB(252, 244, 5);
+	[5] = Color3.fromRGB(255, 255, 255);
+}
 NoteResultPopupEffect.Type = "NoteResultPopupEffect"
 
 local INITIAL_FRAME_Y = 125
@@ -47,6 +55,8 @@ function NoteResultPopupEffect:new(_game, _position, _result)
 		else
 			_image.Text = ""
 		end
+
+		_image.TextColor3 = NoteResultPopupEffect.HitColor[_result]
 		
 		_effect_obj:SetPrimaryPartCFrame(
 			SPUtil:lookat_camera_cframe(_position)
