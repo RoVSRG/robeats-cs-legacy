@@ -31,6 +31,8 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	local tab_container
 	local should_remove = false
 
+	local song_list_element_proto
+
 	local _input = _local_services._input
 
 	local _leaderboard_display
@@ -48,37 +50,10 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			song_list.CanvasSize = UDim2.new(0, 0, 0, song_list.UIListLayout.AbsoluteContentSize.Y)
 		end)
 		
-		local song_list_element_proto = song_list.SongListElementProto
+		song_list_element_proto = song_list.SongListElementProto
 		song_list_element_proto.Parent = nil
 		for itr_songkey, itr_songdata in SongDatabase:key_itr() do
-			local itr_list_element = song_list_element_proto:Clone()
-			itr_list_element.Parent = song_list
-			itr_list_element.LayoutOrder = itr_songkey
-
-			--SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
-			itr_list_element.SongCover.Image = SongDatabase:get_image_for_key(itr_songkey)
-			itr_list_element.NameDisplay.Text = SongDatabase:get_title_for_key(itr_songkey)
-			itr_list_element.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(itr_songkey))
-			if SongDatabase:key_get_audiomod(itr_songkey) == SongDatabase.SongMode.SupporterOnly then
-				itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
-			end
-			
-			SPUtil:bind_input_fire(itr_list_element, function(input)
-				_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
-				self:select_songkey(itr_songkey)
-			end)
-
-			local original_size = itr_list_element.Size
-
-			itr_list_element.MouseEnter:Connect(function()
-				itr_list_element:TweenSize(original_size+UDim2.new(0,4,0,20), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
-				--_local_services._sfx_manager:play_sfx(SFXManager.SFX_HOVER)
-			end)
-
-			itr_list_element.MouseLeave:Connect(function()
-				itr_list_element:TweenSize(original_size, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
-			end)
-			
+			self:add_song_button(itr_songkey)
 		end
 		
 		_leaderboard_display = LeaderboardDisplay:new(
@@ -102,8 +77,11 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			_local_services._menus:push_menu(MultiplayerLobbyMenu:new(_local_services))
 		end)
 
-		
 		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = true
+
+		section_container.SongSection.SearchBar.SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+			self:search_songs(section_container.SongSection.SearchBar.SearchBox.Text)
+		end)
 
 		MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, asset_id, is_purchased)
 			if asset_id == CustomServerSettings.SupporterGamepassID and is_purchased == true then
@@ -192,6 +170,60 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		section_container.SongInfoSection.SongInfoDisplay.Metadata.TotalLengthDisplay.Text = string.format("Total Length: %s",
 			SPUtil:format_ms_time(SongDatabase:get_song_length_for_key(_selected_songkey)/(Configuration.SessionSettings.Rate/100))
 		)
+	end
+
+	function self:add_song_button(songkey)
+		local itr_list_element = song_list_element_proto:Clone()
+		itr_list_element.Parent = section_container.SongSection.SongList
+		itr_list_element.LayoutOrder = songkey
+
+		--SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
+		itr_list_element.SongCover.Image = SongDatabase:get_image_for_key(songkey)
+		itr_list_element.NameDisplay.Text = SongDatabase:get_title_for_key(songkey)
+		itr_list_element.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(songkey))
+		if SongDatabase:key_get_audiomod(songkey) == SongDatabase.SongMode.SupporterOnly then
+			itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
+		end
+		
+		SPUtil:bind_input_fire(itr_list_element, function(input)
+			_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
+			self:select_songkey(songkey)
+		end)
+
+		local original_size = itr_list_element.Size
+
+		itr_list_element.MouseEnter:Connect(function()
+			itr_list_element:TweenSize(original_size+UDim2.new(0,4,0,20), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
+			--_local_services._sfx_manager:play_sfx(SFXManager.SFX_HOVER)
+		end)
+
+		itr_list_element.MouseLeave:Connect(function()
+			itr_list_element:TweenSize(original_size, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
+		end)
+	end
+
+	function self:search_songs(search)
+		search = search or ""
+		search = string.split(search, " ")
+		for _, itr_songbutton in pairs(section_container.SongSection.SongList:GetChildren()) do
+			if itr_songbutton:IsA("Frame") then
+				itr_songbutton:Destroy()
+			end
+		end
+
+		for itr_songkey, itr_songdata in SongDatabase:key_itr() do
+			local _to_search = SongDatabase:get_searchable_string_for_key(itr_songkey)
+			local found = 0
+			for i = 1, #search do
+				local search_term = search[i]
+				if string.find(_to_search:lower(), search_term:lower()) ~= nil then
+					found += 1
+				end
+			end
+			if found == #search then
+				self:add_song_button(itr_songkey)
+			end
+		end
 	end
 
 	function self:should_remove()
