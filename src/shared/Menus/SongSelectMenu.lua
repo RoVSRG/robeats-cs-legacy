@@ -150,7 +150,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 
 		section_container.SongInfoSection.SongInfoDisplay.Rate.Text = string.format("RATE: %0.2fx", Configuration.SessionSettings.Rate/100)
 		if _current_sfx and _current_sfx.IsLoaded then
-			section_container.SongInfoSection.SongInfoDisplay.NpsGraph.SongPosition:TweenPosition(UDim2.new(_current_sfx.TimePosition/_current_sfx.TimeLength,0,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Sine, 0.1, true)
+			section_container.SongInfoSection.SongInfoDisplay.NpsGraph.SongPosition:TweenPosition(UDim2.new(_current_sfx.TimePosition/_current_sfx.TimeLength,0,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Sine, 0.04, true)
 		end
 	end
 
