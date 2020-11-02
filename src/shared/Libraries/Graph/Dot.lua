@@ -22,7 +22,7 @@ function Dot:new()
         dot_instance.Size = UDim2.new(0,3,0,3)
         dot_instance.AnchorPoint = Vector2.new(0.5, 0.5)
         dot_instance.BackgroundColor3 = params.color or Color3.new(0.9,0.9,0.9)
-        dot_instance.Position = UDim2.new(math.random(),0,math.random(),0)
+        dot_instance.Position = UDim2.new(1,0,math.clamp(math.random(), 0.3, 0.7),0)
         dot_instance.Parent = self.attached_instance
 
         self.tween_queue:push_back({
@@ -43,6 +43,7 @@ function Dot:new()
         line_instance.Position = UDim2.new(NumberUtil.InverseLerp(self.x_lower_bound, self.x_upper_bound, params.x), 0, 0, 0)
         line_instance.AnchorPoint = Vector2.new(0.5, 0)
         line_instance.BackgroundColor3 = params.color or Color3.fromRGB(255, 21, 0)
+        line_instance.BackgroundTransparency = 0.7
         line_instance.Parent = self.attached_instance
 
         return line_instance
@@ -86,7 +87,7 @@ function Dot:new()
         SPUtil:spawn(function()
             for i = 1, self.tween_queue:count() do
                 local itr_instance = self.tween_queue:get(i)
-                itr_instance.instance:TweenPosition(itr_instance.position, Enum.EasingDirection.Out, Enum.EasingStyle.Elastic, 0.5)
+                itr_instance.instance:TweenPosition(itr_instance.position, Enum.EasingDirection.In, Enum.EasingStyle.Quart, (i/self.tween_queue:count())*0.7)
             end
         end)
     end
