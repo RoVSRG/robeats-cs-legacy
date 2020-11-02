@@ -7,6 +7,7 @@ local GameSlot = require(game.ReplicatedStorage.RobeatsGameCore.Enums.GameSlot)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local SFXManager = require(game.ReplicatedStorage.RobeatsGameCore.SFXManager)
 local MarketplaceService = game:GetService("MarketplaceService")
+local TweenService = game:GetService("TweenService")
 
 local LeaderboardDisplay = require(game.ReplicatedStorage.Menus.Utils.LeaderboardDisplay)
 local SongStartMenu = require(game.ReplicatedStorage.Menus.SongStartMenu)
@@ -36,6 +37,8 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	local _input = _local_services._input
 
 	local _leaderboard_display
+
+	local _current_sfx
 	
 	function self:cons()
 		_song_select_ui = EnvironmentSetup:get_menu_protos_folder().SongSelectUI:Clone()
@@ -117,7 +120,8 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		section_container.PlayButton.Visible = true
 		
 		_leaderboard_display:refresh_leaderboard(songkey)
-
+		
+		self:play_preview()
 		self:update_nps_graph()
 		self:update_length()
 	end
@@ -125,15 +129,23 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	function self:update(dt_scale)
 		if _local_services._input:control_just_pressed(InputUtil.KEYCODE_UPRATE) then
 			Configuration.SessionSettings.Rate += 5
-			self:update_nps_graph()
-			self:update_length()
+			self:on_rate_change()
 		elseif _local_services._input:control_just_pressed(InputUtil.KEYCODE_DOWNRATE) then
 			Configuration.SessionSettings.Rate -= 5
-			self:update_nps_graph()
-			self:update_length()
+			self:on_rate_change()
 		end
 
 		section_container.SongInfoSection.SongInfoDisplay.Rate.Text = string.format("RATE: %0.2fx", Configuration.SessionSettings.Rate/100)
+	end
+
+	function self:on_rate_change()
+		--Configuration.SessionSettings.Rate
+		self:update_nps_graph()
+		self:update_length()
+
+		if _current_sfx then
+			_current_sfx.PlaybackSpeed = Configuration.SessionSettings.Rate/100
+		end
 	end
 
 	function self:update_nps_graph()
@@ -241,17 +253,46 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			end
 		end
 	end
+
+	function self:play_preview()
+		if _selected_songkey == SongDatabase:invalid_songkey() then return end
+
+		if _current_sfx then
+			_current_sfx:Stop()
+		end
+
+		local audio_id = SongDatabase:get_data_for_key(_selected_songkey).AudioAssetId
+
+		_current_sfx = _local_services._sfx_manager:play_sfx(audio_id, 0)
+		_current_sfx.Loaded:Connect(function()
+			_current_sfx.TimePosition = NumberUtil.Lerp(0,_current_sfx.TimeLength,0.35)
+			_current_sfx.PlaybackSpeed = Configuration.SessionSettings.Rate/100
+			local volume_tween_info = TweenInfo.new(3)
+			local volume_tween = TweenService:Create(_current_sfx, volume_tween_info, {
+				Volume = 0.5
+			})
+			volume_tween:Play()
+		end)
+		_current_sfx.Looped = true
+	end
 	
 	--[[Override--]] function self:do_remove()
+		if _current_sfx then
+			_current_sfx:Stop()
+		end
 		_song_select_ui:Destroy()
 	end
 	
 	--[[Override--]] function self:set_is_top_element(val)
 		if val then
+			self:play_preview()
 			EnvironmentSetup:set_mode(EnvironmentSetup.Mode.Menu)
 			_song_select_ui.Parent = EnvironmentSetup:get_player_gui_root()
 			self:select_songkey(_selected_songkey)
 		else
+			if _current_sfx then
+				_current_sfx:Stop()
+			end
 			_song_select_ui.Parent = nil
 		end
 	end
