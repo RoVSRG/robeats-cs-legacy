@@ -30,7 +30,7 @@ function ResultsMenu:new(_local_services, _score_data)
 	local _spread_display
 	local total_judges
 
-	local _tween_number = NumberTween:new(1.2)
+	local _tween_number = NumberTween:new(3.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
 	local _should_remove = false
 

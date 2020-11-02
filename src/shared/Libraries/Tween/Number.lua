@@ -1,9 +1,11 @@
 local SPList = require(game.ReplicatedStorage.Shared.SPList)
 local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
 
+local TweenService = game:GetService("TweenService")
+
 local Number = {}
 
-function Number:new(_time)
+function Number:new(_time, _easing_style, _easing_direction)
     local self = {}
     local _bound = SPList:new()
 
@@ -34,7 +36,7 @@ function Number:new(_time)
     end
 
     function self:get_value()
-        return math.clamp(NumberUtil.InverseLerp(_start_time, _end_time, _cur_time), 0, 1)
+        return TweenService:GetValue(math.clamp(NumberUtil.InverseLerp(_start_time, _end_time, _cur_time), 0, 1), _easing_style or Enum.EasingStyle.Quad, _easing_direction or Enum.EasingDirection.InOut)
     end
 
     return self
