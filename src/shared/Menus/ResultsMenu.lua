@@ -87,7 +87,7 @@ function ResultsMenu:new(_local_services, _score_data)
 			section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key))*scale)
 			section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy*scale)
 			section_container.DataContainer.Score.Data.Text = math.floor(_score_data.scores*scale + 0.5)
-			section_container.DataContainer.Mean.Data.Text = -math.round(average_offset*scale).."ms"
+			section_container.DataContainer.Mean.Data.Text = math.round(average_offset*scale).."ms"
 			section_container.DataContainer.MaxCombo.Data.Text = math.round(_score_data.maxcombo*scale).."x"
 		end)
 
