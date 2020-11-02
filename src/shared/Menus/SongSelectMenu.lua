@@ -80,6 +80,19 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			_local_services._menus:push_menu(MultiplayerLobbyMenu:new(_local_services))
 		end)
 
+		SPUtil:bind_input_fire(section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items, function()
+			local mouse = game.Players.LocalPlayer:GetMouse()
+			local _a = NumberUtil.InverseLerp(
+				section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items.AbsolutePosition.X,
+				section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items.AbsolutePosition.X+section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items.AbsoluteSize.X,
+				mouse.X
+			)
+			
+			if _current_sfx and _current_sfx.IsLoaded then
+				_current_sfx.TimePosition = _current_sfx.TimeLength*_a
+			end
+		end)
+
 		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = true
 
 		section_container.SongSection.SearchBar.SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -136,6 +149,9 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		end
 
 		section_container.SongInfoSection.SongInfoDisplay.Rate.Text = string.format("RATE: %0.2fx", Configuration.SessionSettings.Rate/100)
+		if _current_sfx and _current_sfx.IsLoaded then
+			section_container.SongInfoSection.SongInfoDisplay.NpsGraph.SongPosition:TweenPosition(UDim2.new(_current_sfx.TimePosition/_current_sfx.TimeLength,0,0,0), Enum.EasingDirection.InOut, Enum.EasingStyle.Sine, 0.1, true)
+		end
 	end
 
 	function self:on_rate_change()
