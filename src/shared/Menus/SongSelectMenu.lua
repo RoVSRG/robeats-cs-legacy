@@ -37,6 +37,8 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 
 	local _leaderboard_display
 
+	local ResultsMenu = require(game.ReplicatedStorage.Menus.ResultsMenu)
+
 	local _current_sfx
 	
 	function self:cons()
@@ -58,10 +60,9 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			self:add_song_button(itr_songkey)
 		end
 		
-		_leaderboard_display = LeaderboardDisplay:new(
-			section_container.LeaderboardSection, 
-			section_container.LeaderboardSection.LeaderboardList.LeaderboardListElementProto
-		)
+		_leaderboard_display = LeaderboardDisplay:new(section_container.LeaderboardSection, section_container.LeaderboardSection.LeaderboardList.LeaderboardListElementProto, function(_slot_data)
+			_local_services._menus:push_menu(ResultsMenu:new(_local_services, _slot_data))
+		end)
 		
 		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = true
 		section_container.SongInfoSection.SongInfoDisplay.Visible = false

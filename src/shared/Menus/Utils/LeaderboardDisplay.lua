@@ -4,7 +4,7 @@ local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
 local LeaderboardDisplay = {}
 
-function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
+function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto, _on_leaderboard_click)
 	local self = {}
 	_leaderboard_proto.Parent = nil
 	local _leaderboard_list_root = _leaderboard_ui_root.LeaderboardList
@@ -17,8 +17,8 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
 	_leaderboard_list_root.CanvasSize = UDim2.new(0, 0, 0, 0)
 	
 	local function get_formatted_data(data)
-		local str = "%.2f%% | %0d / %0d / %0d / %0d"
-		return string.format(str, data.accuracy*100, data.perfects, data.greats, data.okays, data.misses)
+		local str = "%.2f%% | %0d / %0d / %0d / %0d / %0d / %0d"
+		return string.format(str, data.accuracy, data.marvelouses, data.perfects, data.greats, data.goods, data.bads, data.misses)
 	end
 	
 	local _last_load_start_time
@@ -27,13 +27,15 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
 		_last_load_start_time = tick()
 		local load_start_time = _last_load_start_time
 		_leaderboard_loading_display.Visible = true
-		spawn(function()
+		SPUtil:spawn(function()
 			--// CLEAR LEADERBOARD LIST
 			for i, v in pairs(_leaderboard_list_root:GetChildren()) do
 				if v:IsA("Frame") then
 					v:Destroy()
 				end
 			end
+
+			print(songkey)
 
 			--// GET NEW LEADERBOARD
 			local leaderboardData = Network.GetLeaderboard:Invoke({
@@ -43,6 +45,13 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
 				return --loaded another leaderboard since when this load was begun, do not display info
 			end
 			DebugOut:puts("Showing leaderboard for songkey(%s)!",tostring(songkey))
+
+			table.sort(leaderboardData, function(a, b)
+				if a.rating == 0 and b.rating == 0 then
+					return a.score > b.score
+				end
+				return a.rating > b.rating
+			end)
 			
 			--// RENDER NEW LEADERBOARD
 			for itr, itr_data in pairs(leaderboardData) do
@@ -51,6 +60,14 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto)
 				itr_leaderboard_proto.UserThumbnail.Player.Text = string.format("%s at %s", itr_data.playername, SPUtil:time_to_str(itr_data.time))
 				itr_leaderboard_proto.UserThumbnail.Data.Text = get_formatted_data(itr_data)
 				itr_leaderboard_proto.UserThumbnail.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", itr_data.userid)
+
+				SPUtil:bind_input_fire(itr_leaderboard_proto, function()
+					itr_data.hitdeviance = Network.GetDeviance:Invoke({
+						mapid = songkey;
+						userid = itr_data.userid;
+					})
+					if _on_leaderboard_click then _on_leaderboard_click(itr_data) end
+				end)
 
 				itr_leaderboard_proto.Parent = _leaderboard_list_root
 			end

@@ -75,19 +75,11 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		section_container.Banner.GradeContainer.Grade.Image = img or ""
 
-		local average_offset = 0
-
-		for i, v in pairs(_score_data.hitdeviance) do
-			average_offset += v.time_to_end
-		end
-
-		average_offset /= (#_score_data.hitdeviance == 0 and 1 or #_score_data.hitdeviance)
-
 		_tween_number:bind(function(scale)
 			section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key))*scale)
 			section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy*scale)
-			section_container.DataContainer.Score.Data.Text = math.floor(_score_data.scores*scale + 0.5)
-			section_container.DataContainer.Mean.Data.Text = math.round(average_offset*scale).."ms"
+			section_container.DataContainer.Score.Data.Text = math.floor(_score_data.score*scale + 0.5)
+			section_container.DataContainer.Mean.Data.Text = math.round(_score_data.mean*scale).."ms"
 			section_container.DataContainer.MaxCombo.Data.Text = math.round(_score_data.maxcombo*scale).."x"
 		end)
 
@@ -97,15 +89,15 @@ function ResultsMenu:new(_local_services, _score_data)
 		total_judges = #_key_data.HitObjects
 
 		section_container.Banner.PlayerInfo.Text = string.format("Played by %s at %s",
-			game.Players.LocalPlayer.Name,
-			SPUtil:time_to_str(os.time())
+			SPUtil:player_name_from_id(_score_data.userid) or game.Players.LocalPlayer.Name,
+			SPUtil:time_to_str(_score_data.time or os.time())
 		);
 
 		section_container.Banner.MapInfo.Text = string.format("%s - %s [%0d] (%0.2fx rate)",
 			SongDatabase:get_title_for_key(_song_key),
 			SongDatabase:get_artist_for_key(_song_key),
 			SongDatabase:get_difficulty_for_key(_song_key),
-			Configuration.SessionSettings.Rate/100
+			_score_data.rate/100
 		)
 
 		local hit_graph = Graph.Dot:new()
@@ -115,7 +107,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		hit_graph:add_y_markers(-60)
 
 		SPUtil:spawn(function()
-			for _, hit_data in pairs(_score_data.hitdeviance) do
+			for _, hit_data in pairs(_score_data.hitdeviance or {}) do
 				if hit_data.note_result == 0 then
 					hit_graph:add_line({
 						x = hit_data.hit_time_ms;

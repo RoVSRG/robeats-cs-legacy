@@ -164,20 +164,32 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 			goods = good_count;
 			bads = bad_count;
 			misses = miss_count;
-			scores = score;
+			score = score;
+			rate = Configuration.SessionSettings.Rate;
 		}
 
+		data.hitdeviance = _game._score_manager:get_hit_deviance()
+
+		local average_offset = 0
+
+		for i, v in pairs(data.hitdeviance) do
+			average_offset += v.time_to_end
+		end
+
+		average_offset /= (#data.hitdeviance == 0 and 1 or #data.hitdeviance)
+
+		data.mean = average_offset
+
 		spawn(function()
-			if not _force_quit then
+			if _force_quit then
 				DebugOut:puts("Writing score...")
-				Network.SubmitScore:Fire(data)
+				local _to_send = SPUtil:copy_table(data)
+				Network.SubmitScore:Fire(_to_send)
 				DebugOut:puts("Score has been written!")
 			else
 				print("Score not submitted because you force quitted!")
 			end
 		end)
-
-		data.hitdeviance = _game._score_manager:get_hit_deviance()
 
 		_game:teardown()
 
