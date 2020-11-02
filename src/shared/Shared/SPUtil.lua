@@ -174,4 +174,8 @@ function SPUtil:player_name_from_id(id)
 	return suc and name or "N/A"
 end
 
+function SPUtil:spawn(_callback)
+	spawn(_callback)
+end
+
 return SPUtil

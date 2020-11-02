@@ -10,6 +10,7 @@ local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.Environm
 local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
 local Configuration = require(game.ReplicatedStorage.Configuration)
 local TimingPresets = require(game.ReplicatedStorage.TimingPresets)
+local Configuration = require(game.ReplicatedStorage.Configuration)
 
 local SingleNote = require(game.ReplicatedStorage.RobeatsGameCore.NoteTypes.SingleNote)
 local HeldNote = require(game.ReplicatedStorage.RobeatsGameCore.NoteTypes.HeldNote)
@@ -27,10 +28,10 @@ AudioManager.Mode = {
 function AudioManager:new(_game)
 	local self = {}
 
-	local _rate = 1 --Rate multiplier, you may implement some sort of way to modify the rate at runtime.
+	local _rate = Configuration.SessionSettings.Rate / 100 --Rate multiplier, you may implement some sort of way to modify the rate at runtime.
 	
-	--Note speed in milliseconds, from time it takes to spawn the note to time the note is hit. Default value is 1500, or 1.5 seconds.
-	--To add a multiplier to this, set Configuration.Preferences.NoteSpeedMultiplier
+	--Note speed in milliseconds, from time it takes to spawn the note to time the note is hit. Default value is 2000, or 2 seconds.
+	--To change this, set Configuration.Preferences.NoteSpeed
 	
 	local _current_audio_data
 	
@@ -41,7 +42,7 @@ function AudioManager:new(_game)
 	
 	function self:get_note_prebuffer_time_ms() 
 		_current_audio_data = SongDatabase:get_data_for_key(_song_key)
-		_note_prebuffer_time = (_current_audio_data.AudioNotePrebufferTime / Configuration.Preferences.NoteSpeedMultiplier)*_rate
+		_note_prebuffer_time = Configuration.Preferences.NoteSpeed*_rate
 		return _note_prebuffer_time 
 	end
 	
@@ -134,7 +135,7 @@ function AudioManager:new(_game)
 		end
 		
 		--Apply note speed multiplier
-		_note_prebuffer_time = (_current_audio_data.AudioNotePrebufferTime / Configuration.Preferences.NoteSpeedMultiplier)*_rate
+		_note_prebuffer_time = Configuration.Preferences.NoteSpeed*_rate
 	end
 
 	function self:teardown()

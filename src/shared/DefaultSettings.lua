@@ -8,7 +8,7 @@ return {
 			{Enum.KeyCode.R, Enum.KeyCode.F, Enum.KeyCode.V, Enum.KeyCode.P, Enum.KeyCode.Semicolon, Enum.KeyCode.Slash},
 	};
 	AudioOffset = 0;
-	NoteSpeedMultiplier = 1;
+	NoteSpeed = 1000;
 
 	--Configure these to change timing windows		
 

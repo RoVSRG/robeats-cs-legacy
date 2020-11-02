@@ -42,6 +42,9 @@ InputUtil.KEYCODE_TOUCH_TRACK2 = 10002
 InputUtil.KEYCODE_TOUCH_TRACK3 = 10003
 InputUtil.KEYCODE_TOUCH_TRACK4 = 10004
 
+InputUtil.KEYCODE_UPRATE = Enum.KeyCode.Equals --61
+InputUtil.KEYCODE_DOWNRATE = Enum.KeyCode.Minus --45
+
 function InputUtil:new()
 	local self = {}
 	
@@ -284,6 +287,12 @@ function InputUtil:new()
 		elseif control == InputUtil.KEYCODE_TOUCH_TRACK4 then
 			return _down_keys:contains(InputUtil.KEYCODE_TOUCH_TRACK4)
 
+		elseif control == InputUtil.KEYCODE_UPRATE then
+			return active_dict:contains(Enum.KeyCode.Equals)
+			
+		elseif control == InputUtil.KEYCODE_DOWNRATE then
+			return active_dict:contains(Enum.KeyCode.Minus)
+			
 		else
 			error("INPUTKEY NOT FOUND ",control)
 			return false

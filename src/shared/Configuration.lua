@@ -5,11 +5,12 @@ local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 --[[
 Use this class to access player settings. Example:
 local Configuration = require(game.ReplicatedStorage.Configuration)
-print(Configuration.Preferences.NoteSpeedMultiplier) --To access player NoteSpeedMultiplier
+print(Configuration.Preferences.NoteSpeed) --To access player NoteSpeed
 ]]--
 
 local Configuration = {
-		Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.DefaultSettings))
+		Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.DefaultSettings));
+		SessionSettings = SPUtil:copy_table(require(game.ReplicatedStorage.SessionSettings));
 }
 
 function Configuration:modify(key, value)

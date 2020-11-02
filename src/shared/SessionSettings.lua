@@ -1,0 +1,3 @@
+return {
+    Rate = 100;
+}

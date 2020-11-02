@@ -3,6 +3,10 @@ local EnvironmentSetup = require(game.ReplicatedStorage.RobeatsGameCore.Environm
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
+local CurveUtil = require(game.ReplicatedStorage.Shared.CurveUtil)
+local NumberTween = require(game.ReplicatedStorage.Libraries.Tween.Number)
+
+local Configuration = require(game.ReplicatedStorage.Configuration)
 
 local Graph = require(game.ReplicatedStorage.Libraries.Graph)
 local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
@@ -26,6 +30,8 @@ function ResultsMenu:new(_local_services, _score_data)
 	local _spread_display
 	local total_judges
 
+	local _tween_number = NumberTween:new(3.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
 	local _should_remove = false
 
 	local _grade_images = {
@@ -40,6 +46,7 @@ function ResultsMenu:new(_local_services, _score_data)
 	local _accuracy_marks = {100,95,90,80,70,60,50}
 	
 	function self:cons()
+		_tween_number:start()
 		_results_menu_ui = EnvironmentSetup:get_menu_protos_folder().ResultsMenuUI:Clone()
 
 		local _song_length_ms = SongDatabase:get_song_length_for_key(_score_data.mapid)+2000
@@ -67,8 +74,6 @@ function ResultsMenu:new(_local_services, _score_data)
 		end
 
 		section_container.Banner.GradeContainer.Grade.Image = img or ""
-		section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy)
-		section_container.DataContainer.Score.Data.Text = math.floor(_score_data.scores) + 0.5
 
 		local average_offset = 0
 
@@ -78,11 +83,13 @@ function ResultsMenu:new(_local_services, _score_data)
 
 		average_offset /= (#_score_data.hitdeviance == 0 and 1 or #_score_data.hitdeviance)
 
-		section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key)))
-
-		section_container.DataContainer.Mean.Data.Text = math.round(average_offset).."ms"
-		
-		section_container.DataContainer.MaxCombo.Data.Text = _score_data.maxcombo.."x"
+		_tween_number:bind(function(scale)
+			section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key))*scale)
+			section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy*scale)
+			section_container.DataContainer.Score.Data.Text = math.floor(_score_data.scores*scale + 0.5)
+			section_container.DataContainer.Mean.Data.Text = math.round(average_offset*scale).."ms"
+			section_container.DataContainer.MaxCombo.Data.Text = math.round(_score_data.maxcombo*scale).."x"
+		end)
 
 		--HANDLE SPREAD RENDERING
 		_spread_display = section_container.SpreadContainer.SpreadDisplay
@@ -94,10 +101,11 @@ function ResultsMenu:new(_local_services, _score_data)
 			SPUtil:time_to_str(os.time())
 		);
 
-		section_container.Banner.MapInfo.Text = string.format("%s - %s [%0d]",
+		section_container.Banner.MapInfo.Text = string.format("%s - %s [%0d] (%0.2fx rate)",
 			SongDatabase:get_title_for_key(_song_key),
 			SongDatabase:get_artist_for_key(_song_key),
-			SongDatabase:get_difficulty_for_key(_song_key)
+			SongDatabase:get_difficulty_for_key(_song_key),
+			Configuration.SessionSettings.Rate/100
 		)
 
 		local hit_graph = Graph.Dot:new()
@@ -106,25 +114,32 @@ function ResultsMenu:new(_local_services, _score_data)
 		hit_graph:set_bounds(_song_length_ms, -300, 0, 300)
 		hit_graph:add_y_markers(-60)
 
-		for _, hit_data in pairs(_score_data.hitdeviance) do
-			print(hit_data.note_result)
-			if hit_data.note_result == 0 then
-				hit_graph:add_line({
-					x = hit_data.hit_time_ms;
-				})
-			else
-				hit_graph:add_data_point({
-					x = hit_data.hit_time_ms;
-					y = hit_data.time_to_end;
-					color = ResultsMenu.HitColor[hit_data.note_result];
-				})
+		SPUtil:spawn(function()
+			for _, hit_data in pairs(_score_data.hitdeviance) do
+				if hit_data.note_result == 0 then
+					hit_graph:add_line({
+						x = hit_data.hit_time_ms;
+					})
+				else
+					hit_graph:add_data_point({
+						x = hit_data.hit_time_ms;
+						y = hit_data.time_to_end;
+						color = ResultsMenu.HitColor[hit_data.note_result];
+					})
+				end
 			end
-		end
+			hit_graph:animate_tweens()
+		end)
 	end
 
 	function self:get_formatted_data(data)
 		local str = "%.2f%% | %0d / %0d / %0d / %0d"
 		return string.format(str, data.accuracy*100, data.perfects, data.greats, data.okays, data.misses)
+	end
+
+	function self:update(dt_scale)
+		local timescale = CurveUtil:TimescaleToDeltaTime(dt_scale)
+		_tween_number:update(timescale)
 	end
 
 	function self:render_spread()
