@@ -148,12 +148,13 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		local _lime = Color3.fromRGB(186, 252, 3)
 		local _red = Color3.fromRGB(224, 18, 32)
 
-		for _, nps in pairs(nps_graph) do
+		for i, nps in pairs(nps_graph) do
 			local nps_point = Instance.new("Frame")
-			nps_point.BorderSizePixel = 0
-			nps_point.Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0)
-			nps_point.BackgroundColor3 = _lime:Lerp(_red, math.clamp(nps/40, 0, 1))
 			nps_point.Parent = section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items
+			nps_point.BorderSizePixel = 0
+			nps_point.Size = UDim2.new(1/#nps_graph,0,0,0)
+			nps_point:TweenSize(UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0), Enum.EasingDirection.Out, Enum.EasingStyle.Elastic, (i/#nps_graph)*1.222, true)
+			nps_point.BackgroundColor3 = _lime:Lerp(_red, math.clamp(nps/40, 0, 1))
 		end
 
 		section_container.SongInfoSection.SongInfoDisplay.NpsGraph.MaxNps.Text = string.format("MAX NPS: %d", max_nps)
