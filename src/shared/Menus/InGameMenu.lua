@@ -41,10 +41,6 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 				_game:set_mode(RobeatsGame.Mode.GameEnded)
 			end
 		end)
-
-		if _multiplayer_client then
-			
-		end
 	end
 	
 	--[[Override--]] function self:update(dt_scale)
@@ -95,7 +91,7 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 		local song_time = _game._audio_manager:get_current_time_ms()
 
 		local ms_remaining = song_length - song_time
-		_stat_display_ui.TimeLeftDisplay.Text = SPUtil:format_ms_time(ms_remaining)
+		_stat_display_ui.TimeLeftDisplay.Text = SPUtil:format_ms_time(ms_remaining/(Configuration.SessionSettings.Rate/100))
 
 		--Handle multiplayer data
 
