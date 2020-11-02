@@ -430,7 +430,7 @@ function HeldNote:new(
 			local did_hit, note_result = NoteResult:timedelta_to_result(time_to_end, _game)
 
 			if did_hit then
-				return did_hit, note_result
+				return did_hit, note_result, time_to_end
 			end
 
 			if _state == HeldNote.State.HoldMissedActive then
@@ -439,10 +439,9 @@ function HeldNote:new(
 				return true, NoteResult.Miss
 			end
 		end
-
 		return false, NoteResult.Miss
 	end
-	--[[Override--]] function self:on_release(note_result, i_notes)
+	--[[Override--]] function self:on_release(note_result, i_notes, time_to_end)
 		if _state == HeldNote.State.Holding or _state == HeldNote.State.HoldMissedActive then
 			if note_result == NoteResult.Miss then
 				--Holding or missed first hit, missed second hit
@@ -450,7 +449,7 @@ function HeldNote:new(
 					note_result, 
 					_slot_index, 
 					_track_index,	
-					HitParams:new():set_play_hold_effect(false)
+					HitParams:new():set_play_hold_effect(false):set_hit_time(get_tail_hit_time()):set_time_to_end(time_to_end)
 				)
 				_state = HeldNote.State.HoldMissedActive
 			else
@@ -464,7 +463,7 @@ function HeldNote:new(
 					note_result,
 					_slot_index,
 					_track_index,
-					HitParams:new():set_play_hold_effect(true, get_tail_position())
+					HitParams:new():set_play_hold_effect(true, get_tail_position()):set_hit_time(get_tail_hit_time()):set_time_to_end(time_to_end)
 				)
 				_did_trigger_tail = true
 				_state = HeldNote.State.Passed

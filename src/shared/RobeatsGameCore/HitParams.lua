@@ -52,12 +52,12 @@ function HitParams:new()
 	end
 
 	function self:set_hit_time(val)
-		self.HitTime = val
+		self.HitTime = val or 0
 		return self
 	end
 
 	function self:set_time_to_end(val)
-		self.TimeToEnd = val
+		self.TimeToEnd = val or 0
 		return self
 	end
 	

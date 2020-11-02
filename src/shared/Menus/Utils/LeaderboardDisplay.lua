@@ -35,8 +35,6 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto, _on_le
 				end
 			end
 
-			print(songkey)
-
 			--// GET NEW LEADERBOARD
 			local leaderboardData = Network.GetLeaderboard:Invoke({
 				mapid = songkey
