@@ -98,12 +98,12 @@ function SettingsMenu:new(_local_services)
 
 		--//OFFSET
 		SPUtil:bind_input_fire(offset.Minus, function()
-			Configuration.Preferences.AudioOffset = Configuration.Preferences.AudioOffset - 5
+			Configuration.Preferences.AudioOffset = Configuration.Preferences.AudioOffset - 1
 			updateADOFFSET()
 		end)
 
 		SPUtil:bind_input_fire(offset.Plus, function()
-			Configuration.Preferences.AudioOffset = Configuration.Preferences.AudioOffset + 5
+			Configuration.Preferences.AudioOffset = Configuration.Preferences.AudioOffset + 1
 			updateADOFFSET()
 		end)
 
