@@ -74,6 +74,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		end
 
 		section_container.Banner.GradeContainer.Grade.Image = img or ""
+		SongDatabase:render_bannerimage_for_key(section_container.Banner, _score_data.mapid)
 
 		_tween_number:bind(function(scale)
 			section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key))*scale)

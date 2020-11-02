@@ -72,6 +72,11 @@ function SongDatabase:new()
 		end
 	end
 
+	function self:render_bannerimage_for_key(banner_image, key)
+		local data = self:get_data_for_key(key)
+		banner_image.Image = data.AudioCoverImageAssetId
+	end
+
 	function self:get_title_for_key(key)
 		local songdata = self:get_data_for_key(key)
 		return songdata.AudioFilename
