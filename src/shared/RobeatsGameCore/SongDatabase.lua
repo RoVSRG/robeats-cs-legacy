@@ -145,6 +145,16 @@ function SongDatabase:new()
 
 		return total_notes, total_holds
 	end
+
+	function self:get_searchable_string_for_key(key)
+		local data = self:get_data_for_key(key)
+		return string.format("%s %s %s %s",
+			data.AudioArtist,
+			data.AudioFilename,
+			data.AudioDifficulty,
+			data.AudioDescription
+		)
+	end
 	
 	function self:invalid_songkey() return -1 end
 
