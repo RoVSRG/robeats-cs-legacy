@@ -34,7 +34,7 @@ function SettingsMenu:new(_local_services)
 		local keybind_buttons = {keybinds.Keybind1, keybinds.Keybind2, keybinds.Keybind3, keybinds.Keybind4}
 
 		local function updateNSMULT()
-			notespeed.Display.Label.Text = string.format("x%.1f", Configuration.Preferences.NoteSpeedMultiplier)
+			notespeed.Display.Label.Text = string.format("%d ms", Configuration.Preferences.NoteSpeed)
 		end
 
 		local function updateADOFFSET()
@@ -87,12 +87,12 @@ function SettingsMenu:new(_local_services)
 
 		--//NOTESPEED
 		SPUtil:bind_input_fire(notespeed.Minus, function()
-			Configuration.Preferences.NoteSpeedMultiplier = Configuration.Preferences.NoteSpeedMultiplier - 0.1
+			Configuration.Preferences.NoteSpeed -= 15
 			updateNSMULT()
 		end)
 
 		SPUtil:bind_input_fire(notespeed.Plus, function()
-			Configuration.Preferences.NoteSpeedMultiplier = Configuration.Preferences.NoteSpeedMultiplier + 0.1
+			Configuration.Preferences.NoteSpeed += 15
 			updateNSMULT()
 		end)
 

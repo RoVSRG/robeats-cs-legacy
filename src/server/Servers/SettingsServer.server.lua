@@ -11,7 +11,7 @@ end
 
 Network.AddEvent("SaveSettings"):Connect(function(player, settings)
 	AssertType:is_int(settings.AudioOffset)
-	AssertType:is_number(settings.NoteSpeedMultiplier)
+	AssertType:is_number(settings.NoteSpeed)
 	AssertType:is_table(settings.Keybinds)
 	for _,itr in pairs(settings.Keybinds) do
 		AssertType:is_table(itr)
