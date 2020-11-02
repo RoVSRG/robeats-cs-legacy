@@ -115,7 +115,7 @@ function ResultsMenu:new(_local_services, _score_data)
 				else
 					hit_graph:add_data_point({
 						x = hit_data.hit_time_ms;
-						y = hit_data.time_to_end;
+						y = hit_data.time_to_end/_score_data.rate;
 						color = ResultsMenu.HitColor[hit_data.note_result];
 					})
 				end
