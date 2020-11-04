@@ -151,6 +151,33 @@ function SPUtil:bind_input_fire(object_, callback_)
 	end
 end
 
+function SPUtil:button(_instance, _expand_size, _local_services, _callback)
+	local SFXManager = require(game.ReplicatedStorage.RobeatsGameCore.SFXManager)
+	local original_size = _instance.Size
+	_expand_size = _expand_size or UDim2.new(0, 0, 0, 0)
+
+	_instance.MouseEnter:Connect(function()
+		SPUtil:try(function()
+			_instance:TweenSize(original_size+_expand_size, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
+		end)
+	end)
+
+	_instance.MouseLeave:Connect(function()
+		SPUtil:try(function()
+			_instance:TweenSize(original_size, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
+		end)
+	end)
+
+	SPUtil:bind_input_fire(_instance, function()
+		if _callback then
+			if _local_services then
+				_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
+			end
+			_callback()
+		end
+	end)
+end
+
 function SPUtil:copy_table(datatable)
 	local tblRes={}
 	if type(datatable)=="table" then
