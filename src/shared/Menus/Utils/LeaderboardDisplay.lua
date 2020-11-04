@@ -4,7 +4,7 @@ local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
 local LeaderboardDisplay = {}
 
-function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto, _on_leaderboard_click)
+function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderboard_proto, _on_leaderboard_click)
 	local self = {}
 	_leaderboard_proto.Parent = nil
 	local _leaderboard_list_root = _leaderboard_ui_root.LeaderboardList
@@ -57,9 +57,10 @@ function LeaderboardDisplay:new(_leaderboard_ui_root, _leaderboard_proto, _on_le
 
 				itr_leaderboard_proto.UserThumbnail.Player.Text = string.format("%s at %s", itr_data.playername, SPUtil:time_to_str(itr_data.time))
 				itr_leaderboard_proto.UserThumbnail.Data.Text = get_formatted_data(itr_data)
+				itr_leaderboard_proto.UserThumbnail.Place.Text = string.format("#%d", itr)
 				itr_leaderboard_proto.UserThumbnail.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", itr_data.userid)
 
-				SPUtil:bind_input_fire(itr_leaderboard_proto, function()
+				SPUtil:button(itr_leaderboard_proto, UDim2.new(0,4,0,0), _local_services, function()
 					itr_data.hitdeviance = Network.GetDeviance:Invoke({
 						mapid = songkey;
 						userid = itr_data.userid;
