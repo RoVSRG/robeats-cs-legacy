@@ -21,9 +21,6 @@ rtv.AudioVolume = 0.5
 rtv.AudioNotePrebufferTime = 1170
 rtv.AudioMod = 0
 rtv.AudioHitSFXGroup = 0
-local maxPoints = 0
-local grades = require(game.ReplicatedStorage.AudioData.Grades)
-rtv.AudioRanks = grades.GetAudioRanks(maxPoints)
 rtv.HitObjects = {}
 do
 	rtv.HitObjects[#rtv.HitObjects + 1] = { Time = 38; Type = 1; Track = 3; } --#0
