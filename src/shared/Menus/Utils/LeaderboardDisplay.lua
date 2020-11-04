@@ -4,6 +4,12 @@ local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
 local LeaderboardDisplay = {}
 
+LeaderboardDisplay.PlaceColors = {
+	[1] = Color3.fromRGB(204, 204, 8);
+	[2] = Color3.fromRGB(237, 162, 12);
+	[3] = Color3.fromRGB(237, 106, 12);
+}
+
 function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderboard_proto, _on_leaderboard_click)
 	local self = {}
 	_leaderboard_proto.Parent = nil
@@ -45,7 +51,7 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 			DebugOut:puts("Showing leaderboard for songkey(%s)!",tostring(songkey))
 
 			table.sort(leaderboardData, function(a, b)
-				if a.rating == 0 and b.rating == 0 then
+				if a.rating == b.rating then
 					return a.score > b.score
 				end
 				return a.rating > b.rating
@@ -59,6 +65,7 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 				itr_leaderboard_proto.UserThumbnail.Data.Text = get_formatted_data(itr_data)
 				itr_leaderboard_proto.UserThumbnail.Place.Text = string.format("#%d", itr)
 				itr_leaderboard_proto.UserThumbnail.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", itr_data.userid)
+				itr_leaderboard_proto.UserThumbnail.Place.TextColor3 = LeaderboardDisplay.PlaceColors[itr] or Color3.fromRGB(200, 200, 200)
 
 				SPUtil:button(itr_leaderboard_proto, UDim2.new(0,4,0,0), _local_services, function()
 					itr_data.hitdeviance = Network.GetDeviance:Invoke({
