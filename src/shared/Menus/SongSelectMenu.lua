@@ -42,6 +42,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	local _current_sfx
 	
 	function self:cons()
+		local tab_button_expand = UDim2.new(0,10,0,2)
 		_song_select_ui = EnvironmentSetup:get_menu_protos_folder().SongSelectUI:Clone()
 
 		section_container = _song_select_ui.SectionContainer
@@ -60,7 +61,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			self:add_song_button(itr_songkey)
 		end
 		
-		_leaderboard_display = LeaderboardDisplay:new(section_container.LeaderboardSection, section_container.LeaderboardSection.LeaderboardList.LeaderboardListElementProto, function(_slot_data)
+		_leaderboard_display = LeaderboardDisplay:new(_local_services, section_container.LeaderboardSection, section_container.LeaderboardSection.LeaderboardList.LeaderboardListElementProto, function(_slot_data)
 			_local_services._menus:push_menu(ResultsMenu:new(_local_services, _slot_data))
 		end)
 		
@@ -68,7 +69,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		section_container.SongInfoSection.SongInfoDisplay.Visible = false
 		section_container.PlayButton.Visible = false
 
-		SPUtil:bind_input_fire(section_container.PlayButton, function()
+		SPUtil:button(section_container.PlayButton, UDim2.new(-0.005,0,0,0), _local_services, function()
 			self:play_button_pressed()
 		end)
 
@@ -80,7 +81,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			_local_services._menus:push_menu(MultiplayerLobbyMenu:new(_local_services))
 		end)
 
-		SPUtil:bind_input_fire(section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items, function()
+		SPUtil:button(section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items, UDim2.new(0,-2,0,-2), _local_services, function()
 			local mouse = game.Players.LocalPlayer:GetMouse()
 			local _a = NumberUtil.InverseLerp(
 				section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items.AbsolutePosition.X,
@@ -213,20 +214,9 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
 		end
 		
-		SPUtil:bind_input_fire(itr_list_element, function(input)
+		SPUtil:button(itr_list_element, UDim2.new(0,4,0,20), _local_services, function(input)
 			_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
 			self:select_songkey(songkey)
-		end)
-
-		local original_size = itr_list_element.Size
-
-		itr_list_element.MouseEnter:Connect(function()
-			itr_list_element:TweenSize(original_size+UDim2.new(0,4,0,20), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
-			--_local_services._sfx_manager:play_sfx(SFXManager.SFX_HOVER)
-		end)
-
-		itr_list_element.MouseLeave:Connect(function()
-			itr_list_element:TweenSize(original_size, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.2, true)
 		end)
 	end
 
