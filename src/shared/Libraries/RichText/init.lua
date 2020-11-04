@@ -25,7 +25,7 @@ function RichText:font(str, properties)
         property_str ..= string.format("size=\"%s\" ", properties.Size)
     end
     if properties.Color then
-        property_str ..= string.format("color=\"rgb(%s, %s, %s)\"", properties.Color.R, properties.Color.G, properties.Color.B)
+        property_str ..= string.format("color=\"rgb(%s, %s, %s)\"", math.round(properties.Color.R*255), math.round(properties.Color.G*255), math.round(properties.Color.B*255))
     end
     return string.format("<font %s>%s</font>", property_str, str)
 end

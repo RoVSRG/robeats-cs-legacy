@@ -16,6 +16,8 @@ local MultiplayerLobbyMenu = require(game.ReplicatedStorage.Menus.MultiplayerLob
 local Configuration	= require(game.ReplicatedStorage.Configuration)
 local CustomServerSettings = require(game.Workspace.CustomServerSettings)
 
+local Tabs = require(game.ReplicatedStorage.Menus.Utils.Tabs)
+
 local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
 
 local SongSelectMenu = {}
@@ -38,6 +40,10 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	local _leaderboard_display
 
 	local ResultsMenu = require(game.ReplicatedStorage.Menus.ResultsMenu)
+
+	local _tabs = Tabs:new({
+		
+	}, "SelectionTab")
 
 	local _current_sfx
 	
