@@ -116,16 +116,18 @@ function SongDatabase:new()
 		return len
 	end
 
-	function self:get_nps_graph_for_key(key)
+	function self:get_nps_graph_for_key(key, resolution)
 		local nps_graph = {}
 		local data = self:get_data_for_key(key)
 
 		local last_time = 0
 		local cur_nps = 0
 
-		for _, hit_object in pairs(data.HitObjects) do
+		for i, hit_object in pairs(data.HitObjects) do
 			if hit_object.Time - last_time > 1000 then
-				nps_graph[#nps_graph+1] = cur_nps
+				if (resolution and i % resolution == 0) or (not resolution) then
+					nps_graph[#nps_graph+1] = cur_nps
+				end
 				last_time = hit_object.Time
 				cur_nps = 0
 			end
