@@ -2,6 +2,8 @@ local Network = require(game.ReplicatedStorage.Network)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
+local RichText = require(game.ReplicatedStorage.Libraries.RichText)
+
 local LeaderboardDisplay = {}
 
 LeaderboardDisplay.PlaceColors = {
@@ -10,11 +12,21 @@ LeaderboardDisplay.PlaceColors = {
 	[3] = Color3.fromRGB(237, 106, 12);
 }
 
+LeaderboardDisplay.ColorAccuracy = {
+	{color = Color3.fromRGB(247, 247, 247), accuracy = 100};
+	{color = Color3.fromRGB(245, 209, 7), accuracy = 95};
+	{color = Color3.fromRGB(11, 230, 7), accuracy = 90};
+	{color = Color3.fromRGB(7, 81, 230), accuracy = 80};
+	{color = Color3.fromRGB(174, 7, 230), accuracy = 70};
+	{color = Color3.fromRGB(232, 1, 1), accuracy = 60};
+}
+
 function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderboard_proto, _on_leaderboard_click)
 	local self = {}
 	_leaderboard_proto.Parent = nil
 	local _leaderboard_list_root = _leaderboard_ui_root.LeaderboardList
 	local _leaderboard_loading_display = _leaderboard_ui_root.LoadingDisplay
+	local _no_scores_display = _leaderboard_ui_root.NoScoresDisplay
 	_leaderboard_loading_display.Visible = false
 	
 	_leaderboard_list_root.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -23,12 +35,23 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 	_leaderboard_list_root.CanvasSize = UDim2.new(0, 0, 0, 0)
 	
 	local function get_formatted_data(data)
-		local str = "%.2f%% | %0d / %0d / %0d / %0d / %0d / %0d"
-		return string.format(str, data.accuracy, data.marvelouses, data.perfects, data.greats, data.goods, data.bads, data.misses)
+		local _color
+		for i = 1, #LeaderboardDisplay.ColorAccuracy do
+			local itr_color_data = LeaderboardDisplay.ColorAccuracy[i]
+			if data.accuracy >= itr_color_data.accuracy then _color = itr_color_data.color break end
+		end
+		if not _color then
+			_color = LeaderboardDisplay.ColorAccuracy[#LeaderboardDisplay.ColorAccuracy].color
+		end
+		local _h = 258*(SPUtil:tra(math.clamp(data.rating/70, 0, 1)))
+		local _rating_color = Color3.fromHSV(_h/360, 88/100, 100/100)
+		return string.format(RichText:font("%0.2f", {Font = "GothamBlack", Color = _rating_color}).." | "..RichText:bold("%0.2fx rate").." | "..RichText:font("%.2f%%", {Color = _color}).." | "..RichText:italic("%s / %s / %s / %s / %s / %s"),
+			data.rating, data.rate/100, data.accuracy, data.marvelouses, data.perfects, data.greats, data.goods, data.bads, data.misses)
 	end
 	
 	local _last_load_start_time
 	function self:refresh_leaderboard(songkey)
+		_no_scores_display.Visible = false
 		DebugOut:puts("loading leaderboard for songkey(%s)...",tostring(songkey))
 		_last_load_start_time = tick()
 		local load_start_time = _last_load_start_time
@@ -61,7 +84,9 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 			for itr, itr_data in pairs(leaderboardData) do
 				local itr_leaderboard_proto = _leaderboard_proto:Clone()
 
-				itr_leaderboard_proto.UserThumbnail.Player.Text = string.format("%s at %s", itr_data.playername, SPUtil:time_to_str(itr_data.time))
+				itr_leaderboard_proto.UserThumbnail.Player.Text = string.format("%s %s", itr_data.playername, RichText:font("\nPlayed at " .. SPUtil:time_to_str(itr_data.time), {
+					Size = 10
+				}))
 				itr_leaderboard_proto.UserThumbnail.Data.Text = get_formatted_data(itr_data)
 				itr_leaderboard_proto.UserThumbnail.Place.Text = string.format("#%d", itr)
 				itr_leaderboard_proto.UserThumbnail.Image = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=420&height=420&format=png", itr_data.userid)
@@ -78,6 +103,7 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 				itr_leaderboard_proto.Parent = _leaderboard_list_root
 			end
 			_leaderboard_loading_display.Visible = false
+			_no_scores_display.Visible = #leaderboardData == 0
 		end)
 	end
 	return self

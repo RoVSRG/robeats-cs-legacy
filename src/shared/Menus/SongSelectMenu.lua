@@ -16,6 +16,8 @@ local MultiplayerLobbyMenu = require(game.ReplicatedStorage.Menus.MultiplayerLob
 local Configuration	= require(game.ReplicatedStorage.Configuration)
 local CustomServerSettings = require(game.Workspace.CustomServerSettings)
 
+local Tabs = require(game.ReplicatedStorage.Menus.Utils.Tabs)
+
 local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
 
 local SongSelectMenu = {}
@@ -39,7 +41,10 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 
 	local ResultsMenu = require(game.ReplicatedStorage.Menus.ResultsMenu)
 
+	local _tabs
 	local _current_sfx
+
+	local tabs_base
 	
 	function self:cons()
 		local tab_button_expand = UDim2.new(0,10,0,2)
@@ -48,7 +53,15 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		section_container = _song_select_ui.SectionContainer
 		tab_container = _song_select_ui.TabContainer
 
-		local song_list = section_container.SongSection.SongList
+		tabs_base = section_container.TabsSection.Tabs
+
+		_tabs = Tabs:new({
+			tabs_base.SongSection;
+			tabs_base.LeaderboardSection;
+		}, "SongSection")
+	
+
+		local song_list = tabs_base.SongSection.SongList
 		
 		--Expand the scrolling list to fit contents
 		song_list.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -61,7 +74,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			self:add_song_button(itr_songkey)
 		end
 		
-		_leaderboard_display = LeaderboardDisplay:new(_local_services, section_container.LeaderboardSection, section_container.LeaderboardSection.LeaderboardList.LeaderboardListElementProto, function(_slot_data)
+		_leaderboard_display = LeaderboardDisplay:new(_local_services, tabs_base.LeaderboardSection, tabs_base.LeaderboardSection.LeaderboardList.LeaderboardListElementProto, function(_slot_data)
 			_local_services._menus:push_menu(ResultsMenu:new(_local_services, _slot_data))
 		end)
 		
@@ -96,8 +109,8 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 
 		section_container.SongInfoSection.NoSongSelectedDisplay.Visible = true
 
-		section_container.SongSection.SearchBar.SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-			self:search_songs(section_container.SongSection.SearchBar.SearchBox.Text)
+		tabs_base.SongSection.SearchBar.SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+			self:search_songs(tabs_base.SongSection.SearchBar.SearchBox.Text)
 		end)
 
 		MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, asset_id, is_purchased)
@@ -106,6 +119,14 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 				self:select_songkey(_selected_songkey)
 				self:show_gamepass_menu()
 			end
+		end)
+
+		SPUtil:bind_input_fire(section_container.TabsSection.TabsList.TabsLayout.Songs, function()
+			_tabs:switch_tab("SongSection")
+		end)
+
+		SPUtil:bind_input_fire(section_container.TabsSection.TabsList.TabsLayout.Leaderboard, function()
+			_tabs:switch_tab("LeaderboardSection")
 		end)
 		
 		spawn(function()
@@ -203,7 +224,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 
 	function self:add_song_button(songkey)
 		local itr_list_element = song_list_element_proto:Clone()
-		itr_list_element.Parent = section_container.SongSection.SongList
+		itr_list_element.Parent = tabs_base.SongSection.SongList
 		itr_list_element.LayoutOrder = songkey
 
 		--SongDatabase:render_coverimage_for_key(song_cover, song_cover.SongCoverOverlay, itr_songkey)
@@ -212,6 +233,26 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		itr_list_element.DifficultyDisplay.Text = string.format("Difficulty: %d",SongDatabase:get_difficulty_for_key(songkey))
 		if SongDatabase:key_get_audiomod(songkey) == SongDatabase.SongMode.SupporterOnly then
 			itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
+		end
+
+		local _rate = Configuration.SessionSettings.Rate/100
+		local nps_graph = SongDatabase:get_nps_graph_for_key(songkey, 10)
+
+		local max_nps = 0
+		for _, nps in pairs(nps_graph) do
+			max_nps = math.max(nps, max_nps)
+		end
+
+		for i, nps in pairs(nps_graph) do
+			nps *= _rate
+			local nps_point = Instance.new("Frame")
+			nps_point.Parent = itr_list_element.NpsGraph.Items
+			nps_point.BorderSizePixel = 0
+			nps_point.Size = UDim2.new(1/#nps_graph,0,0,0)
+			nps_point.Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0)
+
+			local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
+			nps_point.BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100)
 		end
 		
 		SPUtil:button(itr_list_element, UDim2.new(0,4,0,20), _local_services, function(input)
@@ -223,7 +264,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	function self:search_songs(search)
 		search = search or ""
 		search = string.split(search, " ")
-		for _, itr_songbutton in pairs(section_container.SongSection.SongList:GetChildren()) do
+		for _, itr_songbutton in pairs(tabs_base.SongSection.SongList:GetChildren()) do
 			if itr_songbutton:IsA("Frame") then
 				itr_songbutton:Destroy()
 			end
