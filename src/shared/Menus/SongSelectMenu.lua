@@ -234,6 +234,26 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		if SongDatabase:key_get_audiomod(songkey) == SongDatabase.SongMode.SupporterOnly then
 			itr_list_element.DifficultyDisplay.Text = itr_list_element.DifficultyDisplay.Text .. " (Supporter Only)"
 		end
+
+		local _rate = Configuration.SessionSettings.Rate/100
+		local nps_graph = SongDatabase:get_nps_graph_for_key(songkey, 10)
+
+		local max_nps = 0
+		for _, nps in pairs(nps_graph) do
+			max_nps = math.max(nps, max_nps)
+		end
+
+		for i, nps in pairs(nps_graph) do
+			nps *= _rate
+			local nps_point = Instance.new("Frame")
+			nps_point.Parent = itr_list_element.NpsGraph.Items
+			nps_point.BorderSizePixel = 0
+			nps_point.Size = UDim2.new(1/#nps_graph,0,0,0)
+			nps_point.Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0)
+
+			local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
+			nps_point.BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100)
+		end
 		
 		SPUtil:button(itr_list_element, UDim2.new(0,4,0,20), _local_services, function(input)
 			_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
