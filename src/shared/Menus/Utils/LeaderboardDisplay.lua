@@ -26,6 +26,7 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 	_leaderboard_proto.Parent = nil
 	local _leaderboard_list_root = _leaderboard_ui_root.LeaderboardList
 	local _leaderboard_loading_display = _leaderboard_ui_root.LoadingDisplay
+	local _no_scores_display = _leaderboard_ui_root.NoScoresDisplay
 	_leaderboard_loading_display.Visible = false
 	
 	_leaderboard_list_root.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -42,14 +43,15 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 		if not _color then
 			_color = LeaderboardDisplay.ColorAccuracy[#LeaderboardDisplay.ColorAccuracy].color
 		end
-		local str = string.format("%s | %s/%s/%s/%s/%s/%s", RichText:font(RichText:bold("%.2f%%"), {
-			Color = _color
-		}), "%0d", "%0d", "%0d", "%0d", "%0d", "%0d")
-		return string.format(str, data.accuracy, data.marvelouses, data.perfects, data.greats, data.goods, data.bads, data.misses)
+		local _h = 258*(SPUtil:tra(math.clamp(data.rating/70, 0, 1)))
+		local _rating_color = Color3.fromHSV(_h/360, 88/100, 100/100)
+		return string.format(RichText:font("%0.2f", {Font = "GothamBlack", Color = _rating_color}).." | "..RichText:bold("%0.2fx rate").." | "..RichText:font("%.2f%%", {Color = _color}).." | "..RichText:italic("%s / %s / %s / %s / %s / %s"),
+			data.rating, data.rate/100, data.accuracy, data.marvelouses, data.perfects, data.greats, data.goods, data.bads, data.misses)
 	end
 	
 	local _last_load_start_time
 	function self:refresh_leaderboard(songkey)
+		_no_scores_display.Visible = false
 		DebugOut:puts("loading leaderboard for songkey(%s)...",tostring(songkey))
 		_last_load_start_time = tick()
 		local load_start_time = _last_load_start_time
@@ -101,6 +103,7 @@ function LeaderboardDisplay:new(_local_services, _leaderboard_ui_root, _leaderbo
 				itr_leaderboard_proto.Parent = _leaderboard_list_root
 			end
 			_leaderboard_loading_display.Visible = false
+			_no_scores_display.Visible = #leaderboardData == 0
 		end)
 	end
 	return self
