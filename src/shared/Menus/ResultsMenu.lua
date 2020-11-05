@@ -77,7 +77,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		SongDatabase:render_bannerimage_for_key(section_container.Banner, _score_data.mapid)
 
 		_tween_number:bind(function(scale)
-			section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(1, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key))*scale)
+			section_container.DataContainer.Rating.Data.Text = string.format("%0.2f", Metrics.calculate_rating(_score_data.rate/100, _score_data.accuracy, SongDatabase:get_difficulty_for_key(_song_key))*scale)
 			section_container.DataContainer.Accuracy.Data.Text = string.format("%0.2f%%", _score_data.accuracy*scale)
 			section_container.DataContainer.Score.Data.Text = math.floor(_score_data.score*scale + 0.5)
 			section_container.DataContainer.Mean.Data.Text = math.round(_score_data.mean*scale).."ms"
