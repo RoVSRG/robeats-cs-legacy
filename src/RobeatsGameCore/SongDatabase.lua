@@ -3,7 +3,7 @@ local SPDict = require(game.ReplicatedStorage.Shared.SPDict)
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local SongErrorParser = require(game.ReplicatedStorage.RobeatsGameCore.SongErrorParser)
 
-local SongMapList = require(game.Workspace.SongMapList)
+local SongMapList = workspace.SongMaps:GetChildren()
 
 local SongDatabase = {}
 

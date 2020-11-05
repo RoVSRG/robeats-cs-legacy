@@ -5,24 +5,40 @@
   
 	  "ReplicatedStorage": {
 		"$className": "ReplicatedStorage",
-		"$path": "src/shared"
+		"RobeatsGameCore": {
+			"$className": "Folder",
+			"$path": "src/RobeatsGameCore"
+		},
+		"Shared": {
+			"$className": "Folder",
+			"$path": "src/Shared"
+		},
+		"Menus": {
+			"$className": "Folder",
+			"$path": "src/Client/Menus"
+		},
+		"Components": {
+			"$className": "Folder",
+			"$path": "src/Client/Components"
+		}
 	  },
   
 	  "ServerScriptService": {
 		"$className": "ServerScriptService",
-		"$path": "src/server"
+		"$path": "src/Server"
 	  },
   
 	  "StarterPlayer": {
 		"$className": "StarterPlayer",
   
 		"StarterPlayerScripts": {
-		  "$className": "StarterPlayerScripts",
-  
-		  "Client": {
-			"$path": "src/client"
-		  }
-		}
+		  	"$className": "StarterPlayerScripts",
+			"$path": "src/StarterPlayerClient"
+		},
+		"StarterCharacterScripts": {
+			"$className": "StarterCharacterScripts",
+		  	"$path": "src/StarterCharacterClient"
+	  	}
 	  },
   
 	  "Workspace": {
@@ -30,7 +46,10 @@
 		"$properties": {
 		  "FilteringEnabled": true
 		},
-		"$path": "src/services/workspace"
+		"SongMaps": {
+			"$className": "Folder",
+			"$path": "songs"
+		}
 	  },
 	  "SoundService": {
 		"$className": "SoundService",
