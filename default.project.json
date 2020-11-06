@@ -17,6 +17,10 @@
 			"$className": "Folder",
 			"$path": "src/Client/Menus"
 		},
+		"Libraries": {
+			"$className": "Folder",
+			"$path": "libraries"
+		},
 		"Components": {
 			"$className": "Folder",
 			"$path": "src/Client/Components"
