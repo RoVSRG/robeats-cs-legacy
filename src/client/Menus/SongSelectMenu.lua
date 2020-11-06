@@ -193,26 +193,6 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			end
 		end
 
-		local nps_graph = SongDatabase:get_nps_graph_for_key(_selected_songkey)
-		local max_nps = 0
-		for _, nps in pairs(nps_graph) do
-			max_nps = math.max(nps, max_nps)
-		end
-
-		local _rate = Configuration.SessionSettings.Rate/100
-
-		for i, nps in pairs(nps_graph) do
-			nps *= _rate
-			local nps_point = Instance.new("Frame")
-			nps_point.Parent = section_container.SongInfoSection.SongInfoDisplay.NpsGraph.Items
-			nps_point.BorderSizePixel = 0
-			nps_point.Size = UDim2.new(1/#nps_graph,0,0,0)
-			nps_point:TweenSize(UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0), Enum.EasingDirection.Out, Enum.EasingStyle.Elastic, (i/#nps_graph)*1.222, true)
-
-			local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
-			nps_point.BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100)
-		end
-
 		section_container.SongInfoSection.SongInfoDisplay.NpsGraph.MaxNps.Text = string.format("MAX NPS: %d", max_nps*_rate)
 	end
 
