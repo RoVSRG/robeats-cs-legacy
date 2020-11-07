@@ -16,6 +16,3 @@
 [submodule "libraries/RoactAnimate"]
 	path = libraries/RoactAnimate
 	url = https://github.com/thenerdie/roact-animate
-[submodule "libraries/t"]
-	path = libraries/t
-	url = https://github.com/osyrisrblx/t
