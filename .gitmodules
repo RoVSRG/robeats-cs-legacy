@@ -1,9 +1,6 @@
 [submodule "libraries/Roact"]
 	path = libraries/Roact
 	url = https://github.com/Roblox/roact
-[submodule "libraries/MockDataStoreService"]
-	path = libraries/MockDataStoreService
-	url = https://github.com/buildthomas/MockDataStoreService
 [submodule "libraries/testez"]
 	path = libraries/testez
 	url = https://github.com/Roblox/testez
