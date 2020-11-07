@@ -20,17 +20,35 @@ function SongButtonLayout:didMount()
     end)
 end
 
+function SongButtonLayout:search(search, _songkey)
+    search = search or ""
+    search = string.split(search, " ")
+
+    local _to_search = SongDatabase:get_searchable_string_for_key(_songkey)
+    local found = 0
+    for i = 1, #search do
+        local search_term = search[i]
+        if string.find(_to_search:lower(), search_term:lower()) ~= nil then
+            found += 1
+        end
+    end
+
+    return found == #search
+end
+
 function SongButtonLayout:render()
     local _songbuttons = {}
 
     for key_itr, itr_data in SongDatabase:key_itr() do
         if key_itr >= 50 then break end
-        _songbuttons[#_songbuttons+1] = Roact.createElement(SongButton, {
-            song_key = key_itr or 1,
-            on_click = function(key)
-                print(key)
-            end
-        })
+        if SongButtonLayout:search(self.state.search, key_itr) then
+            _songbuttons[#_songbuttons+1] = Roact.createElement(SongButton, {
+                song_key = key_itr or 1,
+                on_click = function(key)
+                    print(key)
+                end
+            })
+        end
     end
 
     return Roact.createElement("Frame", {
@@ -91,6 +109,15 @@ function SongButtonLayout:render()
                 TextSize = 14,
                 TextWrapped = true,
                 TextXAlignment = Enum.TextXAlignment.Left,
+                [Roact.Change.Text] = function(o)
+                    local _text = o.Text
+                    wait(0.5)
+                    if o.Text == _text then
+                        self:setState({
+                            search = o.Text
+                        })
+                    end
+                end
             }, {
                 Roact.createElement("UITextSizeConstraint", {
                     MaxTextSize = 17,
