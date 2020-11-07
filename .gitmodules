@@ -1,6 +1,3 @@
 [submodule "libraries/testez"]
 	path = libraries/testez
 	url = https://github.com/Roblox/testez
-[submodule "libraries/RoactAnimate"]
-	path = libraries/RoactAnimate
-	url = https://github.com/thenerdie/roact-animate
