@@ -53,6 +53,10 @@
 		"SongMaps": {
 			"$className": "Folder",
 			"$path": "songs"
+		},
+		"Models": {
+			"$className": "Folder",
+			"$path": "models"
 		}
 	  },
 	  "SoundService": {
