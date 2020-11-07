@@ -4,9 +4,6 @@
 [submodule "libraries/MockDataStoreService"]
 	path = libraries/MockDataStoreService
 	url = https://github.com/buildthomas/MockDataStoreService
-[submodule "libraries/Llama"]
-	path = libraries/Llama
-	url = https://github.com/F-RDY/llama
 [submodule "libraries/testez"]
 	path = libraries/testez
 	url = https://github.com/Roblox/testez
