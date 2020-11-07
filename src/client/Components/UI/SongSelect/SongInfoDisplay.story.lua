@@ -3,7 +3,14 @@ local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local RoactAnimate = require(game.ReplicatedStorage.Libraries.RoactAnimate)
 
+local NpsGraph = require(game.ReplicatedStorage.Components.UI.NpsGraph)
+
 local SongInfoDisplay = Roact.Component:extend("SongInfoDisplay")
+
+--[[
+    Position = UDim2.new(1, 0, 0, 0),
+    Size = UDim2.new(0.340000004, 0, 0.875, 0),
+]]
 
 function SongInfoDisplay:didMount()
 end
@@ -12,20 +19,23 @@ function SongInfoDisplay:init()
 end
 
 function SongInfoDisplay:render()
+    local _songkey = self.props.song_key
+
+    local total_notes, total_holds = SongDatabase:get_note_metrics_for_key(_songkey)
     return Roact.createElement("Frame", {
         Name = "SongInfoSection",
         AnchorPoint = Vector2.new(1, 0),
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
-        Position = UDim2.new(1, 0, 0, 0),
-        Size = UDim2.new(0.340000004, 0, 0.875, 0),
+        Position = self.props.Position or UDim2.new(1,0,0,0),
+        Size = self.props.Size or UDim2.new(1,0,1,0),
     }, {
         Roact.createElement("TextLabel", {
             Name = "NoSongSelectedDisplay",
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(-0.00191900111, 0, 0, 0),
+            Position = UDim2.new(0, 0, 0, 0),
             Size = UDim2.new(1, 0, 1, 0),
             Visible = false,
             ZIndex = 2,
@@ -46,6 +56,7 @@ function SongInfoDisplay:render()
                 BorderSizePixel = 0,
                 Size = UDim2.new(1, 0, 0.25, 0),
                 ScaleType = Enum.ScaleType.Crop,
+                Image = SongDatabase:get_image_for_key(_songkey)
             }, {
                 Roact.createElement("UICorner", {
                     CornerRadius = UDim.new(0, 4),
@@ -59,10 +70,10 @@ function SongInfoDisplay:render()
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
                 BorderSizePixel = 0,
-                Position = UDim2.new(0.0499999113, 0, 0.611425757, 0),
-                Size = UDim2.new(0.899999976, 0, 0.12886931, 0),
+                Position = UDim2.new(0.05, 0, 0.68, 0),
+                Size = UDim2.new(0.9, 0, 0.13, 0),
                 Font = Enum.Font.Gotham,
-                Text = "The main theme to MONDAY NIGHT MONSTERS, a 2016 game by spotco. FinnMK is also the main composer for Robeats!",
+                Text = "<placeholder>",
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextScaled = true,
                 TextSize = 26,
@@ -97,22 +108,13 @@ function SongInfoDisplay:render()
                     TextSize = 14,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }),
-                Roact.createElement("Frame", {
+                Roact.createElement(NpsGraph, {
                     Name = "Items",
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     ClipsDescendants = true,
                     Size = UDim2.new(1, 0, 1, 0),
-                    ZIndex = 2,
-                }, {
-                    Roact.createElement("UICorner", {
-                        CornerRadius = UDim.new(0, 4),
-                    }),
-                    Roact.createElement("UIListLayout", {
-                        FillDirection = Enum.FillDirection.Horizontal,
-                        SortOrder = Enum.SortOrder.LayoutOrder,
-                        VerticalAlignment = Enum.VerticalAlignment.Bottom,
-                    })
+                    song_key = _songkey,
                 }),
                 Roact.createElement("Frame", {
                     Name = "SongPosition",
@@ -140,7 +142,7 @@ function SongInfoDisplay:render()
                     LayoutOrder = 1,
                     Size = UDim2.new(0.957943857, 0, 0.268147349, 0),
                     Font = Enum.Font.Gotham,
-                    Text = "FinnMK",
+                    Text = SongDatabase:get_artist_for_key(_songkey),
                     TextColor3 = Color3.fromRGB(255, 208, 87),
                     TextScaled = true,
                     TextSize = 26,
@@ -160,7 +162,7 @@ function SongInfoDisplay:render()
                     Position = UDim2.new(0, 0, 0.26814732, 0),
                     Size = UDim2.new(0.957943916, 0, 0.164641663, 0),
                     Font = Enum.Font.GothamBold,
-                    Text = "Monday Night Monsters",
+                    Text = SongDatabase:get_title_for_key(_songkey),
                     TextColor3 = Color3.fromRGB(255, 208, 87),
                     TextScaled = true,
                     TextSize = 26,
@@ -180,7 +182,7 @@ function SongInfoDisplay:render()
                     Position = UDim2.new(0, 0, 0.432788938, 0),
                     Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
                     Font = Enum.Font.GothamSemibold,
-                    Text = "Difficulty: 1",
+                    Text = string.format("Difficulty: %d", SongDatabase:get_difficulty_for_key(_songkey)),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
                     TextSize = 26,
@@ -200,7 +202,7 @@ function SongInfoDisplay:render()
                     Position = UDim2.new(0, 0, 0.432788938, 0),
                     Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
                     Font = Enum.Font.GothamSemibold,
-                    Text = "Total Notes: 0",
+                    Text = string.format("Total Notes: %d", total_notes),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
                     TextSize = 26,
@@ -220,7 +222,7 @@ function SongInfoDisplay:render()
                     Position = UDim2.new(0, 0, 0.432788938, 0),
                     Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
                     Font = Enum.Font.GothamSemibold,
-                    Text = "Total Holds: 0",
+                    Text = string.format("Total Holds: %d", total_holds),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
                     TextSize = 26,
@@ -240,7 +242,7 @@ function SongInfoDisplay:render()
                     Position = UDim2.new(0, 0, 0.432788938, 0),
                     Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
                     Font = Enum.Font.GothamSemibold,
-                    Text = "Total Length: 0:00",
+                    Text = string.format("Total Length: %s", SPUtil:format_ms_time(SongDatabase:get_song_length_for_key(_songkey))),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
                     TextSize = 26,
@@ -281,9 +283,7 @@ end
 
 return function(target)
     local testApp = Roact.createElement(SongInfoDisplay, {
-        song_key = 1,
-        Position = UDim2.new(0,0,0,0);
-        Size = UDim2.new(1,0,1,0);
+        song_key = 1
     })
 
     local fr = Roact.mount(testApp, target)

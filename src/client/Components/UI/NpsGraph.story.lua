@@ -29,7 +29,7 @@ function NpsGraph:init()
         self._animations[i] = {
             Animation = RoactAnimate.Value.new(UDim2.new(1/#nps_graph, 0, 0, 0));
             Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0);
-            Time = (i/#nps_graph)*1.7;
+            Time = (i/#nps_graph)*1.8;
         }
         elements[#elements+1] = Roact.createElement(RoactAnimate.Frame, {
             Size = self._animations[i].Animation;

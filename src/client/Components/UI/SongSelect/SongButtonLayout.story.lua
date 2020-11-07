@@ -1,8 +1,38 @@
+local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+
+local SongButton = require(game.ReplicatedStorage.Components.UI.SongSelect.SongButton)
 
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 
+function SongButtonLayout:init()
+    self._list_layout_ref = Roact.createRef()
+    self:setState({
+        search = ""
+    })
+end
+
+function SongButtonLayout:didMount()
+    local song_list_layout = self._list_layout_ref:getValue()
+    local song_list = song_list_layout.Parent
+    song_list_layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        song_list_layout.Parent.CanvasSize = UDim2.new(0, 0, 0, song_list.UIListLayout.AbsoluteContentSize.Y)
+    end)
+end
+
 function SongButtonLayout:render()
+    local _songbuttons = {}
+
+    for key_itr, itr_data in SongDatabase:key_itr() do
+        if key_itr >= 50 then break end
+        _songbuttons[#_songbuttons+1] = Roact.createElement(SongButton, {
+            song_key = key_itr or 1,
+            on_click = function(key)
+                print(key)
+            end
+        })
+    end
+
     return Roact.createElement("Frame", {
         Name = "SongSection",
         AnchorPoint = Vector2.new(0, 0.5),
@@ -27,107 +57,13 @@ function SongButtonLayout:render()
             TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
             VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left,
         }, {
-            Roact.createElement("Frame", {
-                Name = "SongListElementProto",
-                BackgroundColor3 = Color3.fromRGB(15, 15, 15),
-                BorderMode = Enum.BorderMode.Inset,
-                BorderSizePixel = 0,
-                Position = UDim2.new(0.0228759851, 0, -1.5662053e-08, 0),
-                Size = UDim2.new(0.977124035, 0, 0.195140719, 0),
-            }, {
-                Roact.createElement("UICorner", {
-                    CornerRadius = UDim.new(0, 4),
-                }),
-                Roact.createElement("UIAspectRatioConstraint", {
-                    AspectRatio = 10,
-                    AspectType = Enum.AspectType.ScaleWithParentSize,
-                }),
-                Roact.createElement("ImageLabel", {
-                    Name = "SongCover",
-                    AnchorPoint = Vector2.new(1, 0.5),
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                    BorderSizePixel = 0,
-                    Position = UDim2.new(1, 0, 0.5, 0),
-                    Size = UDim2.new(0.5, 0, 1, 0),
-                    ScaleType = Enum.ScaleType.Crop,
-                }, {
-                    Roact.createElement("UICorner", {
-                        CornerRadius = UDim.new(0, 4),
-                    }),
-                }),
-                Roact.createElement("TextLabel", {
-                    Name = "DifficultyDisplay",
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                    BackgroundTransparency = 1,
-                    BorderSizePixel = 0,
-                    Position = UDim2.new(0.0199999847, 0, 0.5, 0),
-                    Size = UDim2.new(0.462034643, 0, 0.330079168, 0),
-                    Font = Enum.Font.GothamSemibold,
-                    Text = "Difficulty: 1",
-                    TextColor3 = Color3.fromRGB(255, 255, 255),
-                    TextScaled = true,
-                    TextSize = 16,
-                    TextWrapped = true,
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                }, {
-                    Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 18,
-                        MinTextSize = 10,
-                    })
-                }),
-                Roact.createElement("TextLabel", {
-                    Name = "NameDisplay",
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                    BackgroundTransparency = 1,
-                    BorderSizePixel = 0,
-                    Position = UDim2.new(0.0199999996, 0, 0.100000001, 0),
-                    Selectable = true,
-                    Size = UDim2.new(0.5, 0, 0.400000006, 0),
-                    Font = Enum.Font.GothamBold,
-                    Text = "Monday Night Monsters",
-                    TextColor3 = Color3.fromRGB(255, 208, 87),
-                    TextScaled = true,
-                    TextSize = 26,
-                    TextWrapped = true,
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                }, {
-                    Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 26,
-                    })
-                }),
-                Roact.createElement("Frame", {
-                    Name = "NpsGraph",
-                    BackgroundColor3 = Color3.fromRGB(16, 16, 16),
-                    BorderSizePixel = 0,
-                    Position = UDim2.new(0.835147917, 0, 0.379469723, 0),
-                    Size = UDim2.new(0.15732792, 0, 0.545288444, 0),
-                }, {
-                    Roact.createElement("UICorner", {
-                        CornerRadius = UDim.new(0, 4),
-                    }),
-                    Roact.createElement("Frame", {
-                        Name = "Items",
-                        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                        BackgroundTransparency = 1,
-                        ClipsDescendants = true,
-                        Size = UDim2.new(1, 0, 1, 0),
-                        ZIndex = 2,
-                    }, {
-                        Roact.createElement("UICorner", {
-                            CornerRadius = UDim.new(0, 4),
-                        }),
-                        Roact.createElement("UIListLayout", {
-                            FillDirection = Enum.FillDirection.Horizontal,
-                            SortOrder = Enum.SortOrder.LayoutOrder,
-                            VerticalAlignment = Enum.VerticalAlignment.Bottom,
-                        })
-                    })
-                })
-            }),
-            Roact.createElement("UIListLayout", {
-                HorizontalAlignment = Enum.HorizontalAlignment.Right,
-                SortOrder = Enum.SortOrder.LayoutOrder,
-                Padding = UDim.new(0, 5),
+            Layout = Roact.createFragment({
+                UIListLayout = Roact.createElement("UIListLayout", {
+                    HorizontalAlignment = Enum.HorizontalAlignment.Right;
+                    Padding = UDim.new(0, 5);
+                    [Roact.Ref] = self._list_layout_ref
+                });
+                SongButtons = Roact.createFragment(_songbuttons);
             })
         }),
         Roact.createElement("Frame", {
