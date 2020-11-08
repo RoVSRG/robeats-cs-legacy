@@ -21,6 +21,7 @@ sysinfo.txt
 /*.booproj
 /*.rbxl.lock
 /*.rbxlx.lock
+*.rbxlx
  
 # ============ #
 # OS generated #

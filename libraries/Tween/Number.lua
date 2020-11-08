@@ -1,4 +1,4 @@
-local SPList = require(game.ReplicatedStorage.Shared.SPList)
+local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
 
 local TweenService = game:GetService("TweenService")

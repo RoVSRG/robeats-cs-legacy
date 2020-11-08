@@ -5,17 +5,16 @@ local _db_version = "v2.3"
 local ScoreDatabase = DataStoreService:GetDataStore("ScoreDatabase".._db_version)
 local NoteDevainceDatabase = DataStoreService:GetDataStore("NoteDevainceDatabase".._db_version)
 
-local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
+local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 
 local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
 
 --TODO: REPLACE KISPERAL'S NETWORKING MODULE WITH "sl0th"'s
 
 local HttpService = game:GetService("HttpService")
-local Network = require(game.ReplicatedStorage.Network)
-local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+local Network = require(game.ReplicatedStorage.Libraries.Network)
+local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
-local CustomServerSettings = require(game.Workspace.CustomServerSettings)
 
 local function getLeaderboardKey(mapid)
 	return string.format("leaderboard_songkey(%s)", tostring(mapid))

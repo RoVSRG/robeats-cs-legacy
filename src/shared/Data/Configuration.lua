@@ -1,16 +1,16 @@
-local DatastoreSerializer = require(game.ReplicatedStorage.Serialization.Datastore)
-local Network = require(game.ReplicatedStorage.Network)
-local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
+local DatastoreSerializer = require(game.ReplicatedStorage.Libraries.Serialization.Datastore)
+local Network = require(game.ReplicatedStorage.Libraries.Network)
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 --[[
 Use this class to access player settings. Example:
-local Configuration = require(game.ReplicatedStorage.Configuration)
+local Configuration = require(game.ReplicatedStorage.Shared.Data.Configuration)
 print(Configuration.Preferences.NoteSpeed) --To access player NoteSpeed
 ]]--
 
 local Configuration = {
-		Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.DefaultSettings));
-		SessionSettings = SPUtil:copy_table(require(game.ReplicatedStorage.SessionSettings));
+		Preferences = SPUtil:copy_table(require(game.ReplicatedStorage.Shared.Data.DefaultSettings));
+		SessionSettings = SPUtil:copy_table(require(game.ReplicatedStorage.Shared.Data.SessionSettings));
 }
 
 function Configuration:modify(key, value)

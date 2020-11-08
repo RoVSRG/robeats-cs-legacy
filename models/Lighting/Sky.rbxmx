@@ -1,0 +1,25 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Sky" referent="RBX6ADD5A057F3448A98A3E4A1AB2E4AFBD">
+		<Properties>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<bool name="CelestialBodiesShown">true</bool>
+			<float name="MoonAngularSize">0</float>
+			<Content name="MoonTextureId"><url>rbxassetid://0</url></Content>
+			<string name="Name">Sky</string>
+			<Content name="SkyboxBk"><url>rbxassetid://0</url></Content>
+			<Content name="SkyboxDn"><url>rbxassetid://0</url></Content>
+			<Content name="SkyboxFt"><url>rbxassetid://0</url></Content>
+			<Content name="SkyboxLf"><url>rbxassetid://0</url></Content>
+			<Content name="SkyboxRt"><url>rbxassetid://0</url></Content>
+			<Content name="SkyboxUp"><url>rbxassetid://0</url></Content>
+			<int64 name="SourceAssetId">-1</int64>
+			<int name="StarCount">0</int>
+			<float name="SunAngularSize">0</float>
+			<Content name="SunTextureId"><url>rbxassetid://0</url></Content>
+			<BinaryString name="Tags"></BinaryString>
+		</Properties>
+	</Item>
+</roblox>

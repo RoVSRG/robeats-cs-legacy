@@ -1,5 +1,5 @@
-local SPDict = require(game.ReplicatedStorage.Shared.SPDict)
-local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
+local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 
 local Player = require(game.ServerScriptService.Multiplayer.Player)
 
