@@ -1,3 +1,12 @@
+local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
+
+local Comppnents = game.ReplicatedStorage.Shared.Components
+local UI = Comppnents.UI
+local SongSelect = UI.SongSelect
+
+local SongSelectMain = require(SongSelect.SongSelectStateWrapper)
+
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
@@ -16,7 +25,7 @@ local _local_elements_folder
 local _menu_protos_folder
 local _player_gui
 
-function EnvironmentSetup:initial_setup()
+function EnvironmentSetup:initial_setup(Store)
 	workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
 
 	_game_environment = workspace.Models.GameEnvironment
@@ -32,7 +41,19 @@ function EnvironmentSetup:initial_setup()
 	_player_gui.IgnoreGuiInset = true
 
 	--LOAD SETTINGS
-	Configuration:load_from_save()
+	--Configuration:load_from_save()
+
+	--Mount Roact tree wrapped in StoreProvider
+
+	local app = Roact.createElement(RoactRodux.StoreProvider, {
+		store = Store
+	}, {
+		SongSelectMain = Roact.createElement(SongSelectMain, {
+
+		})
+	})
+
+	Roact.mount(app, _player_gui)
 end
 
 function EnvironmentSetup:set_mode(mode)

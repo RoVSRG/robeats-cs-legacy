@@ -1,5 +1,5 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local SongSelectUI = require(game.ReplicatedStorage.Components.UI.SongSelect.SongSelectMain)
+local SongSelectUI = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongSelectMain)
 
 return function(target)
     local testApp = Roact.createElement(SongSelectUI)

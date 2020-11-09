@@ -1,6 +1,6 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local NpsGraph = require(game.ReplicatedStorage.Components.UI.NpsGraph)
+local NpsGraph = require(game.ReplicatedStorage.Shared.Components.UI.NpsGraph)
 
 return function(target)
     local testApp = Roact.createElement(NpsGraph, {

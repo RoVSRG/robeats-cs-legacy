@@ -57,6 +57,12 @@
 		  "RespectFilteringEnabled": true
 		}
 	  },
+	  "Players": {
+		  "$className": "Players",
+		  "$properties": {
+			  "CharacterAutoLoads": false
+		  }
+	  },
 	  "HttpService": {
 		"$className": "HttpService",
 		"$properties": {

@@ -1,13 +1,13 @@
-local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local SongSelectUI = Roact.PureComponent:extend("SongSelectUI")
+local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local SongSelectUI: RoactComponent = Roact.PureComponent:extend("SongSelectUI")
 
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
-local Tab = require(game.ReplicatedStorage.Components.Tab)
+local Tab = require(game.ReplicatedStorage.Shared.Components.Tab)
 
-local SongButtonLayout = require(game.ReplicatedStorage.Components.UI.SongSelect.SongButtonLayout)
-local TabLayout = require(game.ReplicatedStorage.Components.UI.TabLayout)
-local SongInfoDisplay = require(game.ReplicatedStorage.Components.UI.SongSelect.SongInfoDisplay)
+local SongButtonLayout = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongButtonLayout)
+local TabLayout = require(game.ReplicatedStorage.Shared.Components.UI.TabLayout)
+local SongInfoDisplay = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongInfoDisplay)
 
 function SongSelectUI:init()
     self.getSongs = function()
@@ -19,10 +19,29 @@ function SongSelectUI:init()
         self._songs = songs
         return songs
     end
+    self.select_song_key = function(key)
+        if self.props.selectSongKey then
+            self.props.selectSongKey(key)
+        else
+            self:setState({
+                cur_selected = key;
+                current_tab = "SongButtonLayout"
+            })
+        end
+    end
+
     self:setState({
         cur_selected = 1;
         current_tab = "SongButtonLayout"
     })
+end
+
+function SongSelectUI:didUpdate(prevProps, prevState)
+    if prevProps.selectedSongKey ~= self.props.selectedSongKey then
+        self:setState({
+            cur_selected = self.props.selectedSongKey
+        })
+    end
 end
 
 function SongSelectUI:render()
@@ -97,11 +116,7 @@ function SongSelectUI:render()
                     AnchorPoint = Vector2.new(0,1);
                     Position = UDim2.new(0,0,1,0);
                     Size = UDim2.new(0.645, 0, 0.94, 0);
-                    on_button_click = function(key)
-                        self:setState({
-                            cur_selected = key
-                        })
-                    end
+                    on_button_click = self.select_song_key
                 }),
             })
         }),

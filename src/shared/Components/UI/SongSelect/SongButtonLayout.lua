@@ -1,7 +1,7 @@
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local SongButton = require(game.ReplicatedStorage.Components.UI.SongSelect.SongButton)
+local SongButton = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongButton)
 
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 
@@ -14,22 +14,18 @@ function SongButtonLayout:init()
     self.on_button_click = self.props.on_button_click
 
     self.on_search_changed = function(o)
-        --[[]]local _text = o.Text
-        --wait(0.15)
-        if o.Text == _text then--[[]]
-            self:setState({
-                search = o.Text;
-            })
-        end       
+        self:setState({
+            search = o.Text;
+        })     
     end
 end
 
 function SongButtonLayout:didMount()
-    --[[local song_list_layout = self._list_layout_ref:getValue()
+    local song_list_layout = self._list_layout_ref:getValue()
     local song_list = song_list_layout.Parent
     song_list_layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         song_list_layout.Parent.CanvasSize = UDim2.new(0, 0, 0, song_list.UIListLayout.AbsoluteContentSize.Y)
-    end)]]--
+    end)
 end
 
 function SongButtonLayout:search(search, _songkey)

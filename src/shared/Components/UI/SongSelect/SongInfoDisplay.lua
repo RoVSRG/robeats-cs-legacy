@@ -3,7 +3,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local RoactAnimate = require(game.ReplicatedStorage.Libraries.RoactAnimate)
 
-local NpsGraph = require(game.ReplicatedStorage.Components.UI.NpsGraph)
+local NpsGraph = require(game.ReplicatedStorage.Shared.Components.UI.NpsGraph)
 
 local SongInfoDisplay = Roact.Component:extend("SongInfoDisplay")
 
