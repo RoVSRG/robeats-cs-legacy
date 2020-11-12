@@ -1,4 +1,5 @@
 return {
-    currentMenu = "SongSelect";
+    currentScreen = "SongSelect";
     selectedSongKey = 1;
+    songRate = 100;
 }
