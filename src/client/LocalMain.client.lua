@@ -24,7 +24,7 @@ local function game_init()
 		_state = StateUtil:new(State)
 	}
 
-	--local_services._menus:push_menu(SongSelectMenu:new(local_services))
+	local_services._menus:push_menu(SongSelectMenu:new(local_services))
 
 	local update_connection
 	update_connection = game:GetService("RunService").Heartbeat:Connect(function(tick_delta)
