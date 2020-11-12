@@ -134,8 +134,7 @@ function SongInfoDisplay:render()
                     SortOrder = Enum.SortOrder.LayoutOrder,
                     Padding = UDim.new(0.0109999999, 0),
                 }),
-                Roact.createElement("TextLabel", {
-                    Name = "ArtistDisplay",
+                ArtistDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
@@ -153,8 +152,7 @@ function SongInfoDisplay:render()
                         MaxTextSize = 26,
                     })
                 }),
-                Roact.createElement("TextLabel", {
-                    Name = "NameDisplay",
+                NameDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
@@ -173,8 +171,7 @@ function SongInfoDisplay:render()
                         MaxTextSize = 28,
                     })
                 }),
-                Roact.createElement("TextLabel", {
-                    Name = "DifficultyDisplay",
+                DifficultyDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
@@ -193,8 +190,7 @@ function SongInfoDisplay:render()
                         MaxTextSize = 20,
                     })
                 }),
-                Roact.createElement("TextLabel", {
-                    Name = "TotalNotesDisplay",
+                TotalNotesDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
@@ -213,8 +209,7 @@ function SongInfoDisplay:render()
                         MaxTextSize = 20,
                     })
                 }),
-                Roact.createElement("TextLabel", {
-                    Name = "TotalHoldsDisplay",
+                TotalHoldsDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
@@ -233,8 +228,7 @@ function SongInfoDisplay:render()
                         MaxTextSize = 20,
                     })
                 }),
-                Roact.createElement("TextLabel", {
-                    Name = "TotalLengthDisplay",
+                TotalLengthDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
@@ -254,15 +248,15 @@ function SongInfoDisplay:render()
                     })
                 })
             }),
-            Roact.createElement("TextLabel", {
-                Name = "Rate",
+            Rate = Roact.createElement("TextLabel", {
+                Name = "",
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
                 Position = UDim2.new(0.0253480561, 0, 0.740295172, 0),
                 Size = UDim2.new(0.289368182, 0, 0.0559303947, 0),
                 ZIndex = 3,
                 Font = Enum.Font.GothamBold,
-                Text = "RATE: 1x",
+                Text = string.format("Rate: %0.02fx", (self.props.rate and self.props.rate or 100)/100),
                 TextColor3 = Color3.fromRGB(193, 193, 193),
                 TextScaled = true,
                 TextSize = 14,
