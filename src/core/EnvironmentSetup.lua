@@ -5,13 +5,15 @@ local Comppnents = game.ReplicatedStorage.Shared.Components
 local UI = Comppnents.UI
 local SongSelect = UI.SongSelect
 
-local SongSelectMain = require(SongSelect.SongSelectStateWrapper)
+local SongSelectMain = require(SongSelect)
 
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 
 local Configuration = require(game.ReplicatedStorage.Shared.Data.Configuration)
+local State = game.ReplicatedStorage.Shared.State
+local with = require(State.with)
 
 local EnvironmentSetup = {}
 EnvironmentSetup.Mode = {
@@ -38,7 +40,9 @@ function EnvironmentSetup:initial_setup(Store)
 	_local_elements_folder.Name = "LocalElements"
 	
 	_player_gui = Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
-	_player_gui.IgnoreGuiInset = true
+	_player_gui.IgnoreGuiInset = false
+
+	game.Players.LocalPlayer.PlayerGui:SetTopbarTransparency(0)
 
 	--LOAD SETTINGS
 	--Configuration:load_from_save()
@@ -48,7 +52,12 @@ function EnvironmentSetup:initial_setup(Store)
 	local app = Roact.createElement(RoactRodux.StoreProvider, {
 		store = Store
 	}, {
-		SongSelectMain = Roact.createElement(SongSelectMain)
+		SongSelectMain = Roact.createElement(with(SongSelectMain));
+		Topbar = Roact.createElement("Frame", {
+			Size = UDim2.new(1,0,36,0);
+			BackgroundColor3 = Color3.fromRGB(35, 35, 35);
+			AnchorPoint = Vector2.new(0,1);
+		})
 	})
 
 	Roact.mount(app, _player_gui)
