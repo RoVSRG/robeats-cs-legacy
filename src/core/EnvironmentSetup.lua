@@ -48,9 +48,7 @@ function EnvironmentSetup:initial_setup(Store)
 	local app = Roact.createElement(RoactRodux.StoreProvider, {
 		store = Store
 	}, {
-		SongSelectMain = Roact.createElement(SongSelectMain, {
-
-		})
+		SongSelectMain = Roact.createElement(SongSelectMain)
 	})
 
 	Roact.mount(app, _player_gui)
