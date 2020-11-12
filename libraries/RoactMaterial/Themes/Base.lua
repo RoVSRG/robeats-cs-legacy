@@ -1,3 +1,0 @@
-local Base = {}
-
-return Base
