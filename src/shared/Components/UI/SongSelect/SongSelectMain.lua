@@ -19,19 +19,9 @@ function SongSelectUI:init()
         self._songs = songs
         return songs
     end
-    self.select_song_key = function(key)
-        if self.props.selectSongKey then
-            self.props.selectSongKey(key)
-        else
-            self:setState({
-                cur_selected = key;
-                current_tab = "SongButtonLayout"
-            })
-        end
-    end
+    self.select_song_key = self.props.selectSongKey or function() end
 
     self:setState({
-        cur_selected = 1;
         current_tab = "SongButtonLayout"
     })
 end
@@ -51,20 +41,22 @@ function SongSelectUI:render()
 		BackgroundColor3 = Color3.fromRGB(35, 35, 35),
 		BorderSizePixel = 0,
 		Position = UDim2.new(0.5, 0, 0.5, 0),
-		Size = UDim2.new(1, 0, 1, 0),
+        Size = UDim2.new(1, 0, 1, 0),
+        Visible = self.props.currentScreen == nil and true or (self.props.currentScreen == "SongSelect" and true or false)
 	}, {
 		SectionContainer = Roact.createElement("Frame", {
 			AnchorPoint = Vector2.new(0.5, 1),
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderSizePixel = 0,
-			Position = UDim2.new(0.5, 0, 0.99000001, 0),
+			Position = UDim2.new(0.5, 0, 0.99, 0),
 			Size = UDim2.new(0.985, 0, 0.915, 0),
 		}, {
             SongInfoDisplay = Roact.createElement(SongInfoDisplay, {
                 Position = UDim2.new(1, 0, 0, 0),
                 Size = UDim2.new(0.35, 0, 0.89, 0),
-                song_key = self.state.cur_selected
+                song_key = self.props.selectedSongKey,
+                rate = self.props.songRate
             }),
 			PlayButton = Roact.createElement("TextButton", {
 				AnchorPoint = Vector2.new(0, 1),
