@@ -31,11 +31,10 @@ function LeaderboardDisplay:render()
         AnchorPoint = Vector2.new(0.5, 0.5),
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
-        Position = UDim2.new(0.499490321, 0, 0.5, 0),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
         Size = UDim2.new(1, 0, 1, 0),
     }, {
-        Roact.createElement("ScrollingFrame", {
-            Name = "LeaderboardList",
+        LeaderboardList = Roact.createElement("ScrollingFrame", {
             Active = true,
             AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundColor3 = Color3.fromRGB(25, 25, 25),
@@ -43,7 +42,7 @@ function LeaderboardDisplay:render()
             BorderColor3 = Color3.fromRGB(25, 25, 25),
             BorderSizePixel = 0,
             Position = UDim2.new(0.5, 0, 0.5, 0),
-            Size = UDim2.new(0.949999988, 0, 0.959999979, 0),
+            Size = UDim2.new(0.95, 0, 0.96, 0),
             BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
             ScrollingDirection = Enum.ScrollingDirection.Y,
             TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",

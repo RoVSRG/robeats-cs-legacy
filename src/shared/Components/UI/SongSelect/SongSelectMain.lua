@@ -1,6 +1,8 @@
 local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local SongSelectUI: RoactComponent = Roact.PureComponent:extend("SongSelectUI")
 
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
 local Tab = require(game.ReplicatedStorage.Shared.Components.Tab)
@@ -67,7 +69,10 @@ function SongSelectUI:render()
 				Font = Enum.Font.Gotham,
 				Text = "Play!",
 				TextColor3 = Color3.fromRGB(0, 0, 0),
-				TextScaled = true,
+                TextScaled = true,
+                [Roact.Event.InputBegan] = SPUtil:input_callback(function()
+                    self.props.changeScreen("LoadingScreen")
+                end)
 			}, {
                 UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
                     MinTextSize = 16;

@@ -31,8 +31,6 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 	local rate = 100
 
 	local _state = _local_services._state
-
-	local section_container
 	local should_remove = false
 
 	--local ResultsMenu = require(game.ReplicatedStorage.Shared.Menus.ResultsMenu)
@@ -50,6 +48,9 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			didChange(new_state.gameData.selectedSongKey, old_state.gameData.selectedSongKey, function()
 				_selected_songkey = new_state.gameData.selectedSongKey
 				self:play_preview()
+			end)
+			didChange(new_state.gameData.currentScreen, old_state.gameData.currentScreen, function()
+				should_remove = new_state.gameData.currentScreen ~= "SongSelect"
 			end)
 		end)
 	end
@@ -76,15 +77,20 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 		return should_remove
 	end
 
+	function self:do_remove()
+		if _current_sfx then
+			_current_sfx:Stop()
+		end
+
+		if getState().gameData.currentScreen == "LoadingScreen" then
+			self:play_button_pressed()
+		end
+	end
+
 	function self:play_button_pressed()
 		_local_services._sfx_manager:play_sfx(SFXManager.SFX_BUTTONPRESS)
 		if SongDatabase:contains_key(_selected_songkey) then
-			if _multiplayer_client then
-				_multiplayer_client:change_song_key(_selected_songkey)
-				should_remove = true
-			else
-				_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
-			end
+			_local_services._menus:push_menu(SongStartMenu:new(_local_services, _selected_songkey, GameSlot.SLOT_1))
 		end
 	end
 

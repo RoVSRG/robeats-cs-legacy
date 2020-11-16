@@ -96,6 +96,7 @@ function SongButton:render()
             Position = UDim2.new(0.835147917, 0, 0.379469723, 0),
             Size = UDim2.new(0.15732792, 0, 0.545288444, 0),
             song_key = _song_key;
+            doNotAnimate = true;
         }, {
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),

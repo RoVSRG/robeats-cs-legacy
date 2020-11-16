@@ -186,6 +186,10 @@ function SPUtil:button(_instance, _expand_size, _local_services, _callback)
 	end)
 end
 
+function SPUtil:should_component_be_visible(a, b)
+	return a == nil and true or (a == b and true or false)
+end
+
 function SPUtil:copy_table(datatable)
 	local tblRes={}
 	if type(datatable)=="table" then

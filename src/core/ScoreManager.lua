@@ -60,7 +60,7 @@ function ScoreManager:new(_game)
 	end
 
 	function self:add_hit_to_deviance(hit_time_ms, time_to_end, note_result)
-		self.hit_deviance[#self.hit_deviance+1] = {hit_time_ms = hit_time_ms, time_to_end = time_to_end, note_result = note_result}
+		--self.hit_deviance[#self.hit_deviance+1] = {hit_time_ms = hit_time_ms, time_to_end = time_to_end, note_result = note_result}
 	end
 
 	function self:get_hit_deviance() return self.hit_deviance end

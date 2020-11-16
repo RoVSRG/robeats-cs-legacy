@@ -65,7 +65,7 @@ function SongInfoDisplay:render()
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
             }),
-            Roact.createElement("TextLabel", {
+            --[[Roact.createElement("TextLabel", {
                 Name = "DescriptionDisplay",
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
@@ -84,7 +84,7 @@ function SongInfoDisplay:render()
                 Roact.createElement("UITextSizeConstraint", {
                     MaxTextSize = 22,
                 })
-            }),
+            }),]]
             Roact.createElement("Frame", {
                 Name = "NpsGraph",
                 BackgroundColor3 = Color3.fromRGB(16, 16, 16),
@@ -94,19 +94,6 @@ function SongInfoDisplay:render()
             }, {
                 Roact.createElement("UICorner", {
                     CornerRadius = UDim.new(0, 4),
-                }),
-                Roact.createElement("TextLabel", {
-                    Name = "MaxNps",
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                    BackgroundTransparency = 1,
-                    Position = UDim2.new(0.0138339922, 0, 0, 0),
-                    Size = UDim2.new(0.249011859, 0, 0.235294119, 0),
-                    ZIndex = 3,
-                    Font = Enum.Font.GothamBlack,
-                    Text = "MAX NPS: 0",
-                    TextColor3 = Color3.fromRGB(255, 255, 255),
-                    TextSize = 14,
-                    TextXAlignment = Enum.TextXAlignment.Left,
                 }),
                 Roact.createElement(NpsGraph, {
                     Name = "Items",
@@ -132,7 +119,7 @@ function SongInfoDisplay:render()
             }, {
                 Roact.createElement("UIListLayout", {
                     SortOrder = Enum.SortOrder.LayoutOrder,
-                    Padding = UDim.new(0.0109999999, 0),
+                    Padding = UDim.new(0.01, 0),
                 }),
                 ArtistDisplay = Roact.createElement("TextLabel", {
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
