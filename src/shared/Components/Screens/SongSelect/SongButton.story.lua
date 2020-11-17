@@ -3,7 +3,7 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local NpsGraph = require(game.ReplicatedStorage.Shared.Components.UI.NpsGraph)
 
-local SongButton = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongButton)
+local SongButton = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongButton)
 
 return function(target)
     local testApp = Roact.createElement(SongButton, {

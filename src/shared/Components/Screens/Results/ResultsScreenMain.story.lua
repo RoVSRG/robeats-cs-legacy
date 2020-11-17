@@ -2,36 +2,35 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 local Llama = require(game.ReplicatedStorage.Libraries.Llama)
-local LoadingScreen = require(game.ReplicatedStorage.Shared.Components.UI.Loading.LoadingScreen)
+local ResultsScreenMain = require(script.Parent.ResultsScreenMain)
 
 return function(target)
-    local testApp = LoadingScreen
+    local testApp = ResultsScreenMain
 
     local store = Rodux.Store.new(function(state, action)
         state = state or {
-            backedOut = false;
-            currentScreen = "LoadingScreen";
-            selectedSongKey = 1;
+            stats = {
+                accuracy = 0;
+                maxcombo = 0;
+                marvelouses = 0;
+                perfects = 0;
+                greats = 0;
+                goods = 0;
+                bads = 0;
+                misses = 0;
+                combo = 0;
+                score = 0;
+            }
         }
-        if action.type == "backOut" then
-            return Llama.Dictionary.join(state, {
-                backedOut = true
-            })
-        end
         return state
     end)
 
     testApp = RoactRodux.connect(function(state, props)
-        return {
-            currentScreen = state.currentScreen;
-            selectedSongKey = state.selectedSongKey;
-        }
+        return state
     end,
     function(dispatch)
         return {
-            backOut = function()
-                dispatch({type = "backOut"})
-            end,
+
         }
     end)(testApp)
 

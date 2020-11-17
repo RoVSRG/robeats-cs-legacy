@@ -1,12 +1,12 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
-local Comppnents = game.ReplicatedStorage.Shared.Components
-local UI = Comppnents.UI
+local Components = game.ReplicatedStorage.Shared.Components
+local Screens = Components.Screens
 
-local SongSelectMain = require(UI.SongSelect)
-local GameplayMain = require(UI.Gameplay)
-local Loading = require(UI.Loading)
+local SongSelectMain = require(Screens.SongSelect)
+local GameplayMain = require(Screens.Gameplay)
+local Loading = require(Screens.Loading)
 
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)

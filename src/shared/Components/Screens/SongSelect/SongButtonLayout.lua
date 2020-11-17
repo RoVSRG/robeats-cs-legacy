@@ -1,7 +1,7 @@
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local SongButton = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongButton)
+local SongButton = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongButton)
 
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 

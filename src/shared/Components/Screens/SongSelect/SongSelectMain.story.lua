@@ -1,7 +1,7 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
-local SongSelectUI = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongSelectMain)
+local SongSelectUI = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongSelectMain)
 
 return function(target)
     local testApp = SongSelectUI

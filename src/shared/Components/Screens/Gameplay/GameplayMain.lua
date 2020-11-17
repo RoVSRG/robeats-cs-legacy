@@ -2,6 +2,8 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local ScoreOverlay = require(script.Parent.ScoreOverlay)
 
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+
 local GameplayMain = Roact.PureComponent:extend("GameplayMain")
 
 function GameplayMain:init()
@@ -15,6 +17,7 @@ function GameplayMain:render()
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		Size = UDim2.new(1, 0, 1, 0),
+		Visible = SPUtil:should_component_be_visible(self.props.currentScreen, "Gameplay")
 	}, {
         StatsOverlay = Roact.createElement(ScoreOverlay, {
             marvs = stats.marvelouses;
@@ -36,6 +39,9 @@ function GameplayMain:render()
 			Text = "Exit",
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextSize = 22,
+			[Roact.Event.InputBegan] = SPUtil:input_callback(function()
+				self.props.backOut()
+			end)
 		}, {
 			Roact.createElement("UICorner", {
 				CornerRadius = UDim.new(0, 4),

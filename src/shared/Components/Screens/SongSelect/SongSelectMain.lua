@@ -7,9 +7,9 @@ local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase
 
 local Tab = require(game.ReplicatedStorage.Shared.Components.Tab)
 
-local SongButtonLayout = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongButtonLayout)
+local SongButtonLayout = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongButtonLayout)
 local TabLayout = require(game.ReplicatedStorage.Shared.Components.UI.TabLayout)
-local SongInfoDisplay = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongInfoDisplay)
+local SongInfoDisplay = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongInfoDisplay)
 
 function SongSelectUI:init()
     self.getSongs = function()

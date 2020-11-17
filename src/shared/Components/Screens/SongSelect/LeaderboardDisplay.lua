@@ -1,6 +1,6 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local LeaderboardSlot = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.LeaderboardSlot)
+local LeaderboardSlot = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.LeaderboardSlot)
 
 local LeaderboardDisplay = Roact.Component:extend("LeaderboardDisplay")
 

@@ -35,6 +35,9 @@ function SongStartMenu:new(_local_services, _start_song_key, _local_player_slot,
 		if false then
 			_game:teardown()
 		else
+			_local_services._state:dispatch("changeScreen", {
+				screen = "Gameplay"
+			})
 			_game:start_game()
 			_local_services._menus:push_menu(InGameMenu:new(_local_services, _game, _start_song_key, _multiplayer_client))
 		end

@@ -2,7 +2,7 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
-local LeaderboardSlot = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.LeaderboardSlot)
+local LeaderboardSlot = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.LeaderboardSlot)
 
 return function(target)
     local userid = 526993347

@@ -12,7 +12,7 @@ function Score:render()
         Position = self.props.Position,
         Size = self.props.Size,
         Font = Enum.Font.GothamSemibold,
-        Text = self.props.score,
+        Text = math.floor(self.props.score),
         TextColor3 = Color3.fromRGB(255, 255, 255),
         TextScaled = true,
         TextSize = 26,

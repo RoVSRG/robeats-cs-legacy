@@ -27,88 +27,56 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 	local _multiplayer_protos = SPDict:new()
 	
 	function self:cons()
-
+		_local_services._state:dispatch("setForceQuit", {
+			value = false
+		})
 	end
 	
 	--[[Override--]] function self:update(dt_scale)
 		_game:update(dt_scale)
-		_multi_send_retrieve_data:update(dt_scale)
+		--_multi_send_retrieve_data:update(dt_scale)
 		
 		if _game._audio_manager:get_mode() == AudioManager.Mode.PreStart then
-			local did_raise_pre_start_trigger, raise_pre_start_trigger_val, raise_pre_start_trigger_duration = _game._audio_manager:raise_pre_start_trigger()
-			if did_raise_pre_start_trigger == true then
-				-- _stat_display_ui.ExitButton.Text = string.format("Starting in %d...", raise_pre_start_trigger_val)
-			end
-		elseif _game._audio_manager:get_mode() == AudioManager.Mode.Playing then
-			-- _stat_display_ui.ExitButton.Text = "Exit"
+			_game._audio_manager:raise_pre_start_trigger()
 		end
 		
 		if _game._audio_manager:is_finished() then
 			_game:set_mode(RobeatsGame.Mode.GameEnded)
 		end
-		
-		-- _stat_display_ui.ChainDisplay.Text = tostring(_game._score_manager:get_chain())
+
+		if _local_services._state:get_state().gameData.forceQuit then
+			if _game._audio_manager:get_mode() == AudioManager.Mode.Playing then
+				_force_quit = true
+				_game:set_mode(RobeatsGame.Mode.GameEnded)
+			end
+		end
+
 		-- _stat_display_ui.GradeDisplay.Text = string.format("%.2f",_game._score_manager:get_accuracy()) .. "%"
 		-- _stat_display_ui.ScoreDisplay.Text = math.floor(_game._score_manager:get_score() + 0.5)
 
 		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = _game._score_manager:get_end_records()
-		local total_count = marv_count + perf_count + great_count + good_count + bad_count + miss_count
+		local combo = _game._score_manager:get_chain()
+		local accuracy = _game._score_manager:get_accuracy()
 
 		--if total_count == 0 and not is_first_frame then return end
 
-		-- local song_length = _game._audio_manager:get_song_length_ms()
-		-- local song_time = _game._audio_manager:get_current_time_ms()
+		local song_length = _game._audio_manager:get_song_length_ms()
+		local song_time = _game._audio_manager:get_current_time_ms()
 
-		-- local ms_remaining = song_length - song_time
+		local ms_remaining = song_length - song_time
 
-		--Handle multiplayer data
-
-		-- if _multiplayer_client then
-		-- 	if _multi_send_retrieve_data:do_flash() then
-		-- 		--Upload stats to server
-		-- 		_multiplayer_client:upload_stats({
-		-- 			marvelous_count = marv_count;
-		-- 			perfect_count = perf_count;
-		-- 			great_count = great_count;
-		-- 			good_count = good_count;
-		-- 			bad_count = bad_count;
-		-- 			miss_count = miss_count;
-		-- 			accuracy = _game._score_manager:get_accuracy();
-		-- 			max_combo = max_combo;
-		-- 			score = score;
-		-- 			combo = _game._score_manager:get_chain();
-		-- 		})
-
-		-- 		--Retrieve others' stats
-
-		-- 		local _player_stats = _multiplayer_client:get_player_stats()
-
-		-- 		table.sort(_player_stats, function(a, b)
-		-- 			return a.score > b.score
-		-- 		end)
-
-		-- 		for i, plr in pairs(_player_stats) do
-		-- 			if not _multiplayer_protos:contains(plr.userid) then
-		-- 				local itr_proto = _player_slot_proto:Clone()
-		-- 				itr_proto.Place.Text = string.format("#%d", i)
-		-- 				itr_proto.PlayerName.Text = SPUtil:player_name_from_id(tonumber(plr.userid))
-		-- 				itr_proto.Data.Text = string.format("Score: %0.0f | Accuracy = %0.2f", plr.score, plr.accuracy)
-		-- 				itr_proto.Parent = _stat_display_ui.MultiListDisplay
-		-- 				itr_proto.LayoutOrder = i
-		-- 				_multiplayer_protos:add(plr.userid, itr_proto)
-		-- 				return
-		-- 			else
-		-- 				local itr_proto = _multiplayer_protos:get(plr.userid)
-		-- 				itr_proto.Place.Text = string.format("#%d", i)
-		-- 				itr_proto.PlayerName.Text = SPUtil:player_name_from_id(tonumber(plr.userid))
-		-- 				itr_proto.LayoutOrder = i
-		-- 				itr_proto.Data.Text = string.format("Score: %0.0f | Accuracy = %0.2f", plr.score, plr.accuracy)
-		-- 			end
-		-- 		end
-		-- 	end
-		-- end
-
-		--is_first_frame = false
+		_local_services._state:dispatch("changeStats", {
+			score = score;
+			marvelouses = marv_count;
+			perfects = perf_count;
+			greats = great_count;
+			goods = good_count;
+			bads = bad_count;
+			misses = miss_count;
+			combo = combo;
+			accuracy = accuracy;
+			time_left = ms_remaining;
+		})
 	end
 	
 	--[[Override--]] function self:should_remove()
@@ -132,7 +100,7 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 			bads = bad_count;
 			misses = miss_count;
 			score = score;
-			rate = Configuration.SessionSettings.Rate;
+			rate = 1;
 		}
 
 		data.hitdeviance = _game._score_manager:get_hit_deviance()
@@ -146,7 +114,7 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 		average_offset /= (#data.hitdeviance == 0 and 1 or #data.hitdeviance)
 
 		data.mean = average_offset
-
+	--[[
 		spawn(function()
 			if not _force_quit then
 				DebugOut:puts("Writing score...")
@@ -157,6 +125,11 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 				print("Score not submitted because you force quitted!")
 			end
 		end)
+		]]
+
+		_local_services._state:dispatch("changeScreen", {
+			screen = "Results"
+		})
 
 		_game:teardown()
 

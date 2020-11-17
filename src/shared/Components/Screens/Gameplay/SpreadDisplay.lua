@@ -6,7 +6,6 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local SpreadDisplay = Roact.Component:extend("SpreadDisplay")
 
 function SpreadDisplay:render()
-    print(game:GetService"HttpService":JSONEncode(self.props))
     local total_count = self.props.marvs + self.props.perfs + self.props.greats + self.props.goods + self.props.bads + self.props.misses
     return Roact.createElement("Frame", {
         Name = "SpreadDisplay",

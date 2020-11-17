@@ -3,7 +3,7 @@ local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 
 local GameData = require(script.GameData)
 
-local _use_debug = game:GetService("RunService"):IsStudio()
+local _use_debug = false --game:GetService("RunService"):IsStudio()
 
 return Rodux.Store.new(Rodux.combineReducers({
     gameData = Rodux.createReducer(GameData, {
@@ -25,22 +25,27 @@ return Rodux.Store.new(Rodux.combineReducers({
         changeStats = function(state, action)
             return Llama.Dictionary.join(state, {
                 stats = Llama.Dictionary.join(state.stats, {
-                    accuracy = action.accuracy;
-                    maxcombo = action.maxcombo;
-                    marvelouses = action.marvelouses;
-                    perfects = action.perfects;
-                    greats = action.greats;
-                    goods = action.goods;
-                    bads = action.bads;
-                    misses = action.misses;
-                    combo = action.combo;
-                    score = action.score
+                    accuracy = action.accuracy or state.stats.accuracy;
+                    maxcombo = action.maxcombo or state.stats.maxcombo;
+                    marvelouses = action.marvelouses or state.stats.marvelouses;
+                    perfects = action.perfects or state.stats.perfects;
+                    greats = action.greats or state.stats.greats;
+                    goods = action.goods or state.stats.goods;
+                    bads = action.bads or state.stats.bads;
+                    misses = action.misses or state.stats.misses;
+                    combo = action.combo or state.stats.combo;
+                    score = action.score or state.stats.score
                 })
             })
         end;
         updateTimeLeft = function(state, action)
             return Llama.Dictionary.join(state, {
                 timeLeft = action.timeLeft;
+            })
+        end;
+        setForceQuit = function(state, action)
+            return Llama.Dictionary.join(state, {
+                forceQuit = action.value
             })
         end
     });

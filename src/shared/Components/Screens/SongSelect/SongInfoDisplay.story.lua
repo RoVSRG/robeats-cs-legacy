@@ -1,6 +1,6 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local SongInfoDisplay = require(game.ReplicatedStorage.Shared.Components.UI.SongSelect.SongInfoDisplay)
+local SongInfoDisplay = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongInfoDisplay)
 
 return function(target)
     local testApp = Roact.createElement(SongInfoDisplay, {

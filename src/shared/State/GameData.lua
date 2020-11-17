@@ -15,4 +15,5 @@ return {
         score = 0;
     };
     timeLeft = 0;
+    forceQuit = false;
 }

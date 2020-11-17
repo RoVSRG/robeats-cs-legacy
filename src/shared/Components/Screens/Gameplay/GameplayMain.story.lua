@@ -5,7 +5,6 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
-local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 
 return function(target)
     local _unmount = false
