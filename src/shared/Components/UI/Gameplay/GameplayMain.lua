@@ -8,6 +8,7 @@ function GameplayMain:init()
 end
 
 function GameplayMain:render()
+	local stats = self.props.stats
 	return Roact.createElement("Frame", {
 		Name = "GameplayMain",
 		BackgroundColor3 = Color3.fromRGB(35, 35, 35),
@@ -16,16 +17,16 @@ function GameplayMain:render()
 		Size = UDim2.new(1, 0, 1, 0),
 	}, {
         StatsOverlay = Roact.createElement(ScoreOverlay, {
-            marvs = self.props.marvs;
-            perfs = self.props.perfs;
-            greats = self.props.greats;
-            goods = self.props.goods;
-            bads = self.props.bads;
-            misses = self.props.misses;
-            score = self.props.score;
-            accuracy = self.props.accuracy;
-            time_left = self.props.time_left;
-            combo = self.props.combo;
+            marvs = stats.marvelouses;
+            perfs = stats.perfects;
+            greats = stats.greats;
+            goods = stats.goods;
+            bads = stats.bads;
+            misses = stats.misses;
+            score = stats.score;
+            accuracy = stats.accuracy;
+            time_left = stats.time_left;
+            combo = stats.combo;
         });
 		ExitButton = Roact.createElement("TextButton", {
 			BackgroundColor3 = Color3.fromRGB(255, 53, 53),

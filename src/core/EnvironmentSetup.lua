@@ -3,9 +3,10 @@ local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
 local Comppnents = game.ReplicatedStorage.Shared.Components
 local UI = Comppnents.UI
-local SongSelect = UI.SongSelect
 
-local SongSelectMain = require(SongSelect)
+local SongSelectMain = require(UI.SongSelect)
+local GameplayMain = require(UI.Gameplay)
+local Loading = require(UI.Loading)
 
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
@@ -53,6 +54,8 @@ function EnvironmentSetup:initial_setup(Store)
 		store = Store
 	}, {
 		SongSelectMain = Roact.createElement(with(SongSelectMain));
+		GameplayMain = Roact.createElement(with(GameplayMain));
+		Loading = Roact.createElement(with(Loading));
 		Topbar = Roact.createElement("Frame", {
 			Size = UDim2.new(1,0,36,0);
 			BackgroundColor3 = Color3.fromRGB(35, 35, 35);

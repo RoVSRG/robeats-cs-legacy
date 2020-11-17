@@ -1,17 +1,20 @@
 local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
-local SongSelect = require(script.GameplayMain)
+local Llama = require(game.ReplicatedStorage.Libraries.Llama)
+
+local Gameplay = require(script.GameplayMain)
 
 return RoactRodux.connect(function(state, props)
     return {
-        selectedSongKey = state.gameData.selectedSongKey
+        selectedSongKey = state.gameData.selectedSongKey;
+        stats = Llama.Dictionary.join(state.gameData.stats, {
+            time_left = state.gameData.timeLeft
+        })
     }
 end,
 function(dispatch)
     return {
-        selectSongKey = function(key)
-            dispatch({type = "changeSelectedSongKey", songKey = key})
-        end,
+        
     }
-end)(SongSelect)
+end)(Gameplay)

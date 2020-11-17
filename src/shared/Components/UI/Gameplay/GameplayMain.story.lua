@@ -21,23 +21,19 @@ return function(target)
 
     local store = Rodux.Store.new(function(state, action)
         state = state or {
-            marvs = 1;
-            perfs = 0;
-            greats = 0;
-            goods = 0;
-            bads = 0;
-            misses = 0;
-            score = 0;
-            accuracy = 0;
-            time_left = 0;
-            combo = 0;
+            stats = {
+                marvelouses = 1;
+                perfects = 0;
+                greats = 0;
+                goods = 0;
+                bads = 0;
+                misses = 0;
+                score = 0;
+                accuracy = 0;
+                time_left = 0;
+                combo = 0;
+            }
         }
-
-        if action.type == "changeScoreData" then
-            return Llama.Dictionary.join(state, {
-                score = action.score
-            })
-        end
 
         return state
     end)
@@ -49,19 +45,6 @@ return function(target)
     })
 
     local tree = Roact.mount(fr, target)
-
-    SPUtil:spawn(function()
-        local _score_ = 0
-        while true do
-            store:dispatch({
-                type = "changeScoreData",
-                score = _score_
-            })
-            _score_ += 1
-            wait(2)
-            if _unmount then break end
-        end
-    end)
 
     return function()
         _unmount = true
