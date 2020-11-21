@@ -228,7 +228,7 @@ function SpreadDisplay:render()
         Roact.createElement("Frame", {
             Name = "Misses",
             BackgroundColor3 = Color3.fromRGB(74, 0, 1),
-            Size = UDim2.new(1, 0, 0.165714279, 0),
+            Size = UDim2.new(1, 0, 0.16, 0),
         }, {
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
@@ -237,7 +237,7 @@ function SpreadDisplay:render()
                 Name = "Total",
                 BackgroundColor3 = Color3.fromRGB(255, 0, 4),
                 BorderSizePixel = 0,
-                Size = UDim2.new(self.props.misses/total_count, 0, 1.00000024, 0),
+                Size = UDim2.new(self.props.misses/total_count, 0, 1, 0),
                 ZIndex = 2,
             }, {
                 Roact.createElement("UICorner", {

@@ -3,7 +3,7 @@ local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreS
 local _db_version = "v2.3"
 
 local ScoreDatabase = DataStoreService:GetDataStore("ScoreDatabase".._db_version)
-local NoteDevainceDatabase = DataStoreService:GetDataStore("NoteDevainceDatabase".._db_version)
+local NoteDevianceDatabase = DataStoreService:GetDataStore("NoteDevianceDatabase".._db_version)
 
 local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
 local Network = require(game.ReplicatedStorage.Libraries.Network)
@@ -81,7 +81,7 @@ Network.AddEvent("SubmitScore"):Connect(function(player, sent_data)
 	local suc, err = pcall(function()
 		if save_hitdeviance then
 			local key = getDevianceKey(player_id, sent_data.mapid)
-			NoteDevainceDatabase:SetAsync(key, sent_data.hitdeviance)
+			NoteDevianceDatabase:SetAsync(key, sent_data.hitdeviance)
 		end
 	end)
 
@@ -111,5 +111,5 @@ Network.AddFunction("GetDeviance"):Set(function(player, request)
 	AssertType:is_true(SongDatabase:contains_key(request.mapid))
 	AssertType:is_int(request.userid)
 
-	return NoteDevainceDatabase:GetAsync(getDevianceKey(request.userid, request.mapid))
+	return NoteDevianceDatabase:GetAsync(getDevianceKey(request.userid, request.mapid))
 end)
