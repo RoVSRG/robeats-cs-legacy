@@ -1,20 +1,7 @@
-local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
-
-local Components = game.ReplicatedStorage.Shared.Components
-local Screens = Components.Screens
-
-local SongSelectMain = require(Screens.SongSelect)
-local GameplayMain = require(Screens.Gameplay)
-local Loading = require(Screens.Loading)
-
-local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
-local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
+local RoactApp = require(game.ReplicatedStorage.RobeatsGameCore.RoactApp)
 
 local Configuration = require(game.ReplicatedStorage.Shared.Data.Configuration)
-local State = game.ReplicatedStorage.Shared.State
-local with = require(State.with)
 
 local EnvironmentSetup = {}
 EnvironmentSetup.Mode = {
@@ -49,21 +36,7 @@ function EnvironmentSetup:initial_setup(Store)
 	--Configuration:load_from_save()
 
 	--Mount Roact tree wrapped in StoreProvider
-
-	local app = Roact.createElement(RoactRodux.StoreProvider, {
-		store = Store
-	}, {
-		SongSelectMain = Roact.createElement(with(SongSelectMain));
-		GameplayMain = Roact.createElement(with(GameplayMain));
-		Loading = Roact.createElement(with(Loading));
-		Topbar = Roact.createElement("Frame", {
-			Size = UDim2.new(1,0,36,0);
-			BackgroundColor3 = Color3.fromRGB(35, 35, 35);
-			AnchorPoint = Vector2.new(0,1);
-		})
-	})
-
-	Roact.mount(app, _player_gui)
+	RoactApp:mount(_player_gui)
 end
 
 function EnvironmentSetup:set_mode(mode)
