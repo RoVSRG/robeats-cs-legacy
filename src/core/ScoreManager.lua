@@ -29,7 +29,9 @@ function ScoreManager:new(_game)
 	local _max_chain = 0
 	local _total_count = 0
 	local maxscore = 1000000
-	
+
+	local song_length = _game._audio_manager:get_song_length_ms()
+
 	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain, self._score end
 	function self:get_accuracy()
 		local _total_count = _marv_count + _perfect_count + _great_count + _good_count + _bad_count + _miss_count
@@ -60,7 +62,7 @@ function ScoreManager:new(_game)
 	end
 
 	function self:add_hit_to_deviance(hit_time_ms, time_to_end, note_result)
-		--self.hit_deviance[#self.hit_deviance+1] = {hit_time_ms = hit_time_ms, time_to_end = time_to_end, note_result = note_result}
+		self.hit_deviance[#self.hit_deviance+1] = {x = hit_time_ms/song_length, y = time_to_end/360, result = note_result}
 	end
 
 	function self:get_hit_deviance() return self.hit_deviance end

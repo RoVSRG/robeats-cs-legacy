@@ -1,17 +1,13 @@
 local Rodux: Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 
+local GameState = require(script.GameState)
 local GameData = require(script.GameData)
 
 local _use_debug = false --game:GetService("RunService"):IsStudio()
 
 return Rodux.Store.new(Rodux.combineReducers({
     gameData = Rodux.createReducer(GameData, {
-        changeScreen = function(state, action)
-            return Llama.Dictionary.join(state, {
-                currentScreen = action.screen
-            })
-        end;
         changeSelectedSongKey = function(state, action)
             return Llama.Dictionary.join(state, {
                 selectedSongKey = action.songKey
@@ -49,6 +45,18 @@ return Rodux.Store.new(Rodux.combineReducers({
             })
         end
     });
+    gameState = Rodux.createReducer(GameState, {
+        setIsLoading = function(state, action)
+            return Llama.Dictionary.join(state, {
+                isLoading = action.value;
+            })
+        end;
+        setIsPlaying = function(state, action)
+            return Llama.Dictionary.join(state, {
+                isPlaying = action.value;
+            })
+        end;
+    })
 }), {}, {
     _use_debug and Rodux.loggerMiddleware or nil
 })

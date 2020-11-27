@@ -7,9 +7,10 @@ local SpreadDisplay = Roact.Component:extend("SpreadDisplay")
 function SpreadDisplay:render()
     local total_count = self.props.marvelouses + self.props.perfects + self.props.greats + self.props.goods + self.props.bads + self.props.misses
     return Roact.createElement("Frame", {
-        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+        BackgroundColor3 = self.props.BackgroundColor3 or Color3.fromRGB(25, 25, 25),
         Position = self.props.Position,
-        Size = UDim2.new(1, 0, 1, 0),
+        Size = self.props.Size or UDim2.new(1, 0, 1, 0),
+        AnchorPoint = self.props.AnchorPoint
     }, {
         Corner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 6),

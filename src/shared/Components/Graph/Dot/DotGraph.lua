@@ -52,7 +52,8 @@ function DotGraph:render()
         Size = self.props.Size or UDim2.new(1,0,1,0);
         Position = self.props.Position;
         BackgroundColor3 = self.props.BackgroundColor3 or Color3.fromRGB(35, 35, 35);
-        BorderSizePixel = self.props.BorderSizePixel or 0
+        BorderSizePixel = self.props.BorderSizePixel or 0;
+        AnchorPoint = self.props.AnchorPoint
     }, {
         Corner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0,4)

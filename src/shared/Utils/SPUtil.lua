@@ -1,4 +1,9 @@
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
 local RandomLua = require(game.ReplicatedStorage.Shared.Utils.RandomLua)
+
+local function noop() end
 
 local SPUtil = {}
 
@@ -186,6 +191,10 @@ function SPUtil:button(_instance, _expand_size, _local_services, _callback)
 	end)
 end
 
+function SPUtil:bind_to_frame(_callback)
+	return RunService.Heartbeat:Connect(_callback)
+end
+
 function SPUtil:should_component_be_visible(a, b)
 	return a == nil and true or (a == b and true or false)
 end
@@ -198,6 +207,21 @@ function SPUtil:copy_table(datatable)
 		tblRes=datatable
 	end
 	return tblRes
+end
+
+function SPUtil:initialize_settings_callbacks(component, props)
+	local self = component
+	self:setState({
+        value = self.props.initialValue or 0
+    })
+
+    self.getText = function()
+        return self.props.getText and self.props.getText(self.state.value) or self.state.value
+    end
+
+    self.increment = self.props.increment or 1
+
+    self.onChange = self.props.onChange or noop
 end
 
 function SPUtil:player_name_from_id(id)
@@ -215,6 +239,15 @@ end
 
 function SPUtil:spawn(_callback)
 	spawn(_callback)
+end
+
+function SPUtil:bind_to_key(key_code, _callback)
+	_callback = _callback or noop
+	return UserInputService.InputBegan:Connect(function(inputob)
+		if inputob.KeyCode == key_code then
+			_callback()
+		end
+	end)
 end
 
 return SPUtil

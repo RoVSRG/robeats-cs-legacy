@@ -7,17 +7,6 @@ local NpsGraph = require(game.ReplicatedStorage.Shared.Components.UI.NpsGraph)
 
 local SongInfoDisplay = Roact.Component:extend("SongInfoDisplay")
 
---[[
-    Position = UDim2.new(1, 0, 0, 0),
-    Size = UDim2.new(0.340000004, 0, 0.875, 0),
-]]
-
-function SongInfoDisplay:didMount()
-end
-
-function SongInfoDisplay:init()
-end
-
 function SongInfoDisplay:render()
     local _songkey = self.props.song_key
 

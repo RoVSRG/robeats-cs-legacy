@@ -7,6 +7,15 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local GameplayMain = Roact.PureComponent:extend("GameplayMain")
 
 function GameplayMain:init()
+	self.bound_to_frame = SPUtil:bind_to_frame(function()
+		if self.props.isPlaying == false then
+			self.props.history:push("/results")
+		end
+	end)
+end
+
+function GameplayMain:willUnmount()
+
 end
 
 function GameplayMain:render()
@@ -17,7 +26,6 @@ function GameplayMain:render()
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		Size = UDim2.new(1, 0, 1, 0),
-		Visible = SPUtil:should_component_be_visible(self.props.currentScreen, "Gameplay")
 	}, {
         StatsOverlay = Roact.createElement(ScoreOverlay, {
             marvs = stats.marvelouses;

@@ -65,6 +65,8 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 				delta = -5
 			})
 		end
+
+		should_remove = getState().gameState.isPlaying
 	end
 
 	function self:on_rate_change()
@@ -82,7 +84,7 @@ function SongSelectMenu:new(_local_services, _multiplayer_client)
 			_current_sfx:Stop()
 		end
 
-		if getState().gameData.currentScreen == "LoadingScreen" then
+		if getState().gameState.isPlaying then
 			self:play_button_pressed()
 		end
 	end

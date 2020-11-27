@@ -2,87 +2,81 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local ResultsScreenMain = Roact.Component:extend("ResultsScreenMain")
 
+local DotGraph = require(game.ReplicatedStorage.Shared.Components.Graph.Dot.DotGraph)
+local SpreadDisplay = require(script.Parent.SpreadDisplay)
+local BannerCard = require(script.Parent.BannerCard)
+local DataDisplay = require(script.Parent.DataDisplay)
+
 function ResultsScreenMain:render()
+	local stats = self.props.stats
+
     return Roact.createElement("Frame", {
-		AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundColor3 = Color3.fromRGB(35, 35, 35),
-		BorderSizePixel = 0,
-		Position = UDim2.new(0.5, 0, 0.5, 0),
-		Size = UDim2.new(1, 0, 1, 0),
+		BorderSizePixel = 0;
+		Size = UDim2.new(1, 0, 1, 0);
 	}, {
-		Roact.createElement("Frame", {
-			Name = "SectionContainer",
-			AnchorPoint = Vector2.new(0.5, 1),
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
+		HitGraph = Roact.createElement(DotGraph, {
+			AnchorPoint = Vector2.new(1, 1),
+			BackgroundColor3 = Color3.fromRGB(25, 25, 25),
 			BorderSizePixel = 0,
-			Position = UDim2.new(0.5, 0, 0.99000001, 0),
-			Size = UDim2.new(0.985000014, 0, 0.915000021, 0),
-		}, {
-			HitContainer = Roact.createElement("Frame", {
-				AnchorPoint = Vector2.new(1, 0),
-				BackgroundColor3 = Color3.fromRGB(25, 25, 25),
-				Position = UDim2.new(1, 0, 0.429999948, 0),
-				Size = UDim2.new(0.497000009, 0, 0.563807964, 0),
-			}, {
-				Corner = Roact.createElement("UICorner", {
-					CornerRadius = UDim.new(0, 6),
-				}),
-				Hits = Roact.createElement("Frame", {
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-					BackgroundTransparency = 0.89999997615814,
-					ClipsDescendants = true,
-					Position = UDim2.new(0.00798931159, 0, 0.0132246064, 0),
-					Size = UDim2.new(0.983741581, 0, 0.9718135, 0),
-				}, {
-					Roact.createElement("UICorner", {
-						CornerRadius = UDim.new(0, 6),
-					})
-				})
-			}),
+			Position = UDim2.new(0.99, 0, 0.98, 0),
+			Size = UDim2.new(0.485, 0, 0.5, 0),
+			bounds = {
+				min = {
+					y = -350;
+				};
+				max = {
+					y = 350;
+				}
+			};
+			interval = {
+				y = 50;
+			}
 		}),
-		Roact.createElement("Frame", {
-			Name = "TabContainer",
-			AnchorPoint = Vector2.new(0.5, 0),
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Position = UDim2.new(0.5, 0, 0.00999999978, 0),
-			Size = UDim2.new(0.985000014, 0, 0.0549999997, 0),
-		}, {
-			Roact.createElement("TextButton", {
-				Name = "BackButton",
-				BackgroundColor3 = Color3.fromRGB(20, 20, 20),
-				Size = UDim2.new(0.19065246, 0, 1, 0),
-				Font = Enum.Font.SourceSansBold,
-				Text = "",
-				TextColor3 = Color3.fromRGB(0, 0, 0),
-				TextSize = 22,
-				TextWrapped = true,
-			}, {
-				Roact.createElement("TextLabel", {
-					Name = "Label",
-					AnchorPoint = Vector2.new(0.5, 0.5),
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1,
-					Position = UDim2.new(0.5, 0, 0.5, 0),
-					Size = UDim2.new(0.75, 0, 0.5, 0),
-					Font = Enum.Font.GothamSemibold,
-					Text = "Back",
-					TextColor3 = Color3.fromRGB(255, 255, 255),
-					TextScaled = true,
-					TextSize = 14,
-					TextWrapped = true,
-				}),
-				Roact.createElement("UICorner", {
-					CornerRadius = UDim.new(0, 4),
-				})
-			}),
-			Roact.createElement("UIGridLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder,
-				CellPadding = UDim2.new(0.00999999978, 0, 0.100000001, 0),
-				CellSize = UDim2.new(0.189999998, 0, 1, 0),
-			})
+		SpreadDisplay = Roact.createElement(SpreadDisplay, {
+			AnchorPoint = Vector2.new(0,1),
+			Position = UDim2.new(0.01,0,0.98,0),
+			Size = UDim2.new(0.485,0,0.5,0),
+			marvelouses = stats.marvelouses,
+			perfects = stats.perfects,
+			greats = stats.greats,
+			goods = stats.goods,
+			bads = stats.bads,
+			misses = stats.misses
+		}),
+		BannerCard = Roact.createElement(BannerCard, {
+			AnchorPoint = Vector2.new(0.5,0);
+			song_key = 1;
+			playername = "kisperal";
+			Position = UDim2.new(0.5,0,0.01,0);
+			Size = UDim2.new(0.98,0,0.3,0);
+		});
+		DataDisplay = Roact.createElement(DataDisplay, {
+			data = {
+				{
+					Name = "Score";
+					Value = stats.score;
+				};
+				{
+					Name = "Accuracy";
+					Value = string.format("%0.2f%%", stats.accuracy);
+				};
+				{
+					Name = "Play Rating";
+					Value = string.format("%0.2f", 85.555888888);
+				};
+				{
+					Name = "Max Combo";
+					Value = stats.maxcombo
+				};
+				{
+					Name = "Mean";
+					Value = string.format("%0d ms", 0);
+				};
+			};
+			Position = UDim2.new(0.5,0,0.32,0);
+			Size = UDim2.new(0.98,0,0.15,0);
+			AnchorPoint = Vector2.new(0.5,0);
 		})
 	})
 end

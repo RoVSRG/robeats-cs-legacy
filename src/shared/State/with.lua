@@ -1,19 +1,22 @@
-local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
-local State = require(script.Parent)
+local function noop() return {} end
 
-return function(component)
+return function(getExtraProps, getExtraDispatches)
+    getExtraProps = getExtraProps or noop
+    getExtraDispatches = getExtraDispatches or noop
+
     return RoactRodux.connect(function(state, props)
-        return {
-            currentScreen = state.gameData.currentScreen;
+        local extraProps = getExtraProps(state, props)
+        local baseProps = {
+            selectedSongKey = state.gameData.selectedSongKey;
             songRate = state.gameData.songRate
         }
+        return Llama.Dictionary.join(baseProps, extraProps)
     end, function(dispatch)
-        return {
-            changeScreen = function(screen)
-                dispatch({type = "changeScreen", screen = screen})
-            end
-        }
-    end)(component)
+        local extraDispatches = getExtraDispatches(dispatch)
+        local baseDispacthes = {}
+        return Llama.Dictionary.join(baseDispacthes, extraDispatches)
+    end)
 end

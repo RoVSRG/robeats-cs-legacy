@@ -6,13 +6,15 @@ local BannerCard = Roact.Component:extend("BannerCard")
 
 function BannerCard:render()
     return Roact.createElement("ImageLabel", {
-        BackgroundColor3 = Color3.fromRGB(15, 15, 15),
-        BorderSizePixel = 0,
+        Position = self.props.Position;
+        BackgroundColor3 = Color3.fromRGB(15, 15, 15);
+        BorderSizePixel = 0;
         Size = self.props.Size or UDim2.new(1,0,1,0);
-        ScaleType = Enum.ScaleType.Crop,
-        SliceCenter = Rect.new(-11, 0.5, 50, 0.5),
-        SliceScale = 0.5,
-        Image = SongDatabase:get_image_for_key(self.props.song_key)
+        ScaleType = Enum.ScaleType.Crop;
+        SliceCenter = Rect.new(-11, 0.5, 50, 0.5);
+        SliceScale = 0.5;
+        AnchorPoint = self.props.AnchorPoint;
+        Image = SongDatabase:get_image_for_key(self.props.song_key);
     }, {
         Corner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),

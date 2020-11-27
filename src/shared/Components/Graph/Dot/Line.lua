@@ -21,11 +21,11 @@ function Line:render()
             TextScaled = true;
             Text = self.props.value;
             Font = Enum.Font.GothamSemibold;
-            TextColor3 = Color3.fromRGB(25, 25, 25);
+            TextColor3 = Color3.fromRGB(35, 35, 35);
         }, {
             TextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
                 MaxTextSize = 14;
-                MinTextSize = 4;
+                MinTextSize = 3;
             })
         })
     })

@@ -17,14 +17,14 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 
 	local self = MenuBase:new()
 
-	local _force_quit = false
+	-- local _force_quit = false
 
-	local is_first_frame = true
+	-- local is_first_frame = true
 
-	local _player_slot_proto
+	-- local _player_slot_proto
 
-	local _multi_send_retrieve_data = FlashEvery:new(2)
-	local _multiplayer_protos = SPDict:new()
+	-- local _multi_send_retrieve_data = FlashEvery:new(2)
+	-- local _multiplayer_protos = SPDict:new()
 	
 	function self:cons()
 		_local_services._state:dispatch("setForceQuit", {
@@ -127,8 +127,8 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 		end)
 		]]
 
-		_local_services._state:dispatch("changeScreen", {
-			screen = "Results"
+		_local_services._state:dispatch("setIsPlaying", {
+			value = false
 		})
 
 		_game:teardown()

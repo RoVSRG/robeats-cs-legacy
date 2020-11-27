@@ -1,16 +1,9 @@
-local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
+local with = require(game.ReplicatedStorage.Shared.State.with)
 
-local LoadingScreen = require(script.LoadingScreen)
+local ResultsScreenMain = require(script.ResultsScreenMain)
 
-return RoactRodux.connect(function(state, props)
+return with(function(state)
     return {
-        selectedSongKey = state.gameData.selectedSongKey;
-        stats = state.gameData.stats
+        stats = state.gameData.stats;
     }
-end,
-function(dispatch)
-    return {
-        
-    }
-end)(LoadingScreen)
+end)(ResultsScreenMain)

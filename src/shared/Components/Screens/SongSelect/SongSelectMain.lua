@@ -1,4 +1,6 @@
 local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local RoactRouter = require(game.ReplicatedStorage.Libraries.RoactRouter)
+
 local SongSelectUI: RoactComponent = Roact.PureComponent:extend("SongSelectUI")
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
@@ -26,6 +28,11 @@ function SongSelectUI:init()
     self:setState({
         current_tab = "SongButtonLayout"
     })
+
+    self.on_play_button_pressed = SPUtil:input_callback(function()
+        self.props.startGame()
+        self.props.history:push("/loading")
+    end)
 end
 
 function SongSelectUI:didUpdate(prevProps, prevState)
@@ -37,43 +44,39 @@ function SongSelectUI:didUpdate(prevProps, prevState)
 end
 
 function SongSelectUI:render()
-	return Roact.createElement("Frame", {
-		Name = "SongSelectUI",
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		BackgroundColor3 = Color3.fromRGB(35, 35, 35),
-		BorderSizePixel = 0,
-		Position = UDim2.new(0.5, 0, 0.5, 0),
+    return Roact.createElement("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+        BorderSizePixel = 0,
+        Position = UDim2.new(0.5, 0, 0.5, 0),
         Size = UDim2.new(1, 0, 1, 0),
-        Visible = self.props.currentScreen == nil and true or (self.props.currentScreen == "SongSelect" and true or false)
-	}, {
-		SectionContainer = Roact.createElement("Frame", {
-			AnchorPoint = Vector2.new(0.5, 1),
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Position = UDim2.new(0.5, 0, 0.99, 0),
-			Size = UDim2.new(0.985, 0, 0.915, 0),
-		}, {
+    }, {
+        SectionContainer = Roact.createElement("Frame", {
+            AnchorPoint = Vector2.new(0.5, 1),
+            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            Position = UDim2.new(0.5, 0, 0.99, 0),
+            Size = UDim2.new(0.985, 0, 0.915, 0),
+        }, {
             SongInfoDisplay = Roact.createElement(SongInfoDisplay, {
                 Position = UDim2.new(1, 0, 0, 0),
                 Size = UDim2.new(0.35, 0, 0.89, 0),
                 song_key = self.props.selectedSongKey,
                 rate = self.props.songRate
             }),
-			PlayButton = Roact.createElement("TextButton", {
-				AnchorPoint = Vector2.new(0, 1),
-				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-				Position = UDim2.new(0.65, 0, 1, 0),
-				Size = UDim2.new(0.35, 0, 0.1, 0),
-				AutoButtonColor = false,
-				Font = Enum.Font.Gotham,
-				Text = "Play!",
-				TextColor3 = Color3.fromRGB(0, 0, 0),
+            PlayButton = Roact.createElement("TextButton", {
+                AnchorPoint = Vector2.new(0, 1),
+                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                Position = UDim2.new(0.65, 0, 1, 0),
+                Size = UDim2.new(0.35, 0, 0.1, 0),
+                AutoButtonColor = false,
+                Font = Enum.Font.Gotham,
+                Text = "Play!",
+                TextColor3 = Color3.fromRGB(0, 0, 0),
                 TextScaled = true,
-                [Roact.Event.InputBegan] = SPUtil:input_callback(function()
-                    self.props.changeScreen("LoadingScreen")
-                end)
-			}, {
+                [Roact.Event.InputBegan] = self.on_play_button_pressed
+            }, {
                 UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
                     MinTextSize = 16;
                     MaxTextSize = 26;
@@ -82,8 +85,8 @@ function SongSelectUI:render()
                     CornerRadius = UDim.new(0, 4)
                 })
             }),
-			SectionTabs = Roact.createElement(TabLayout, {
-				BackgroundColor3 = Color3.fromRGB(53, 53, 53),
+            SectionTabs = Roact.createElement(TabLayout, {
+                BackgroundColor3 = Color3.fromRGB(53, 53, 53),
                 Size = UDim2.new(0.645, 0, 0.05, 0),
                 buttons = {
                     {
@@ -117,12 +120,12 @@ function SongSelectUI:render()
                 }),
             })
         }),
-		TabContainer = Roact.createElement(TabLayout, {
-			AnchorPoint = Vector2.new(0.5, 0),
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderSizePixel = 0,
-			Position = UDim2.new(0.5, 0, 0.01, 0),
+        TabContainer = Roact.createElement(TabLayout, {
+            AnchorPoint = Vector2.new(0.5, 0),
+            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            Position = UDim2.new(0.5, 0, 0.01, 0),
             Size = UDim2.new(0.985, 0, 0.055, 0),
             buttons = {
                 {
@@ -132,8 +135,8 @@ function SongSelectUI:render()
                     end
                 },
             }
-		})
-	})
+        })
+    })
 end
 
 return SongSelectUI

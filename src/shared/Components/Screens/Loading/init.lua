@@ -1,17 +1,10 @@
-local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local with = require(game.ReplicatedStorage.Shared.State.with)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
 local LoadingScreen = require(script.LoadingScreen)
 
-return RoactRodux.connect(function(state, props)
+return with(function(state)
     return {
-        selectedSongKey = state.gameData.selectedSongKey
-    }
-end,
-function(dispatch)
-    return {
-        selectSongKey = function(key)
-            dispatch({type = "changeSelectedSongKey", songKey = key})
-        end,
+        isLoaded = state.gameState.isLoading == false
     }
 end)(LoadingScreen)

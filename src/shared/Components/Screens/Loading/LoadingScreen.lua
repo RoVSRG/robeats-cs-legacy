@@ -8,27 +8,30 @@ local NpsGraph = require(game.ReplicatedStorage.Shared.Components.UI.NpsGraph)
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
 function LoadingUI:init()
+	self.startTime = tick()
 	self:setState({
 		increment = 0
 	})
-	SPUtil:spawn(function()
-		while true do
-			self:setState(function(state)
-				return Llama.Dictionary.join(state, {
-					increment = state.increment + 1
-				})
-			end)
-			wait(1)
+end
+
+function LoadingUI:didMount()
+	self.bound_to_frame = SPUtil:bind_to_frame(function()
+		self:setState(function(state)
+			return Llama.Dictionary.join(state, {
+				increment = math.floor(tick()-self.startTime)
+			})
+		end)
+
+		--Check if we need to unmount from state
+
+		if self.props.isLoaded then
+			self.props.history:push("/gameplay")
 		end
 	end)
 end
 
-function LoadingUI:didUpdate()
-	if self.props.startOver then
-		self:setState({
-			increment = 0
-		})
-	end
+function LoadingUI:willUnmount()
+	self.bound_to_frame:Disconnect()
 end
 
 function LoadingUI:render()
@@ -39,7 +42,6 @@ function LoadingUI:render()
 		BorderSizePixel = 0,
 		Position = UDim2.new(0.5, 0, 0.5, 0),
 		Size = UDim2.new(0.7, 0, 0.5, 0),
-		Visible = SPUtil:should_component_be_visible(self.props.currentScreen, "LoadingScreen")
 	}, {
 		TimeDisplay = Roact.createElement("TextLabel", {
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),

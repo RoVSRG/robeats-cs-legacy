@@ -60,6 +60,7 @@ function DataDisplay:render()
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         Position = self.props.Position or UDim2.new(0, 0, 0, 0),
         Size = self.props.Size or UDim2.new(1, 0, 1, 0),
+        AnchorPoint = self.props.AnchorPoint,
     }, {
         Corner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 6),

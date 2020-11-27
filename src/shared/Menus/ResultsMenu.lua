@@ -25,10 +25,6 @@ ResultsMenu.HitColor = {
 function ResultsMenu:new(_local_services, _score_data)
 	local self = MenuBase:new()
 	local _results_menu_ui
-	local _input = _local_services._input
-
-	local _spread_display
-	local total_judges
 
 	local _tween_number = NumberTween:new(3.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
@@ -46,7 +42,7 @@ function ResultsMenu:new(_local_services, _score_data)
 	local _accuracy_marks = {100,95,90,80,70,60,50}
 	
 	function self:cons()
-		_tween_number:start()
+		--[[_tween_number:start()
 		_results_menu_ui = EnvironmentSetup:get_menu_protos_folder().ResultsMenuUI:Clone()
 
 		local _song_length_ms = SongDatabase:get_song_length_for_key(_score_data.mapid)+2000
@@ -122,7 +118,7 @@ function ResultsMenu:new(_local_services, _score_data)
 				end
 			end
 			hit_graph:animate_tweens()
-		end)
+		end)]]
 	end
 
 	function self:get_formatted_data(data)
@@ -136,7 +132,7 @@ function ResultsMenu:new(_local_services, _score_data)
 	end
 
 	function self:render_spread()
-		_spread_display.Marvelous.Total:TweenSize(UDim2.new(_score_data.marvelouses/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
+		--[[_spread_display.Marvelous.Total:TweenSize(UDim2.new(_score_data.marvelouses/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
 		_spread_display.Marvelous.TotalNumber.Text = _score_data.marvelouses
 
 		_spread_display.Perfect.Total:TweenSize(UDim2.new(_score_data.perfects/total_judges,0,1,0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2, true)
@@ -155,7 +151,7 @@ function ResultsMenu:new(_local_services, _score_data)
 		_spread_display.Miss.TotalNumber.Text = _score_data.misses
 
 		_spread_display.Marvelous.MA.Text = string.format("RATIO: %0.1f:1", _score_data.marvelouses/_score_data.perfects)
-		_spread_display.Perfect.PA.Text = string.format("RATIO: %0.1f:1", _score_data.perfects/_score_data.greats)
+		_spread_display.Perfect.PA.Text = string.format("RATIO: %0.1f:1", _score_data.perfects/_score_data.greats)]]
 	end
 	
 	--[[Override--]] function self:should_remove()
@@ -167,13 +163,13 @@ function ResultsMenu:new(_local_services, _score_data)
 	end
 	
 	--[[Override--]] function self:set_is_top_element(val)
-		if val then
+		--[[if val then
 			EnvironmentSetup:set_mode(EnvironmentSetup.Mode.Menu)
 			_results_menu_ui.Parent = EnvironmentSetup:get_player_gui_root()
 			self:render_spread()
 		else
 			_results_menu_ui.Parent = nil
-		end
+		end]]
 	end
 	
 	self:cons()
