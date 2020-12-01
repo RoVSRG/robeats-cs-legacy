@@ -54,10 +54,6 @@ function InGameMenu:new(_local_services, _game, _song_key, _multiplayer_client)
 		-- _stat_display_ui.GradeDisplay.Text = string.format("%.2f",_game._score_manager:get_accuracy()) .. "%"
 		-- _stat_display_ui.ScoreDisplay.Text = math.floor(_game._score_manager:get_score() + 0.5)
 
-		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = _game._score_manager:get_end_records()
-		local combo = _game._score_manager:get_chain()
-		local accuracy = _game._score_manager:get_accuracy()
-
 		--if total_count == 0 and not is_first_frame then return end
 
 		local song_length = _game._audio_manager:get_song_length_ms()

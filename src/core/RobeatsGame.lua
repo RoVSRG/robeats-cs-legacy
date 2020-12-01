@@ -12,6 +12,7 @@ local GameSlot = require(game.ReplicatedStorage.RobeatsGameCore.Enums.GameSlot)
 local GameTrack = require(game.ReplicatedStorage.RobeatsGameCore.Enums.GameTrack)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
+local ObjectPool = require(game.ReplicatedStorage.RobeatsGameCore.ObjectPool)
 
 local RobeatsGame = {}
 RobeatsGame.Mode = {
@@ -20,15 +21,15 @@ RobeatsGame.Mode = {
 	GameEnded = 3;
 }
 
-function RobeatsGame:new(local_services, _game_environment_center_position)
+function RobeatsGame:new(_game_environment_center_position)
 	local self = {
 		_tracksystems = SPDict:new();
 		_audio_manager = nil;
 		_score_manager = nil;
 		_effects = EffectSystem:new();
-		_input = local_services._input;
-		_sfx_manager = local_services._sfx_manager;
-		_object_pool = local_services._object_pool;
+		_input = InputUtil:new();
+		_sfx_manager = SFXManager:new();
+		_object_pool = ObjectPool:new();
 	}
 	self._audio_manager = AudioManager:new(self)
 	self._score_manager = ScoreManager:new(self)
@@ -86,6 +87,8 @@ function RobeatsGame:new(local_services, _game_environment_center_position)
 				itr:update(dt_scale)
 			end
 			
+			self._sfx_manager:update(dt_scale)
+			self._input:post_update()
 			self._effects:update(dt_scale)
 			self._score_manager:update(dt_scale)
 		end

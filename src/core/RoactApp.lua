@@ -5,7 +5,6 @@ local RoactRouter = require(game.ReplicatedStorage.Libraries.RoactRouter)
 local Components = game.ReplicatedStorage.Shared.Components
 local Screens = Components.Screens
 local SongSelectMain = require(Screens.SongSelect)
-local TheFeesh = require(Screens.TheFeesh)
 local GameplayMain = require(Screens.Gameplay)
 local Loading = require(Screens.Loading)
 local Results = require(Screens.Results)
@@ -13,6 +12,12 @@ local State = game.ReplicatedStorage.Shared.State
 local with = require(State.with)
 
 local RoactApp = {}
+
+function RoactApp:cons()
+    Roact.setGlobalConfig({
+        elementTracing = true
+    })
+end
 
 function RoactApp:mount(_player_gui)
     local app = Roact.createElement(RoactRodux.StoreProvider, {
@@ -27,7 +32,6 @@ function RoactApp:mount(_player_gui)
                 exact = true;
                 component = SongSelectMain;
             });
-            TheFeesh = Roact.createElement(TheFeesh);
             GameplayMain = Roact.createElement(RoactRouter.Route, {
                 path = "/gameplay";
                 exact = true;
@@ -54,5 +58,7 @@ function RoactApp:mount(_player_gui)
 
 	Roact.mount(app, _player_gui)
 end
+
+RoactApp:cons()
 
 return RoactApp

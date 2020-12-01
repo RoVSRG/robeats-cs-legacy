@@ -14,7 +14,7 @@ function TimeLeft:render()
         Position = self.props.Position,
         Size = self.props.Size,
         Font = Enum.Font.GothamSemibold,
-        Text = SPUtil:format_ms_time(self.props.time_left),
+        Text = SPUtil:format_ms_time(self.props.time_left or 0),
         TextColor3 = Color3.fromRGB(255, 255, 255),
         TextScaled = true,
         TextSize = 26,

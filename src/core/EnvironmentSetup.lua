@@ -1,7 +1,4 @@
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
-local RoactApp = require(game.ReplicatedStorage.RobeatsGameCore.RoactApp)
-
-local Configuration = require(game.ReplicatedStorage.Shared.Data.Configuration)
 
 local EnvironmentSetup = {}
 EnvironmentSetup.Mode = {
@@ -15,7 +12,9 @@ local _local_elements_folder
 local _menu_protos_folder
 local _player_gui
 
-function EnvironmentSetup:initial_setup(Store)
+function EnvironmentSetup:initial_setup()
+	local RoactApp = require(game.ReplicatedStorage.RobeatsGameCore.RoactApp)
+
 	workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
 
 	_game_environment = workspace.Models.GameEnvironment
@@ -36,6 +35,7 @@ function EnvironmentSetup:initial_setup(Store)
 	--Configuration:load_from_save()
 
 	--Mount Roact tree wrapped in StoreProvider
+
 	RoactApp:mount(_player_gui)
 end
 

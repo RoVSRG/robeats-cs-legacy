@@ -32,6 +32,8 @@ function ScoreManager:new(_game)
 
 	local song_length = _game._audio_manager:get_song_length_ms()
 
+	local _didChange = Instance.new("BindableEvent")
+
 	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain, self._score end
 	function self:get_accuracy()
 		local _total_count = _marv_count + _perfect_count + _great_count + _good_count + _bad_count + _miss_count
@@ -213,11 +215,42 @@ function ScoreManager:new(_game)
 		self._score = self._score + self:result_to_point_total(note_result,totalnotes)
 		
 		_max_chain = math.max(_chain,_max_chain)
+
+		self:fire_change()
+	end
+
+	function self:get_stat_table()
+		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = self:get_end_records()
+		local combo = self:get_chain()
+		local accuracy = self:get_accuracy()
+
+		return {
+			score = score;
+			marvelouses = marv_count;
+			perfects = perf_count;
+			greats = great_count;
+			goods = good_count;
+			bads = bad_count;
+			misses = miss_count;
+			combo = combo;
+			accuracy = accuracy;
+			max_combo = max_combo;
+		}
+	end
+
+	function self:fire_change()
+		_didChange:Fire(self:get_stat_table())
+	end
+
+	function self:bind_to_change(_callback)
+		return _didChange.Event:Connect(_callback)
 	end
 
 	function self:update(dt_scale)
 		_frame_has_played_sfx = false
 	end
+
+	self:fire_change()
 
 	return self
 end

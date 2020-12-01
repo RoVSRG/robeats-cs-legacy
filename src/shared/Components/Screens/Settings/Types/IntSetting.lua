@@ -5,23 +5,17 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local IntSetting = Roact.Component:extend("IntSetting")
 
 function IntSetting:init()
-    SPUtil:initialize_settings_callbacks(self)
-end
-
-function IntSetting:didUpdate(prevProps, prevState)
-    self.onChange(self.state.value, prevState.value)
+    self.changeSetting = self.props.changeSetting
 end
 
 function IntSetting:render()
     return Roact.createElement("Frame", {
-        Name = "Notespeed",
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         Size = UDim2.new(1, 0, 1, 0),
     }, {
-        Roact.createElement("TextButton", {
-            Name = "Minus",
+        Minus = Roact.createElement("TextButton", {
             AnchorPoint = Vector2.new(0, 0.5),
             BackgroundColor3 = Color3.fromRGB(255, 58, 58),
             BorderSizePixel = 0,
@@ -32,18 +26,15 @@ function IntSetting:render()
             TextColor3 = Color3.fromRGB(0, 0, 0),
             TextSize = 14,
             [Roact.Event.InputBegan] = SPUtil:input_callback(function()
-                self:setState(function(state)
-                    return {
-                        value = state.value - self.increment
-                    }
+                self.changeSetting(self.props.name, function(o_value)
+                    return o_value - 1
                 end)
             end)
         }, {
-            Roact.createElement("UICorner", {
+            Corner = Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
             }),
-            Roact.createElement("TextLabel", {
-                Name = "Label",
+            Label = Roact.createElement("TextLabel", {
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
@@ -58,7 +49,7 @@ function IntSetting:render()
                 TextWrapped = true,
             })
         }),
-        Roact.createElement("TextButton", {
+        Plus = Roact.createElement("TextButton", {
             Name = "Plus",
             AnchorPoint = Vector2.new(0, 0.5),
             BackgroundColor3 = Color3.fromRGB(16, 212, 82),
@@ -70,10 +61,8 @@ function IntSetting:render()
             TextColor3 = Color3.fromRGB(0, 0, 0),
             TextSize = 14,
             [Roact.Event.InputBegan] = SPUtil:input_callback(function()
-                self:setState(function(state)
-                    return {
-                        value = state.value + self.increment
-                    }
+                self.changeSetting(self.props.name, function(o_value)
+                    return o_value + 1
                 end)
             end)
         }, {
@@ -123,7 +112,7 @@ function IntSetting:render()
                 Position = UDim2.new(0.5, 0, 0.5, 0),
                 Size = UDim2.new(0.5, 0, 0.5, 0),
                 Font = Enum.Font.GothamSemibold,
-                Text = self.props.getText and self.props.getText(self.state.value) or self.state.value,
+                Text = self.props.value,
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextScaled = true,
                 TextSize = 14,

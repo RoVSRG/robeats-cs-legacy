@@ -31,7 +31,7 @@ function SongSelectUI:init()
 
     self.on_play_button_pressed = SPUtil:input_callback(function()
         self.props.startGame()
-        self.props.history:push("/loading")
+        self.props.history:push("/gameplay")
     end)
 end
 
