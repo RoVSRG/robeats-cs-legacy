@@ -5,6 +5,8 @@ local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 local SettingTypeProvider  =require(script.Parent.SettingTypeProvider)
 local IntSetting = require(script.Parent.Types.IntSetting)
 
+local SettingsGrid = require(script.Parent.SettingsGrid)
+
 local GameSettingsReducer = require(game.ReplicatedStorage.Shared.State.Reducers.GameSettingsReducer)
 
 return function(target)
@@ -19,12 +21,21 @@ return function(target)
         elementTracing = true
     })
 
+    
+
     local element = Roact.createElement(SettingTypeProvider, {
         render = function(settings, changeValue)
-            return Roact.createElement(IntSetting, {
-                value = settings.NoteSpeed;
-                changeSetting = changeValue;
-                name = "NoteSpeed"
+            return Roact.createElement(SettingsGrid, nil, {
+                NoteSpeed = Roact.createElement(IntSetting, {
+                    value = settings.NoteSpeed;
+                    changeSetting = changeValue;
+                    name = "NoteSpeed"
+                });
+                FOV = Roact.createElement(IntSetting, {
+                    value = settings.FOV;
+                    changeSetting = changeValue;
+                    name = "What"
+                })
             })
         end
     })

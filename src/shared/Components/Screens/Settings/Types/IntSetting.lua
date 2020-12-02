@@ -6,6 +6,7 @@ local IntSetting = Roact.Component:extend("IntSetting")
 
 function IntSetting:init()
     self.changeSetting = self.props.changeSetting
+    self.increment = self.props.increment or 1
 end
 
 function IntSetting:render()
@@ -27,7 +28,7 @@ function IntSetting:render()
             TextSize = 14,
             [Roact.Event.InputBegan] = SPUtil:input_callback(function()
                 self.changeSetting(self.props.name, function(o_value)
-                    return o_value - 1
+                    return o_value - self.increment
                 end)
             end)
         }, {
@@ -62,7 +63,7 @@ function IntSetting:render()
             TextSize = 14,
             [Roact.Event.InputBegan] = SPUtil:input_callback(function()
                 self.changeSetting(self.props.name, function(o_value)
-                    return o_value + 1
+                    return o_value + self.increment
                 end)
             end)
         }, {
