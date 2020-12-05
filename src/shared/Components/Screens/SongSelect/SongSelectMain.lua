@@ -7,7 +7,10 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
+local TweenService = game:GetService("TweenService")
+
 local Tab = require(game.ReplicatedStorage.Shared.Components.Tab)
+local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
 
 local SongButtonLayout = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongButtonLayout)
 local TabLayout = require(game.ReplicatedStorage.Shared.Components.UI.TabLayout)
@@ -33,14 +36,37 @@ function SongSelectUI:init()
         self.props.startGame()
         self.props.history:push("/gameplay")
     end)
+
+    self._current_sfx = Instance.new("Sound")
+    self._current_sfx.Parent = workspace
+    self._current_sfx.Loaded:Connect(function()
+        self._current_sfx.TimePosition = NumberUtil.Lerp(0,self._current_sfx.TimeLength,0.35)
+        self._current_sfx.PlaybackSpeed = 1
+        self._current_sfx.Volume = 0
+        local volume_tween_info = TweenInfo.new(3)
+        local volume_tween = TweenService:Create(self._current_sfx, volume_tween_info, {
+            Volume = 0.5
+        })
+        volume_tween:Play()
+        self._current_sfx:Play()
+    end)
+    self._current_sfx.Looped = true
 end
 
-function SongSelectUI:didUpdate(prevProps, prevState)
-    if prevProps.selectedSongKey ~= self.props.selectedSongKey then
-        self:setState({
-            cur_selected = self.props.selectedSongKey
-        })
+function SongSelectUI:didUpdate()
+    self:update_preview()
+end
+
+function SongSelectUI:update_preview()
+    local _selected_songkey = self.props.selectedSongKey
+    if _selected_songkey == SongDatabase:invalid_songkey() then return end
+
+    if self._current_sfx then
+        self._current_sfx:Stop()
     end
+
+    local audio_id = SongDatabase:get_data_for_key(_selected_songkey).AudioAssetId
+    self._current_sfx.SoundId = audio_id
 end
 
 function SongSelectUI:render()
@@ -137,6 +163,11 @@ function SongSelectUI:render()
             }
         })
     })
+end
+
+function SongSelectUI:willUnmount()
+    self._current_sfx:Stop()
+    self._current_sfx:Destroy()
 end
 
 return SongSelectUI

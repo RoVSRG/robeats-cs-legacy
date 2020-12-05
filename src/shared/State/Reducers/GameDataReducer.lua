@@ -29,6 +29,13 @@ return Rodux.createReducer(GameData, {
             })
         })
     end;
+    setHitDeviance = function(state, action)
+        return Llama.Dictionary.join(state, {
+            stats = Llama.Dictionary.join(state.stats, {
+                hit_deviance = action.value;
+            })
+        })
+    end;
     updateTimeLeft = function(state, action)
         return Llama.Dictionary.join(state, {
             timeLeft = action.timeLeft;

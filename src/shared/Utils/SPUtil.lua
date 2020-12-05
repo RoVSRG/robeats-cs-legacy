@@ -157,11 +157,33 @@ function SPUtil:bind_input_fire(object_, callback_)
 end
 
 function SPUtil:input_callback(_callback)
-	return function(o, i)
+	return function(...)
+		if not _callback then return end
+		local i = select(2, ...)
 		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			_callback(o, i)
+			_callback(...)
 		end
 	end
+end
+
+function SPUtil:find_distance(x1, y1, x2, y2)
+	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
+end
+
+function SPUtil:find_angle(point, center)
+	local dx = point.X - center.X;
+
+	local dy = -(point.Y - center.Y);
+
+	local inRads = math.atan2(dy, dx);
+
+	if (inRads < 0) then
+		inRads = math.abs(inRads);
+	else
+		inRads = 2 * math.pi - inRads;
+	end
+
+	return math.deg(inRads);
 end
 
 function SPUtil:button(_instance, _expand_size, _local_services, _callback)
@@ -207,21 +229,6 @@ function SPUtil:copy_table(datatable)
 		tblRes=datatable
 	end
 	return tblRes
-end
-
-function SPUtil:initialize_settings_callbacks(component, props)
-	local self = component
-	self:setState({
-        value = self.props.initialValue or 0
-    })
-
-    self.getText = function()
-        return self.props.getText and self.props.getText(self.state.value) or self.state.value
-    end
-
-    self.increment = self.props.increment or 1
-
-    self.onChange = self.props.onChange or noop
 end
 
 function SPUtil:player_name_from_id(id)

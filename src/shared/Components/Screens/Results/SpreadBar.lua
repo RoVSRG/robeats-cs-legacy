@@ -1,6 +1,22 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
+local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
+
 local SpreadBar = Roact.Component:extend("SpreadBar")
+
+function SpreadBar:didMount()
+    self.motor:setGoal(Flipper.Spring.new(1, {
+        frequency = 4;
+        dampingRatio = 2.5;
+    }))
+end
+
+function SpreadBar:init()
+    self.motor = Flipper.SingleMotor.new(0);
+
+    self.motorBinding = RoactFlipper.getBinding(self.motor)
+end
 
 function SpreadBar:render()
     local h, s, v = self.props.color:ToHSV()
@@ -17,7 +33,9 @@ function SpreadBar:render()
         Total = Roact.createElement("Frame", {
             BackgroundColor3 = total_color,
             BorderSizePixel = 0,
-            Size = UDim2.new(self.props.count/self.props.total, 0, 1, 0),
+            Size = self.motorBinding:map(function(a)
+                return UDim2.new((self.props.count/self.props.total)*a, 0, 1, 0)
+            end)
         }, {
             Corner = Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
@@ -44,25 +62,6 @@ function SpreadBar:render()
                 MinTextSize = 9;
             })
         }),
-        -- Roact.createElement("TextLabel", {
-        --     Name = "MA",
-        --     AnchorPoint = Vector2.new(0, 0.5),
-        --     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        --     BackgroundTransparency = 1,
-        --     BorderColor3 = Color3.fromRGB(27, 42, 53),
-        --     BorderSizePixel = 0,
-        --     Position = UDim2.new(0.0382652916, 0, 0.500000179, 0),
-        --     Size = UDim2.new(0.504279733, 0, 0.400000006, 0),
-        --     ZIndex = 2,
-        --     Font = Enum.Font.GothamSemibold,
-        --     Text = "RATIO:",
-        --     TextColor3 = Color3.fromRGB(255, 255, 255),
-        --     TextScaled = true,
-        --     TextSize = 14,
-        --     TextStrokeTransparency = 0.5,
-        --     TextWrapped = true,
-        --     TextXAlignment = Enum.TextXAlignment.Left,
-        -- })
     })
 end
 

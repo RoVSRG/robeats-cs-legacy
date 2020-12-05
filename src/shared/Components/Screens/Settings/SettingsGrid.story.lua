@@ -29,13 +29,15 @@ return function(target)
                 NoteSpeed = Roact.createElement(IntSetting, {
                     value = settings.NoteSpeed;
                     changeSetting = changeValue;
-                    name = "NoteSpeed"
+                    name = "NoteSpeed";
+                    title = "Note Speed"
                 });
                 FOV = Roact.createElement(IntSetting, {
                     value = settings.FOV;
                     changeSetting = changeValue;
-                    name = "What"
-                })
+                    name = "FOV";
+                    title = "Field of View"
+                });
             })
         end
     })

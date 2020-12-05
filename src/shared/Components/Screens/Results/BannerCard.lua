@@ -1,8 +1,48 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
+local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
 local BannerCard = Roact.Component:extend("BannerCard")
+
+function BannerCard:init()
+    self.motor = Flipper.GroupMotor.new({
+        bg = 0;
+        textTitle = 0;
+        textArtist = 0;
+        grade = 0;
+        playedat = 0;
+    })
+    self.motorBinding = RoactFlipper.getBinding(self.motor)
+end
+
+function BannerCard:didMount()
+    self.motor:setGoal({
+        bg = Flipper.Spring.new(1, {
+            frequency = 1.7;
+            dampingRatio = 4.5;
+        });
+        textTitle = Flipper.Spring.new(1, {
+            frequency = 10;
+            dampingRatio = 4.5;
+        });
+        textArtist = Flipper.Spring.new(1, {
+            frequency = 7;
+            dampingRatio = 4.5;
+        });
+        grade = Flipper.Linear.new(1, {
+            velocity = 0.8;
+        });
+    })
+    delay(0.9, function()
+        self.motor:setGoal({
+            playedat = Flipper.Linear.new(1, {
+                velocity = 2;
+            })
+        })
+    end)
+end
 
 function BannerCard:render()
     return Roact.createElement("ImageLabel", {
@@ -14,6 +54,9 @@ function BannerCard:render()
         SliceCenter = Rect.new(-11, 0.5, 50, 0.5);
         SliceScale = 0.5;
         AnchorPoint = self.props.AnchorPoint;
+        ImageTransparency = self.motorBinding:map(function(a)
+            return 1-a.bg
+        end);
         Image = SongDatabase:get_image_for_key(self.props.song_key);
     }, {
         Corner = Roact.createElement("UICorner", {
@@ -24,7 +67,12 @@ function BannerCard:render()
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.01, 0, 0.95, 0),
+            Position = self.motorBinding:map(function(a)
+                return UDim2.new(0.02, 0, 0.95, 0):Lerp(UDim2.new(0.01, 0, 0.95, 0), a.playedat)
+            end);
+            TextTransparency = self.motorBinding:map(function(a)
+                return 1-a.playedat
+            end);
             Size = UDim2.new(0.6, 0, 0.085, 0),
             Font = Enum.Font.GothamSemibold,
             Text = string.format("Played by %s at %s", self.props.playername, "1PM"),
@@ -52,7 +100,9 @@ function BannerCard:render()
                 BorderSizePixel = 0,
                 Position = UDim2.new(0.5, 0, 0.5, 0),
                 Selectable = true,
-                Size = UDim2.new(0.7, 0, 0.7, 0),
+                Size = self.motorBinding:map(function(a)
+                    return UDim2.new(0.99, 0, 0.99, 0):Lerp(UDim2.new(0.7, 0, 0.7, 0), a.grade)
+                end);
                 Image = self.props.grade_image or "http://www.roblox.com/asset/?id=168702873",
             })
         }),
@@ -60,7 +110,12 @@ function BannerCard:render()
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.01, 0, 0.05, 0),
+            Position = self.motorBinding:map(function(a)
+                return UDim2.new(0.1, 0, 0.05, 0):Lerp(UDim2.new(0.01, 0, 0.05, 0), a.textTitle)
+            end);
+            TextTransparency = self.motorBinding:map(function(a)
+                return 1-a.textTitle
+            end);
             Size = UDim2.new(0.5, 0, 0.15, 0),
             Font = Enum.Font.GothamBold,
             Text = SongDatabase:get_title_for_key(self.props.song_key),
@@ -78,7 +133,12 @@ function BannerCard:render()
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.01, 0, 0.05*4, 0),
+            Position = self.motorBinding:map(function(a)
+                return UDim2.new(0.1, 0, 0.25, 0):Lerp(UDim2.new(0.01, 0, 0.25, 0), a.textArtist)
+            end);
+            TextTransparency = self.motorBinding:map(function(a)
+                return 1-a.textArtist
+            end);
             Size = UDim2.new(0.5, 0, 0.15, 0),
             Font = Enum.Font.GothamBold,
             Text = SongDatabase:get_artist_for_key(self.props.song_key),

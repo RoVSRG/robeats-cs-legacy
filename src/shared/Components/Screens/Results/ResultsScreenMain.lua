@@ -7,6 +7,17 @@ local SpreadDisplay = require(script.Parent.SpreadDisplay)
 local BannerCard = require(script.Parent.BannerCard)
 local DataDisplay = require(script.Parent.DataDisplay)
 
+function ResultsScreenMain:init()
+	self.grade_images = {
+		"http://www.roblox.com/asset/?id=5702584062",
+		"http://www.roblox.com/asset/?id=5702584273",
+		"http://www.roblox.com/asset/?id=5702584488",
+		"http://www.roblox.com/asset/?id=5702584846",
+		"http://www.roblox.com/asset/?id=5702585057",
+		"http://www.roblox.com/asset/?id=5702585272"
+	}
+end
+
 function ResultsScreenMain:render()
 	local stats = self.props.stats
 
@@ -31,7 +42,8 @@ function ResultsScreenMain:render()
 			};
 			interval = {
 				y = 50;
-			}
+			};
+			points = self.props.stats.hit_deviance;
 		}),
 		SpreadDisplay = Roact.createElement(SpreadDisplay, {
 			AnchorPoint = Vector2.new(0,1),
@@ -46,16 +58,17 @@ function ResultsScreenMain:render()
 		}),
 		BannerCard = Roact.createElement(BannerCard, {
 			AnchorPoint = Vector2.new(0.5,0);
-			song_key = 1;
+			song_key = self.props.selectedSongKey or 1;
 			playername = "kisperal";
 			Position = UDim2.new(0.5,0,0.01,0);
 			Size = UDim2.new(0.98,0,0.3,0);
+			grade_image = self.grade_images[2];
 		});
 		DataDisplay = Roact.createElement(DataDisplay, {
 			data = {
 				{
 					Name = "Score";
-					Value = stats.score;
+					Value = string.format("%d", stats.score);
 				};
 				{
 					Name = "Accuracy";
@@ -63,7 +76,7 @@ function ResultsScreenMain:render()
 				};
 				{
 					Name = "Play Rating";
-					Value = string.format("%0.2f", 85.555888888);
+					Value = string.format("%0.2f", stats.rating or 0);
 				};
 				{
 					Name = "Max Combo";

@@ -1,8 +1,11 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
 local SpreadDisplay = require(script.Parent.SpreadDisplay)
 
-return function(target)
-    local fr = Roact.createElement(SpreadDisplay, {
+local SpreadDisplayApp = Story:new()
+
+function SpreadDisplayApp:render()
+    return Roact.createElement(SpreadDisplay, {
         marvelouses = 5;
         perfects = 4;
         greats = 50;
@@ -10,10 +13,6 @@ return function(target)
         bads = 80;
         misses = 89;
     })
-
-    local fr = Roact.mount(fr, target)
-
-    return function()
-        Roact.unmount(fr)
-    end
 end
+
+return SpreadDisplayApp

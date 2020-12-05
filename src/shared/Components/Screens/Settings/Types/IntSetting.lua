@@ -127,7 +127,7 @@ function IntSetting:render()
             Position = UDim2.new(0.0149999997, 0, 0.0500000007, 0),
             Size = UDim2.new(0.25, 0, 0.150000006, 0),
             Font = Enum.Font.GothamSemibold,
-            Text = "Notespeed",
+            Text = self.props.title,
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextScaled = true,
             TextSize = 20,

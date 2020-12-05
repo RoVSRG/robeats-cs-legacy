@@ -1,8 +1,9 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
 local DataDisplay = require(script.Parent.DataDisplay)
 
-return function(target)
-    local fr = Roact.createElement(DataDisplay, {
+local DataDisplayApp = Story:new(function()
+    return Roact.createElement(DataDisplay, {
         data = {
             {
                 Name = "Accuracy";
@@ -18,10 +19,6 @@ return function(target)
             };
         }
     })
+end)
 
-    local fr = Roact.mount(fr, target)
-
-    return function()
-        Roact.unmount(fr)
-    end
-end
+return DataDisplayApp

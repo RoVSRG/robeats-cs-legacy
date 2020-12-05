@@ -13,6 +13,7 @@ return {
         misses = 0;
         combo = 0;
         score = 0;
+        hit_deviance = {};
     };
     timeLeft = 0;
     forceQuit = false;

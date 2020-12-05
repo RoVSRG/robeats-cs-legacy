@@ -1,11 +1,9 @@
-local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
-local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
 local NoteResult = require(game.ReplicatedStorage.RobeatsGameCore.Enums.NoteResult)
 local SFXManager = require(game.ReplicatedStorage.RobeatsGameCore.SFXManager)
-local InputUtil = require(game.ReplicatedStorage.Shared.Utils.InputUtil)
 local NoteResultPopupEffect = require(game.ReplicatedStorage.RobeatsGameCore.Effects.NoteResultPopupEffect)
 local HoldingNoteEffect = require(game.ReplicatedStorage.RobeatsGameCore.Effects.HoldingNoteEffect)
-local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
+
+local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
 
 local ScoreManager = {}
 
@@ -29,8 +27,15 @@ function ScoreManager:new(_game)
 	local _max_chain = 0
 	local _total_count = 0
 	local maxscore = 1000000
-
-	local song_length = _game._audio_manager:get_song_length_ms()
+	
+	local hit_color = {
+		[0] = Color3.fromRGB(255, 0, 0);
+		[1] = Color3.fromRGB(190, 10, 240);
+		[2] = Color3.fromRGB(56, 10, 240);
+		[3] = Color3.fromRGB(7, 232, 74);
+		[4] = Color3.fromRGB(252, 244, 5);
+		[5] = Color3.fromRGB(255, 255, 255);
+	}
 
 	local _didChange = Instance.new("BindableEvent")
 
@@ -64,7 +69,15 @@ function ScoreManager:new(_game)
 	end
 
 	function self:add_hit_to_deviance(hit_time_ms, time_to_end, note_result)
-		self.hit_deviance[#self.hit_deviance+1] = {x = hit_time_ms/song_length, y = time_to_end/360, result = note_result}
+		local song_length = _game._audio_manager:get_song_length_ms()
+		local to_add = {
+			x = (hit_time_ms-time_to_end)/song_length,
+			y = NumberUtil.InverseLerp(-360, 360, time_to_end),
+			result = note_result;
+			color = hit_color[note_result];
+		}
+
+		self.hit_deviance[#self.hit_deviance+1] = to_add
 	end
 
 	function self:get_hit_deviance() return self.hit_deviance end
