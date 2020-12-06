@@ -1,6 +1,6 @@
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
-local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 local Network = require(game.ReplicatedStorage.Libraries.Network)
 local Multiplayer = game.ServerScriptService.Multiplayer

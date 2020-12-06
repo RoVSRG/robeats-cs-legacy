@@ -8,7 +8,7 @@ local NoteDevianceDatabase = DataStoreService:GetDataStore("NoteDevianceDatabase
 local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
 local Network = require(game.ReplicatedStorage.Libraries.Network)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
-local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 local function getLeaderboardKey(mapid)
 	return string.format("leaderboard_songkey(%s)", tostring(mapid))

@@ -2,7 +2,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local SPVector = require(game.ReplicatedStorage.Shared.Utils.SPVector)
-local Configuration = require(game.ReplicatedStorage.Shared.Data.Configuration)
+local Configuration = require(game.ReplicatedStorage.Shared.Core.Data.Configuration)
 
 local InputUtil = {}
 

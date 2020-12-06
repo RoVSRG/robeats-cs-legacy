@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TestEZ = require(ReplicatedStorage.Libraries.TestEZ)
 
 local results = TestEZ.TestBootstrap:run({
-    game.ReplicatedStorage.Shared.Components
+    game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase
 }, TestEZ.Reporters.TextReporter)
 
 if #results.errors > 0 or results.failureCount > 0 then

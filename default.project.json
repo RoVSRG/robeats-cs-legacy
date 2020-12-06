@@ -6,14 +6,14 @@
 	  "ReplicatedStorage": {
 		"$className": "ReplicatedStorage",
   
-		"Shared": {
-			"$path": "src/shared"
+		"Client": {
+			"$path": "src/client"
 		},
 		"Libraries": {
 			"$path": "libraries"
 		},
-		"RobeatsGameCore": {
-			"$path": "src/core"
+		"Shared": {
+			"$path": "src/shared"
 		}
 	  },
   
@@ -32,7 +32,7 @@
 		  "$className": "StarterPlayerScripts",
   
 		  "Client": {
-			"$path": "src/client"
+			"$path": "src/clientplayer"
 		  }
 		}
 	  },
