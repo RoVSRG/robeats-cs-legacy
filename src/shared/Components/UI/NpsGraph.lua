@@ -1,29 +1,35 @@
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local RoactAnimate = require(game.ReplicatedStorage.Libraries.RoactAnimate)
+
+local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+
+local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
+local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local NpsGraph = Roact.Component:extend("NpsGraph")
 
-function NpsGraph:didUpdate()
-    self:doAnimate()
+function NpsGraph:init()
+    self.motor = Flipper.SingleMotor.new(0);
+    self.motorBinding = RoactFlipper.getBinding(self.motor)
 end
 
 function NpsGraph:didMount()
-    self:doAnimate()    
+    self.motor:setGoal(Flipper.Spring.new(1, {
+        frequency = 2;
+        dampingRatio = 1;
+    }))
 end
 
-function NpsGraph:getNpsGraph()
-    return SongDatabase:get_nps_graph_for_key(self.props.song_key)
-end
-
-function NpsGraph:doAnimate()
-    if self.props.doNotAnimate then return end
-    local seq = {}
-    for i, animation in pairs(self._animations) do
-        seq[i] = RoactAnimate(animation.Animation, TweenInfo.new(animation.Time, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), animation.Size)
-    end
-    RoactAnimate.Parallel(seq):Start()
+function NpsGraph:didUpdate()
+    SPUtil:spawn(function()
+        self.motor:setGoal(Flipper.Instant.new(0))
+        wait()
+        self.motor:setGoal(Flipper.Spring.new(1, {
+            frequency = 3.5;
+            dampingRatio = 1.8;
+        }))
+    end)
 end
 
 function NpsGraph:shouldUpdate(nextProps, nextState)
@@ -42,27 +48,17 @@ function NpsGraph:render()
 
     for i, nps in pairs(nps_graph) do
         local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
-        if self.props.doNotAnimate then
-            elements[game:GetService("HttpService"):GenerateGUID()] = Roact.createElement("Frame", {
-                Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0); --nps/(max_nps+5)UDim2.new(1/#nps_graph, 0, 0, 0);--
-                BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100);
-                BorderSizePixel = 0;
-                ZIndex = 1;
-            })
-        else
-            self._animations[i] = {
-                Animation = RoactAnimate.Value.new(UDim2.new(1/#nps_graph, 0, 0, 0));
-                Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5), 0);
-                Time = (i/#nps_graph)*1.7;
-            }
-            elements[game:GetService("HttpService"):GenerateGUID()] = Roact.createElement(RoactAnimate.Frame, {
-                Size = self._animations[i].Animation; --nps/(max_nps+5)UDim2.new(1/#nps_graph, 0, 0, 0);--
-                BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100);
-                BorderSizePixel = 0;
-                ZIndex = 1;
-            })
-        end
-        
+        elements[i] = Roact.createElement("Frame", {
+            Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5));
+            BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100);
+            BorderSizePixel = 0;
+            ZIndex = 1;
+            Position = self.motorBinding:map(function(a)
+                local y = NumberUtil.Lerp(1-(i/#nps_graph), 1, 1-(a-1))
+                return UDim2.new(i/#nps_graph, 0, y, 0);
+            end);
+            AnchorPoint = Vector2.new(0,  1)
+        })
     end
 
     return Roact.createElement("Frame", {
@@ -93,11 +89,6 @@ function NpsGraph:render()
                 BackgroundTransparency = 1;
             }, {
                 Elements = Roact.createFragment(elements or {});
-                ListLayout = Roact.createElement("UIListLayout", {
-                    FillDirection = Enum.FillDirection.Horizontal,
-                    SortOrder = Enum.SortOrder.LayoutOrder,
-                    VerticalAlignment = Enum.VerticalAlignment.Bottom,
-                }),
             }),
             MaxNpsReadout = Roact.createElement("TextLabel", {
                 Text = string.format("MAX NPS: %d", max_nps);
@@ -106,7 +97,12 @@ function NpsGraph:render()
                 Font = Enum.Font.GothamBold;
                 TextSize = 18;
                 TextScaled = true;
-                Position = UDim2.new(0.01,0,0.05,0);
+                TextTransparency = self.motorBinding:map(function(a)
+                    return 1-a
+                end);
+                Position = self.motorBinding:map(function(a)
+                    return UDim2.new(0.01*a,0,0.05,0)
+                end);
                 Size = UDim2.new(0.3,0,0.2,0);
                 AnchorPoint = Vector2.new(0, 0);
                 ZIndex = 3;

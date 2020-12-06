@@ -28,6 +28,7 @@ function ColorWheel(props)
                 Size = UDim2.new(0,10,0,10);
                 Position = props.pointerPosition;
                 BorderSizePixel = 0;
+                AnchorPoint = Vector2.new(0.5, 0.5);
                 BackgroundColor3 = Color3.fromRGB(15, 15, 15);
                 ZIndex = 3;
             });

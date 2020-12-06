@@ -57,27 +57,16 @@ function ColorWheel:init()
             currentColor = cur_color;
         })
 
-        -- print({
-        --     x = x;
-        --     y = y;
-        --     wheelPos = wheelPos;
-        --     wheelSize = wheelSize;
-        --     centerPoint = centerPoint;
-        --     distanceFromCenter = distanceFromCenter;
-        --     angle = angle;
-        --     color = cur_color;
-        -- })
-
-        self.calculatePosition(x, y)
+        self.calculatePosition(cur_color)
     end
 
-    self.calculatePosition = function(x, y)
-        local wheel = self.wheelRef:getValue()
-        local wheelPos = wheel.AbsolutePosition
-        local wheelSize = wheel.AbsoluteSize
-        
-        local xs = NumberUtil.InverseLerp(wheelPos.X, wheelPos.X+wheelSize.X, x)
-        local ys = NumberUtil.InverseLerp(wheelPos.Y, wheelPos.Y+wheelSize.Y, y)
+    self.calculatePosition = function(cur_color)
+        local h, s, v = cur_color:ToHSV()
+        local xs = math.cos(math.rad(h*360))*s
+        local ys = math.sin(math.rad(h*360))*s
+
+        xs = NumberUtil.InverseLerp(1, -1, xs)
+        ys = NumberUtil.InverseLerp(-1, 1, ys)
 
         self.position = UDim2.new(xs, 0, ys, 0)
     end

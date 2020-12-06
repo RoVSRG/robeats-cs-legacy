@@ -14,8 +14,8 @@ function SettingsGrid(props)
     }, {
         grid = Roact.createElement("UIGridLayout", {
             SortOrder = Enum.SortOrder.LayoutOrder;
-            CellPadding = UDim2.new(0.00999999978, 0, 0.00999999978, 0);
-            CellSize = UDim2.new(0.49000001, 0, 0.200000003, 0);
+            CellPadding = UDim2.new(0.01, 0, 0.01, 0);
+            CellSize = UDim2.new(0.49, 0, 0.2, 0);
         });
         children = Roact.createFragment(props[Roact.Children]);
     })
