@@ -17,7 +17,7 @@ local Configuration	= require(game.ReplicatedStorage.Shared.Data.Configuration)
 
 local Tabs = require(game.ReplicatedStorage.Shared.Menus.Utils.Tabs)
 
-local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local SongSelectMenu = {}
 

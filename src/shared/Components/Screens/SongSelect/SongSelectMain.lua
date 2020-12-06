@@ -10,7 +10,7 @@ local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase
 local TweenService = game:GetService("TweenService")
 
 local Tab = require(game.ReplicatedStorage.Shared.Components.Tab)
-local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local SongButtonLayout = require(game.ReplicatedStorage.Shared.Components.Screens.SongSelect.SongButtonLayout)
 local TabLayout = require(game.ReplicatedStorage.Shared.Components.UI.TabLayout)

@@ -2,7 +2,7 @@ local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)

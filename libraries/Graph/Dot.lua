@@ -1,5 +1,5 @@
 local GraphBase = require(script.Parent.GraphBase)
-local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)

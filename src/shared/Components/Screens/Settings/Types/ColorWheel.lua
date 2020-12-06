@@ -7,7 +7,7 @@ local UserInputService = game:GetService("UserInputService")
 local ColorWheel = Roact.Component:extend("ColorWheel")
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
-local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 function ColorWheel:init()
     self:setState({

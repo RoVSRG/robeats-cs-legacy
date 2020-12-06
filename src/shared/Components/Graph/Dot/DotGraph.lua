@@ -1,7 +1,7 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 
-local NumberUtil = require(game.ReplicatedStorage.Libraries.NumberUtil)
+local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local Line = require(script.Parent.Line)
 
