@@ -44,7 +44,6 @@ function AudioManager:new(_game)
 	function self:get_song_key() return _song_key end
 	
 	function self:get_note_prebuffer_time_ms() 
-		print(_note_prebuffer_time)
 		_current_audio_data = SongDatabase:get_data_for_key(_song_key)
 		_note_prebuffer_time = (1-(settings.gameSettings.NoteSpeed/30))*2000
 		return _note_prebuffer_time

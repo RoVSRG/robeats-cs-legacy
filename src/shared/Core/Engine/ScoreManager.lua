@@ -189,8 +189,6 @@ function ScoreManager:new(_game)
 				end
 			end
 		end
-		
-		local totalnotes =_game._audio_manager:get_note_count()
 
 		local _add_to_devaince = true
 		
