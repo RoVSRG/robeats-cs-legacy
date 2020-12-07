@@ -11,9 +11,6 @@ local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
 local SettingsApp = Story:new()
 
 function SettingsApp:render()
-    Roact.setGlobalConfig({
-        elementTracing = false;
-    })
     return Roact.createElement(RoactRodux.StoreProvider, {
         store = self.store
     }, {

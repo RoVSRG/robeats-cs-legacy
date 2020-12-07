@@ -62,7 +62,7 @@ function IntSetting:render()
             TextColor3 = Color3.fromRGB(0, 0, 0),
             TextSize = 14,
             [Roact.Event.InputBegan] = SPUtil:input_callback(function()
-                self.changeSetting("NoteSpeed", function(o_value)
+                self.changeSetting(self.props.name, function(o_value)
                     return o_value + self.increment
                 end)
             end)

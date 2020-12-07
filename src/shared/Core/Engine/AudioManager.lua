@@ -15,6 +15,8 @@ local Configuration = require(game.ReplicatedStorage.Shared.Core.Data.Configurat
 local SingleNote = require(game.ReplicatedStorage.Shared.Core.Engine.NoteTypes.SingleNote)
 local HeldNote = require(game.ReplicatedStorage.Shared.Core.Engine.NoteTypes.HeldNote)
 
+local State = require(game.ReplicatedStorage.Client.State)
+
 local AudioManager = {}
 AudioManager.Mode = {
 	NotLoaded = 0; --No audio is loaded (call AudioManager:load_song)
@@ -31,7 +33,8 @@ function AudioManager:new(_game)
 	local _rate = Configuration.SessionSettings.Rate / 100 --Rate multiplier, you may implement some sort of way to modify the rate at runtime.
 	
 	--Note speed in milliseconds, from time it takes to spawn the note to time the note is hit. Default value is 2000, or 2 seconds.
-	--To change this, set Configuration.Preferences.NoteSpeed
+
+	local settings = State:getState()
 	
 	local _current_audio_data
 	
@@ -41,9 +44,10 @@ function AudioManager:new(_game)
 	function self:get_song_key() return _song_key end
 	
 	function self:get_note_prebuffer_time_ms() 
+		print(_note_prebuffer_time)
 		_current_audio_data = SongDatabase:get_data_for_key(_song_key)
-		_note_prebuffer_time = Configuration.Preferences.NoteSpeed*_rate
-		return _note_prebuffer_time 
+		_note_prebuffer_time = (1-(settings.gameSettings.NoteSpeed/30))*2000
+		return _note_prebuffer_time
 	end
 	
 	--Note timings: millisecond offset (positive is early, negative is late) mapping to what the note result is

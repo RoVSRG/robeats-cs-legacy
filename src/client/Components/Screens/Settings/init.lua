@@ -1,5 +1,4 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
 local SettingsMainHOC = Roact.Component:extend("SettingsMainHOC")
