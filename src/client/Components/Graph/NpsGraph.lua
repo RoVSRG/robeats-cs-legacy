@@ -100,6 +100,9 @@ function NpsGraph:render()
                 TextTransparency = self.motorBinding:map(function(a)
                     return 1-a
                 end);
+                BackgroundTransparency = self.motorBinding:map(function(a)
+                    return 1-a
+                end);
                 Position = self.motorBinding:map(function(a)
                     return UDim2.new(0.01*a,0,0.05,0)
                 end);

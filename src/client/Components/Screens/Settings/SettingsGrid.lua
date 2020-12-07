@@ -11,6 +11,7 @@ function SettingsGrid(props)
         Size = props.Size or UDim2.new(1,0,1,0);
         Position = props.Position;
         BackgroundTransparency = 1;
+        AnchorPoint = props.AnchorPoint;
     }, {
         grid = Roact.createElement("UIGridLayout", {
             SortOrder = Enum.SortOrder.LayoutOrder;

@@ -8,6 +8,8 @@ local SongSelectMain = require(Screens.SongSelect)
 local GameplayMain = require(Screens.Gameplay)
 local Loading = require(Screens.Loading)
 local Results = require(Screens.Results)
+local Settings = require(Screens.Settings)
+
 local State = game.ReplicatedStorage.Client.State
 local with = require(State.with)
 
@@ -47,7 +49,11 @@ function RoactApp:mount(_player_gui)
                 exact = true;
                 component = Results;
             });
-            -- Loading = Roact.createElement(Loading);
+            Settings = Roact.createElement(RoactRouter.Route, {
+                path = "/settings";
+                exact = true;
+                component = Settings;
+            });
             Topbar = Roact.createElement("Frame", {
                 Size = UDim2.new(1,0,36,0);
                 BackgroundColor3 = Color3.fromRGB(35, 35, 35);

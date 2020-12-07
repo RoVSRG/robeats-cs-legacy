@@ -12,7 +12,7 @@ local Tab = require(game.ReplicatedStorage.Client.Components.Tab)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local SongButtonLayout = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButtonLayout)
-local TabLayout = require(game.ReplicatedStorage.Client.Components.UI.TabLayout)
+local TabLayout = require(game.ReplicatedStorage.Client.Components.Layout.TabLayout)
 local SongInfoDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongInfoDisplay)
 
 function SongSelectUI:init()
@@ -156,7 +156,7 @@ function SongSelectUI:render()
                 {
                     Text = "⚙ Settings",
                     OnActivated = function()
-
+                        self.props.history:push("/settings")
                     end
                 },
             }

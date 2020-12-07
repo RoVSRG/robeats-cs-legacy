@@ -1,7 +1,7 @@
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local NpsGraph = require(game.ReplicatedStorage.Client.Components.UI.NpsGraph)
+local NpsGraph = require(game.ReplicatedStorage.Client.Components.Graph.NpsGraph)
 
 local SongButton = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButton)
 

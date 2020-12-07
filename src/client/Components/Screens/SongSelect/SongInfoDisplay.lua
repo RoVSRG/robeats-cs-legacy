@@ -3,7 +3,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local RoactAnimate = require(game.ReplicatedStorage.Libraries.RoactAnimate)
 
-local NpsGraph = require(game.ReplicatedStorage.Client.Components.UI.NpsGraph)
+local NpsGraph = require(game.ReplicatedStorage.Client.Components.Graph.NpsGraph)
 
 local SongInfoDisplay = Roact.Component:extend("SongInfoDisplay")
 
@@ -54,50 +54,14 @@ function SongInfoDisplay:render()
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
             }),
-            --[[Roact.createElement("TextLabel", {
-                Name = "DescriptionDisplay",
+            Roact.createElement(NpsGraph, {
+                Name = "Items",
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
-                BorderSizePixel = 0,
-                Position = UDim2.new(0.05, 0, 0.68, 0),
-                Size = UDim2.new(0.9, 0, 0.13, 0),
-                Font = Enum.Font.Gotham,
-                Text = "<placeholder>",
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                TextScaled = true,
-                TextSize = 26,
-                TextWrapped = true,
-                TextXAlignment = Enum.TextXAlignment.Left,
-                TextYAlignment = Enum.TextYAlignment.Top,
-            }, {
-                Roact.createElement("UITextSizeConstraint", {
-                    MaxTextSize = 22,
-                })
-            }),]]
-            Roact.createElement("Frame", {
-                Name = "NpsGraph",
-                BackgroundColor3 = Color3.fromRGB(16, 16, 16),
-                BorderSizePixel = 0,
+                ClipsDescendants = true,
                 Position = UDim2.new(0.0134330085, 0, 0.796225548, 0),
                 Size = UDim2.new(0.971014559, 0, 0.185931787, 0),
-            }, {
-                Roact.createElement("UICorner", {
-                    CornerRadius = UDim.new(0, 4),
-                }),
-                Roact.createElement(NpsGraph, {
-                    Name = "Items",
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                    BackgroundTransparency = 1,
-                    ClipsDescendants = true,
-                    Size = UDim2.new(1, 0, 1, 0),
-                    song_key = _songkey,
-                }),
-                Roact.createElement("Frame", {
-                    Name = "SongPosition",
-                    BackgroundColor3 = Color3.fromRGB(93, 93, 93),
-                    BorderSizePixel = 0,
-                    Size = UDim2.new(0.00499999989, 0, 1, 0),
-                })
+                song_key = _songkey,
             }),
             Roact.createElement("Frame", {
                 Name = "Metadata",

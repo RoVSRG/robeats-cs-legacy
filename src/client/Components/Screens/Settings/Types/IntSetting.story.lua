@@ -2,8 +2,8 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
-local SettingTypeProvider  =require(script.Parent.SettingTypeProvider)
-local IntSetting = require(script.Parent.Types.IntSetting)
+local SettingTypeProvider  =require(script.Parent.Parent.SettingTypeProvider)
+local IntSetting = require(script.Parent.IntSetting)
 
 local GameSettingsReducer = require(game.ReplicatedStorage.Client.State.Reducers.GameSettingsReducer)
 
@@ -28,7 +28,8 @@ function IntSettingApp:render()
                 return Roact.createElement(IntSetting, {
                     value = settings.NoteSpeed;
                     changeSetting = changeValue;
-                    name = "NoteSpeed"
+                    name = "NoteSpeed";
+                    title = "Notespeed"
                 })
             end
         });

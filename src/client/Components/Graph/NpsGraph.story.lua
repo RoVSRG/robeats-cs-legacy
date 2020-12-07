@@ -4,7 +4,7 @@ local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
 
 local NpsGraphApp = Story:new()
 
-local NpsGraph = require(game.ReplicatedStorage.Client.Components.UI.NpsGraph)
+local NpsGraph = require(game.ReplicatedStorage.Client.Components.Graph.NpsGraph)
 
 function NpsGraphApp:render()
     return Roact.createElement(NpsGraph, {

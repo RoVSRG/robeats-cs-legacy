@@ -1,9 +1,12 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 
-local SettingTypeProvider = Roact.Component:extend("SettingTypeProvider")
+local SettingsMainHOC = Roact.Component:extend("SettingsMainHOC")
 
-function SettingTypeProvider:init()
+local SettingsMain = require(script.SettingsMain)
+
+function SettingsMainHOC:init()
     self.changeSetting = function(setting, argument)
         if setting == nil then return end
         if type(argument) == "function" then
@@ -14,11 +17,15 @@ function SettingTypeProvider:init()
     end
 end
 
-function SettingTypeProvider:render()
-    return Roact.createFragment(self.props.render(self.props.settings, self.changeSetting))
+function SettingsMainHOC:render()
+    return Roact.createElement(SettingsMain, {
+        settings = self.props.settings;
+        changeValue = self.changeSetting;
+        history = self.props.history;
+    })
 end
 
-SettingTypeProvider = RoactRodux.connect(function(state)
+return RoactRodux.connect(function(state)
     return {
         settings = state.gameSettings
     }
@@ -29,6 +36,4 @@ function(dispatch)
             dispatch({type = "changeSetting", setting = setting, value = value})
         end
     }
-end)(SettingTypeProvider)
-
-return SettingTypeProvider
+end)(SettingsMainHOC)
