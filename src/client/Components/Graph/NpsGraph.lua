@@ -50,7 +50,9 @@ function NpsGraph:render()
         local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
         elements[i] = Roact.createElement("Frame", {
             Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5));
-            BackgroundColor3 = Color3.fromHSV(_h/360, 88/100, 100/100);
+            BackgroundColor3 = self.motorBinding:map(function(a)
+                return Color3.fromHSV(_h/360, 0.88, a)
+            end);
             BorderSizePixel = 0;
             ZIndex = 1;
             Position = self.motorBinding:map(function(a)
