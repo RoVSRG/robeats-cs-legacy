@@ -3,10 +3,22 @@ local Rodux = require(game.ReplicatedStorage.Libraries.Rodux)
 local RoactRodux = require(game.ReplicatedStorage.Libraries.RoactRodux)
 local SongSelectUI = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongSelectMain)
 
-return function(target)
+local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
+
+local SongSelectMainApp = Story:new()
+
+function SongSelectMainApp:render()
+    return Roact.createElement(RoactRodux.StoreProvider, {
+        store = self.store
+    }, Roact.createFragment({
+        app = Roact.createElement(self.app)
+    }))
+end
+
+function SongSelectMainApp:init()
     local testApp = SongSelectUI
 
-    local store = Rodux.Store.new(function(state, action)
+    self.store = Rodux.Store.new(function(state, action)
         state = state or {
             selectedSongKey = 1
         }
@@ -31,15 +43,9 @@ return function(target)
         }
     end)(testApp)
 
-    local toMount = Roact.createElement(RoactRodux.StoreProvider, {
-        store = store
-    }, Roact.createFragment({
-        app = Roact.createElement(testApp)
-    }))
-
-    local fr = Roact.mount(toMount, target)
-
-    return function()
-        Roact.unmount(fr)
-    end 
+    self.app = testApp
 end
+
+
+return SongSelectMainApp
+

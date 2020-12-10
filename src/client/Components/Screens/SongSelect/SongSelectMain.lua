@@ -27,10 +27,6 @@ function SongSelectUI:init()
     end
     self.select_song_key = self.props.selectSongKey or function() end
 
-    self:setState({
-        current_tab = "SongButtonLayout"
-    })
-
     self.on_play_button_pressed = SPUtil:input_callback(function()
         self.props.startGame()
         self.props.history:push("/gameplay")
@@ -84,12 +80,12 @@ function SongSelectUI:render()
             Position = UDim2.new(0.5, 0, 0.99, 0),
             Size = UDim2.new(0.985, 0, 0.915, 0),
         }, {
-            SongInfoDisplay = Roact.createElement(SongInfoDisplay, {
-                Position = UDim2.new(1, 0, 0, 0),
-                Size = UDim2.new(0.35, 0, 0.89, 0),
-                song_key = self.props.selectedSongKey,
-                rate = self.props.songRate
-            }),
+            -- SongInfoDisplay = Roact.createElement(SongInfoDisplay, {
+            --     Position = UDim2.new(1, 0, 0, 0),
+            --     Size = UDim2.new(0.35, 0, 0.89, 0),
+            --     song_key = self.props.selectedSongKey,
+            --     rate = self.props.songRate
+            -- }),
             PlayButton = Roact.createElement("TextButton", {
                 AnchorPoint = Vector2.new(0, 1),
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -97,6 +93,7 @@ function SongSelectUI:render()
                 Size = UDim2.new(0.35, 0, 0.1, 0),
                 AutoButtonColor = false,
                 Font = Enum.Font.Gotham,
+                Visible = false;
                 Text = "Play!",
                 TextColor3 = Color3.fromRGB(0, 0, 0),
                 TextScaled = true,
@@ -110,40 +107,13 @@ function SongSelectUI:render()
                     CornerRadius = UDim.new(0, 4)
                 })
             }),
-            SectionTabs = Roact.createElement(TabLayout, {
-                BackgroundColor3 = Color3.fromRGB(53, 53, 53),
-                Size = UDim2.new(0.645, 0, 0.05, 0),
-                buttons = {
-                    {
-                        Text = "📃 Select",
-                        OnActivated = function()
-                            self:setState({
-                                current_tab = "SongButtonLayout"
-                            })
-                        end
-                    },
-                    {
-                        Text = "🎮 Leaderboard",
-                        OnActivated = function()
-                            self:setState({
-                                current_tab = ""
-                            })
-                        end
-                    }
-                }
+            SongButtonLayout = Roact.createElement(SongButtonLayout, {
+                songs = self.getSongs();
+                AnchorPoint = Vector2.new(1,0);
+                Position = UDim2.new(1,0,0,0);
+                Size = UDim2.new(0.645, 0, 0.94, 0);
+                on_button_click = self.select_song_key
             }),
-            Roact.createElement(Tab, {
-                current_tab = self.state.current_tab,
-                tab_name = "SongButtonLayout"
-            }, {
-                SongButtonLayout = Roact.createElement(SongButtonLayout, {
-                    songs = self.getSongs();
-                    AnchorPoint = Vector2.new(0,1);
-                    Position = UDim2.new(0,0,1,0);
-                    Size = UDim2.new(0.645, 0, 0.94, 0);
-                    on_button_click = self.select_song_key
-                }),
-            })
         }),
         TabContainer = Roact.createElement(TabLayout, {
             AnchorPoint = Vector2.new(0.5, 0),

@@ -67,7 +67,7 @@ function SongButtonLayout:render()
     return Roact.createElement("Frame", {
         Name = "SongSection",
         AnchorPoint = self.props.AnchorPoint,
-        BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+        BackgroundTransparency = 1,
         BorderSizePixel = 0,
         Position = self.props.Position,
         Size = self.props.Size,
@@ -75,18 +75,17 @@ function SongButtonLayout:render()
         Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),
         }),
-        Roact.createElement("ScrollingFrame", {
-            Name = "SongList",
+        SongList = Roact.createElement("ScrollingFrame", {
             Active = true,
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundColor3 = Color3.fromRGB(25, 25, 25),
+            AnchorPoint = Vector2.new(1, 1),
+            BackgroundTransparency = 1;
             BorderSizePixel = 0,
-            Position = UDim2.new(0.499582142, 0, 0.468073398, 0),
-            Size = UDim2.new(0.977529943, 0, 0.896146834, 0),
+            Position = UDim2.new(1, 0, 1, 0),
+            Size = UDim2.new(1, 0, 0.95, 0),
             BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
-            ScrollBarThickness = 14,
+            ScrollBarThickness = 8,
             TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
-            VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left,
+            VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right,
         }, {
             Layout = Roact.createFragment({
                 UIListLayout = Roact.createElement("UIListLayout", {
@@ -100,8 +99,9 @@ function SongButtonLayout:render()
         Roact.createElement("Frame", {
             Name = "SearchBar",
             BackgroundColor3 = Color3.fromRGB(31, 31, 31),
-            Position = UDim2.new(0.0108171972, 0, 0.935650527, 0),
-            Size = UDim2.new(0.977529943, 0, 0.0380137786, 0),
+            Position = UDim2.new(1, 0, 0.04, 0),
+            Size = UDim2.new(1, 0, 0.04, 0),
+            AnchorPoint = Vector2.new(1, 1),
         }, {
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
@@ -110,8 +110,8 @@ function SongButtonLayout:render()
                 Name = "SearchBox",
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
-                Position = UDim2.new(0.0222672056, 0, 0, 0),
-                Size = UDim2.new(0.977732778, 0, 1, 0),
+                Position = UDim2.new(0.02, 0, 0, 0),
+                Size = UDim2.new(0.98, 0, 1, 0),
                 ClearTextOnFocus = false,
                 Font = Enum.Font.GothamBold,
                 PlaceholderColor3 = Color3.fromRGB(44, 44, 44),

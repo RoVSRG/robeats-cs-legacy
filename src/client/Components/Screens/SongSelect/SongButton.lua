@@ -27,7 +27,7 @@ function SongButton:render()
         BackgroundColor3 = Color3.fromRGB(15, 15, 15),
         BorderMode = Enum.BorderMode.Inset,
         BorderSizePixel = 0,
-        Size = UDim2.new(0.978, 0, 0.19, 0),
+        Size = UDim2.new(1, 0, 0.19, 0),
         [Roact.Event.InputBegan] = self.on_click
     }, {
         Roact.createElement("UICorner", {
