@@ -79,17 +79,18 @@ function SongInfoDisplay:render()
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
                     LayoutOrder = 1,
-                    Size = UDim2.new(0.957943857, 0, 0.268147349, 0),
+                    --Size = UDim2.new(0.957943857, 0, 0.268147349, 0),
+                    Size = UDim2.new(3, 0, 0.5, 0),
                     Font = Enum.Font.Gotham,
                     Text = SongDatabase:get_artist_for_key(_songkey),
                     TextColor3 = Color3.fromRGB(255, 208, 87),
                     TextScaled = true,
-                    TextSize = 26,
+                    TextSize = 30,
                     TextWrapped = true,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }, {
                     Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 26,
+                        MaxTextSize = 40,
                     })
                 }),
                 NameDisplay = Roact.createElement("TextLabel", {
@@ -97,18 +98,20 @@ function SongInfoDisplay:render()
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
                     LayoutOrder = 2,
-                    Position = UDim2.new(0, 0, 0.26814732, 0),
-                    Size = UDim2.new(0.957943916, 0, 0.164641663, 0),
+                    -- Position = UDim2.new(0, 0, 0.26814732, 0),
+                    Position = UDim2.new(0, 0, 0.525, 0),
+                    --Size = UDim2.new(0.957943916, 0, 0.164641663, 0),
+                    Size = UDim2.new(3, 0, 0.5, 0),
                     Font = Enum.Font.GothamBold,
                     Text = SongDatabase:get_title_for_key(_songkey),
                     TextColor3 = Color3.fromRGB(255, 208, 87),
                     TextScaled = true,
-                    TextSize = 26,
+                    TextSize = 30,
                     TextWrapped = true,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }, {
                     Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 28,
+                        MaxTextSize = 40,
                     })
                 }),
                 DifficultyDisplay = Roact.createElement("TextLabel", {
@@ -117,17 +120,17 @@ function SongInfoDisplay:render()
                     BorderSizePixel = 0,
                     LayoutOrder = 3,
                     Position = UDim2.new(0, 0, 0.432788938, 0),
-                    Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    Size = UDim2.new(1, 0, 0.175, 0),
                     Font = Enum.Font.GothamSemibold,
                     Text = string.format("Difficulty: %d", SongDatabase:get_difficulty_for_key(_songkey)),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
-                    TextSize = 26,
+                    TextSize = 30,
                     TextWrapped = true,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }, {
                     Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 20,
+                        MaxTextSize = 35,
                     })
                 }),
                 TotalNotesDisplay = Roact.createElement("TextLabel", {
@@ -135,18 +138,19 @@ function SongInfoDisplay:render()
                     BackgroundTransparency = 1,
                     BorderSizePixel = 0,
                     LayoutOrder = 3,
-                    Position = UDim2.new(0, 0, 0.432788938, 0),
-                    Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    Position = UDim2.new(0, 0, 0.4, 0),
+                    -- Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    Size = UDim2.new(1, 0, 0.175, 0),
                     Font = Enum.Font.GothamSemibold,
                     Text = string.format("Total Notes: %d", total_notes),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
-                    TextSize = 26,
+                    TextSize = 30,
                     TextWrapped = true,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }, {
                     Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 20,
+                        MaxTextSize = 35,
                     })
                 }),
                 TotalHoldsDisplay = Roact.createElement("TextLabel", {
@@ -155,17 +159,18 @@ function SongInfoDisplay:render()
                     BorderSizePixel = 0,
                     LayoutOrder = 4,
                     Position = UDim2.new(0, 0, 0.432788938, 0),
-                    Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    -- Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    Size = UDim2.new(1, 0, 0.175, 0),
                     Font = Enum.Font.GothamSemibold,
                     Text = string.format("Total Holds: %d", total_holds),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
-                    TextSize = 26,
+                    TextSize = 30,
                     TextWrapped = true,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }, {
                     Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 20,
+                        MaxTextSize = 35,
                     })
                 }),
                 TotalLengthDisplay = Roact.createElement("TextLabel", {
@@ -174,17 +179,18 @@ function SongInfoDisplay:render()
                     BorderSizePixel = 0,
                     LayoutOrder = 4,
                     Position = UDim2.new(0, 0, 0.432788938, 0),
-                    Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    -- Size = UDim2.new(0.957943916, 0, 0.122751191, 0),
+                    Size = UDim2.new(1, 0, 0.175, 0),
                     Font = Enum.Font.GothamSemibold,
                     Text = string.format("Total Length: %s", SPUtil:format_ms_time(SongDatabase:get_song_length_for_key(_songkey))),
                     TextColor3 = Color3.fromRGB(255, 255, 255),
                     TextScaled = true,
-                    TextSize = 26,
+                    TextSize = 30,
                     TextWrapped = true,
                     TextXAlignment = Enum.TextXAlignment.Left,
                 }, {
                     Roact.createElement("UITextSizeConstraint", {
-                        MaxTextSize = 20,
+                        MaxTextSize = 35,
                     })
                 })
             }),
@@ -193,6 +199,7 @@ function SongInfoDisplay:render()
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
                 Position = UDim2.new(0.0253480561, 0, 0.740295172, 0),
+                --Size = UDim2.new(0.289368182, 0, 0.0559303947, 0),
                 Size = UDim2.new(0.289368182, 0, 0.0559303947, 0),
                 ZIndex = 3,
                 Font = Enum.Font.GothamBold,

@@ -91,34 +91,7 @@ function SongButton:render()
                 MaxTextSize = 26,
             })
         }),
-        Roact.createElement(NpsGraph, {
-            BorderSizePixel = 0,
-            Position = UDim2.new(0.835147917, 0, 0.379469723, 0),
-            Size = UDim2.new(0.15732792, 0, 0.545288444, 0),
-            song_key = _song_key;
-            doNotAnimate = true;
-        }, {
-            Roact.createElement("UICorner", {
-                CornerRadius = UDim.new(0, 4),
-            }),
-            Roact.createElement("Frame", {
-                Name = "Items",
-                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                BackgroundTransparency = 1,
-                ClipsDescendants = true,
-                Size = UDim2.new(1, 0, 1, 0),
-                ZIndex = 2,
-            }, {
-                Roact.createElement("UICorner", {
-                    CornerRadius = UDim.new(0, 4),
-                }),
-                Roact.createElement("UIListLayout", {
-                    FillDirection = Enum.FillDirection.Horizontal,
-                    SortOrder = Enum.SortOrder.LayoutOrder,
-                    VerticalAlignment = Enum.VerticalAlignment.Bottom,
-                })
-            })
-        })
+        
     })
 end
 
