@@ -68,7 +68,7 @@ function BannerCard:render()
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
             Position = self.motorBinding:map(function(a)
-                return UDim2.new(0.02, 0, 0.95, 0):Lerp(UDim2.new(0.01, 0, 0.95, 0), a.playedat)
+                return UDim2.new(0.02, 0, 0.55, 0):Lerp(UDim2.new(0.01, 0, 0.55, 0), a.playedat)
             end);
             TextTransparency = self.motorBinding:map(function(a)
                 return 1-a.playedat
@@ -116,7 +116,8 @@ function BannerCard:render()
             TextTransparency = self.motorBinding:map(function(a)
                 return 1-a.textTitle
             end);
-            Size = UDim2.new(0.5, 0, 0.15, 0),
+            --Size = UDim2.new(0.5, 0, 0.15, 0),
+            Size = UDim2.new(0.75, 0, 0.25, 0),
             Font = Enum.Font.GothamBold,
             Text = SongDatabase:get_title_for_key(self.props.song_key),
             TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -151,7 +152,28 @@ function BannerCard:render()
                 MinTextSize = 12;
                 MaxTextSize = 20;
             })
-        })
+        });
+        Indicator = Roact.createElement("TextLabel", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            Position = self.motorBinding:map(function(a)
+                return UDim2.new(0.02, 0, 0.95, 0):Lerp(UDim2.new(0.01, 0, 0.95, 0), a.playedat)
+            end);
+            TextTransparency = self.motorBinding:map(function(a)
+                return 1-a.playedat
+            end);
+            Size = UDim2.new(0.6, 0, 0.085, 0),
+            Font = Enum.Font.GothamSemibold,
+            Text = string.format("Press 'Enter' to return to the menu."),
+            TextColor3 = Color3.fromRGB(252, 255, 166),
+            TextScaled = false,
+            TextSize = 30,
+            TextStrokeTransparency = 0.5,
+            TextWrapped = true,
+            TextXAlignment = Enum.TextXAlignment.Left,
+        }),
     })
 end
 
