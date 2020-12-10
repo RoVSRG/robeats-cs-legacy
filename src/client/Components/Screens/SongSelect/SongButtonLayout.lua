@@ -114,7 +114,7 @@ function SongButtonLayout:render()
                 Size = UDim2.new(0.977732778, 0, 1, 0),
                 ClearTextOnFocus = false,
                 Font = Enum.Font.GothamBold,
-                PlaceholderColor3 = Color3.fromRGB(44, 44, 44),
+                PlaceholderColor3 = Color3.fromRGB(181, 181, 181),
                 PlaceholderText = "Search here...",
                 Text = "",
                 TextColor3 = Color3.fromRGB(255, 255, 255),

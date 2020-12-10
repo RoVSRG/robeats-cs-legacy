@@ -21,6 +21,8 @@ function ResultsScreenMain:init()
 	self.backOutConnection = SPUtil:bind_to_key(Enum.KeyCode.Return, function()
 		self.props.history:push("/select")
 	end)
+
+	
 end
 
 function ResultsScreenMain:willUnmount()

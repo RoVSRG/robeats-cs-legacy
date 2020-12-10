@@ -27,6 +27,12 @@ function SongSelectUI:init()
     end
     self.select_song_key = self.props.selectSongKey or function() end
 
+    -- self.peemypants = SPUtil:bind_to_key(Enum.KeyCode.Minus, function()
+	-- 	print("ok kisperal")
+    -- end)
+    
+    
+
     self:setState({
         current_tab = "SongButtonLayout"
     })
@@ -157,6 +163,13 @@ function SongSelectUI:render()
                     Text = "⚙ Settings",
                     OnActivated = function()
                         self.props.history:push("/settings")
+                    end
+                },
+
+                {
+                    Text = "📃 Update Log",
+                    OnActivated = function()
+                        print('astrl kingdom is racit')
                     end
                 },
             }
