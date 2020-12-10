@@ -15,7 +15,7 @@ function Story:new(render)
             t:init(target)
             local destroyWasCalled = false
             local app = t:render()
-            local fr = Roact.mount(app, target)
+            local fr = Roact.mount(app, t.mountTo or target)
             return function()
                 if destroyWasCalled then return end
                 destroyWasCalled = true
