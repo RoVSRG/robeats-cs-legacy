@@ -27,6 +27,10 @@ function SongSelectUI:init()
     end
     self.select_song_key = self.props.selectSongKey or function() end
 
+    self:setState({
+        current_tab = "SongButtonLayout"
+    })
+
     self.on_play_button_pressed = SPUtil:input_callback(function()
         self.props.startGame()
         self.props.history:push("/gameplay")
@@ -127,6 +131,13 @@ function SongSelectUI:render()
                     Text = "⚙ Settings",
                     OnActivated = function()
                         self.props.history:push("/settings")
+                    end
+                },
+
+                {
+                    Text = "📃 Update Log",
+                    OnActivated = function()
+                        print('astrl kingdom is racit')
                     end
                 },
             }

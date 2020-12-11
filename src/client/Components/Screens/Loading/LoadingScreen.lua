@@ -68,19 +68,19 @@ function LoadingUI:render()
 			BackgroundTransparency = 1,
 			BorderSizePixel = 0,
 			Position = UDim2.new(0.01, 0, 0.17, 0),
-			Size = UDim2.new(0.357, 0, 0.15, 0),
+			Size = UDim2.new(0.4, 0, 0.175, 0),
 			Font = Enum.Font.GothamBold,
-			Text = string.format("%s - %s", SongDatabase:get_artist_for_key(self.props.selectedSongKey), SongDatabase:get_title_for_key(self.props.selectedSongKey)),
+			Text = string.format("%s - %s (%s)", SongDatabase:get_artist_for_key(self.props.selectedSongKey), SongDatabase:get_title_for_key(self.props.selectedSongKey), SongDatabase:get_difficulty_for_key(self.props.selectedSongKey)),
 			TextScaled = true,
-			TextSize = 17,
-			TextColor3 = Color3.fromRGB(25,25,25),
+			TextSize = 25,
+			TextColor3 = Color3.fromRGB(150, 150, 150),
 			TextXAlignment = Enum.TextXAlignment.Left,
 			TextYAlignment = Enum.TextYAlignment.Top,
 			TextWrapped = true,
 		}, {
 			Roact.createElement("UITextSizeConstraint", {
-				MaxTextSize = 17,
-				MinTextSize = 12,
+				MaxTextSize = 25,
+				MinTextSize = 15,
 			})
 		}),
 		NpsGraph = Roact.createElement(NpsGraph, {
@@ -94,7 +94,7 @@ function LoadingUI:render()
 		}),
 		BackButton = Roact.createElement("TextButton", {
 			AnchorPoint = Vector2.new(1, 0),
-			BackgroundColor3 = Color3.fromRGB(20, 20, 20),
+			BackgroundColor3 = Color3.fromRGB(255, 53, 53),
 			Position = UDim2.new(1-0.0037, 0, 0.01, 0),
 			Size = UDim2.new(0.2, 0, 0.1, 0),
 			Font = Enum.Font.SourceSansBold,

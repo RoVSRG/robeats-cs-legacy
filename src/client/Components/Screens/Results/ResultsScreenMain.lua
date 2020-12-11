@@ -1,4 +1,5 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local ResultsScreenMain = Roact.Component:extend("ResultsScreenMain")
 
@@ -16,6 +17,16 @@ function ResultsScreenMain:init()
 		"http://www.roblox.com/asset/?id=5702585057",
 		"http://www.roblox.com/asset/?id=5702585272"
 	}
+
+	self.backOutConnection = SPUtil:bind_to_key(Enum.KeyCode.Return, function()
+		self.props.history:push("/select")
+	end)
+
+	
+end
+
+function ResultsScreenMain:willUnmount()
+	self.backOutConnection:Disconnect()
 end
 
 function ResultsScreenMain:render()
