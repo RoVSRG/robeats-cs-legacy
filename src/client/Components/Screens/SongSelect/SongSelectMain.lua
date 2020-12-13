@@ -137,7 +137,7 @@ function SongSelectUI:render()
                 {
                     Text = "📃 Update Log",
                     OnActivated = function()
-                        print('astrl kingdom is racit')
+                        print('Placeholder or something ok')
                     end
                 },
             }
