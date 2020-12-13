@@ -1,8 +1,12 @@
 local ScoreOverlay = require(script.Parent.ScoreOverlay)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-return function(target)
-    local fr = Roact.createElement(ScoreOverlay, {
+local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
+
+local ScoreOverlayApp = Story:new()
+
+function ScoreOverlayApp:render()
+    Roact.createElement(ScoreOverlay, {
         marvs = 0;
         perfs = 0;
         greats = 0;
@@ -14,10 +18,6 @@ return function(target)
         time_left = 0;
         combo = 0;
     })
-
-    local tree = Roact.mount(fr, target)
-
-    return function()
-        Roact.unmount(tree)
-    end
 end
+
+return ScoreOverlayApp
