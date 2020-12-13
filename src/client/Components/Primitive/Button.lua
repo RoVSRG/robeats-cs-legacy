@@ -18,6 +18,12 @@ function Button:render()
         AnchorPoint = self.props.AnchorPoint;
         Font = Enum.Font.GothamSemibold;
         Text = self.props.Text;
+        TextSize = self.props.TextSize;
+        BackgroundColor3 = self.motorBinding:map(function(a)
+            local c = self.props.BackgroundColor or Color3.fromRGB(255, 255, 255);
+            local cTo = Color3.fromRGB((c.R*255)-40, (c.G*255)-40, (c.B*255)-40);
+            return c:Lerp(cTo, a);
+        end);
         [Roact.Event.MouseEnter] = function()
             self.motor:setGoal(Flipper.Spring.new(0.7, {
                 frequency = 8;

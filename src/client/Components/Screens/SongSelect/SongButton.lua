@@ -2,6 +2,7 @@ local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongData
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+local Gradient = require(game.ReplicatedStorage.Shared.Utils.Gradient)
 
 local NpsGraph = require(game.ReplicatedStorage.Client.Components.Graph.NpsGraph)
 
@@ -17,6 +18,16 @@ end
 
 function SongButton:shouldUpdate(nextProps, nextState)
     return self.props.visible ~= nextProps.visible
+end
+
+function SongButton:getGradient()
+    local gradient = Gradient:new()
+
+    for i = 0, 1, 0.1 do
+        gradient:add_number_keypoint(i, 1-i)
+    end
+
+    return gradient:number_sequence()
 end
 
 function SongButton:render()
@@ -40,13 +51,16 @@ function SongButton:render()
         Roact.createElement("ImageLabel", {
             Name = "SongCover",
             AnchorPoint = Vector2.new(1, 0.5),
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundTransparency = 1;
             BorderSizePixel = 0,
             Position = UDim2.new(1, 0, 0.5, 0),
             Size = UDim2.new(0.5, 0, 1, 0),
             ScaleType = Enum.ScaleType.Crop,
             Image = self.props.image
         }, {
+            Roact.createElement("UIGradient", {
+                Transparency = self:getGradient()
+            }),
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
             }),
@@ -69,7 +83,7 @@ function SongButton:render()
             Roact.createElement("UITextSizeConstraint", {
                 MaxTextSize = 18,
                 MinTextSize = 10,
-            })
+            });
         }),
         Roact.createElement("TextLabel", {
             Name = "NameDisplay",
