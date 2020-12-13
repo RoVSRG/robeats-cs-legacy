@@ -18,7 +18,7 @@ return function(target)
         misses = 1,
         time = 8596444113,
         accuracy = 82,
-        place = 47
+        place = 1
     })
 
     local fr = Roact.mount(testApp, target)
