@@ -11,12 +11,17 @@ local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongData
 
 local TweenService = game:GetService("TweenService")
 
-local Tab = require(game.ReplicatedStorage.Client.Components.Tab)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local SongButtonLayout = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButtonLayout)
+local LeaderboardDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.LeaderboardDisplay)
 local TabLayout = require(game.ReplicatedStorage.Client.Components.Layout.TabLayout)
 local SongInfoDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongInfoDisplay)
+local Button = require(game.ReplicatedStorage.Client.Components.Primitive.Button)
+local Slideshow = require(game.ReplicatedStorage.Client.Components.Primitive.Slideshow)
+local Slide = require(game.ReplicatedStorage.Client.Components.Primitive.Slideshow.Slide)
+
+local noop = function() end
 
 function SongSelectUI:init()
     self.getSongs = function()
@@ -31,13 +36,13 @@ function SongSelectUI:init()
     self.select_song_key = self.props.selectSongKey or function() end
 
     self:setState({
-        current_tab = "SongButtonLayout"
+        selectedTab = 1
     })
 
-    self.on_play_button_pressed = SPUtil:input_callback(function()
+    self.on_play_button_pressed = function()
         self.props.startGame()
         self.props.history:push("/gameplay")
-    end)
+    end
 
     self._current_sfx = Instance.new("Sound")
     self._current_sfx.Parent = workspace
@@ -56,7 +61,10 @@ function SongSelectUI:init()
 
     -- MOTOR
 
-    self.motor = Flipper.SingleMotor.new(0)
+    self.motor = Flipper.GroupMotor.new({
+        songButtonLayout = 0;
+        songInfoDisplay = 0
+    })
     self.motorBinding = RoactFlipper.getBinding(self.motor)
 end
 
@@ -65,10 +73,16 @@ function SongSelectUI:didUpdate()
 end
 
 function SongSelectUI:didMount()
-    self.motor:setGoal(Flipper.Spring.new(1, {
-        frequency = 4;
-        dampingRatio = 2.5;
-    }))
+    self.motor:setGoal({
+        songInfoDisplay = Flipper.Spring.new(1, {
+            frequency = 3.5;
+            dampingRatio = 2.5;
+        });
+        songButtonLayout = Flipper.Spring.new(1, {
+            frequency = 4;
+            dampingRatio = 2.5;
+        });
+    })
 end
 
 function SongSelectUI:update_preview()
@@ -99,13 +113,97 @@ function SongSelectUI:render()
             Position = UDim2.new(0.5, 0, 0.99, 0),
             Size = UDim2.new(0.985, 0, 0.915, 0),
         }, {
-            -- SongInfoDisplay = Roact.createElement(SongInfoDisplay, {
-            --     Position = UDim2.new(1, 0, 0, 0),
-            --     Size = UDim2.new(0.35, 0, 0.89, 0),
-            --     song_key = self.props.selectedSongKey,
-            --     rate = self.props.songRate
-            -- }),
-            PlayButton = Roact.createElement("TextButton", {
+            SongInfoLeaderboard = Roact.createElement(Slideshow, {
+                slide = self.state.selectedTab;
+                Size = UDim2.new(0.35, 0, 0.94, 0);
+                Position = self.motorBinding:map(function(a)
+                    return UDim2.new(a.songInfoDisplay-1, 0, 0, 0)
+                end);
+                BackgroundTransparency = 1;
+                render = function(slide)
+                    return Roact.createFragment({
+                        SongInfoDisplay = Roact.createElement(Slide, {
+                            slide = 1;
+                            currentSlide = slide;
+                        }, {
+                            Display = Roact.createElement(SongInfoDisplay, {
+                                Size = UDim2.new(1, 0, 1, 0),
+                                song_key = self.props.selectedSongKey,
+                                rate = self.props.songRate,
+                                onLeaderboardClick = function()
+                                    self:setState({
+                                        selectedTab = 2;
+                                    })
+                                end;
+                            }),
+                        });
+                        Leaderboard = Roact.createElement(Slide, {
+                            slide = 2;
+                            currentSlide = slide;
+                        }, {
+                            Display = Roact.createElement(LeaderboardDisplay, {
+                                Size = UDim2.new(1, 0, 1, 0),
+                                leaderboard = {
+                                    {
+                                        userid = 526993347,
+                                        playername = "kisperal",
+                                        marvelouses = 6,
+                                        perfects = 5,
+                                        greats = 4,
+                                        goods = 3,
+                                        bads = 2,
+                                        misses = 1,
+                                        time = 1596444113,
+                                        accuracy = 98.98,
+                                        place = 1,
+                                        score = 0,
+                                    },
+                                    {
+                                        userid = 160677253,
+                                        playername = "DetWasTaken",
+                                        marvelouses = 6,
+                                        perfects = 5,
+                                        greats = 4,
+                                        goods = 3,
+                                        bads = 2,
+                                        misses = 1,
+                                        time = 1596666465,
+                                        accuracy = 95.67,
+                                        place = 2,
+                                        score = 0,
+                                    },
+                                    {
+                                        userid = 160677253,
+                                        playername = "DetWasTaken",
+                                        marvelouses = 6,
+                                        perfects = 5,
+                                        greats = 4,
+                                        goods = 3,
+                                        bads = 2,
+                                        misses = 1,
+                                        time = 1596666465,
+                                        accuracy = 95.67,
+                                        place = 3,
+                                        score = 0,
+                                    }
+                                },
+                                onSongInfoClick = function()
+                                    self:setState({
+                                        selectedTab = 1;
+                                    })    
+                                end,
+                                rate = self.props.songRate,
+                                onLeaderboardClick = function()
+                                    self:setState({
+                                        selectedTab = 2;
+                                    })
+                                end;
+                            }),
+                        })
+                    })
+                end
+            });
+            PlayButton = Roact.createElement(Button, {
                 AnchorPoint = Vector2.new(0, 1),
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 Position = UDim2.new(0, 0, 1, 0),
@@ -116,7 +214,8 @@ function SongSelectUI:render()
                 Text = "Play!",
                 TextColor3 = Color3.fromRGB(0, 0, 0),
                 TextScaled = true,
-                [Roact.Event.InputBegan] = self.on_play_button_pressed
+                onActivated = self.on_play_button_pressed;
+                shrinkBy = 0.005
             }, {
                 UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
                     MinTextSize = 16;
@@ -130,7 +229,7 @@ function SongSelectUI:render()
                 songs = self.getSongs();
                 AnchorPoint = Vector2.new(1,0);
                 Position = self.motorBinding:map(function(a)
-                    return UDim2.new(a, 0, 0, 0)
+                    return UDim2.new(a.songButtonLayout, 0, 0, 0)
                 end);
                 Size = UDim2.new(0.645, 0, 0.94, 0);
                 on_button_click = self.select_song_key
@@ -153,9 +252,7 @@ function SongSelectUI:render()
 
                 {
                     Text = "📃 Update Log",
-                    OnActivated = function()
-                        print('astrl kingdom is racit')
-                    end
+                    OnActivated = noop
                 },
             }
         })
