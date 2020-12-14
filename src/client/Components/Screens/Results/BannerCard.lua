@@ -159,19 +159,17 @@ function BannerCard:render()
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
             Position = self.motorBinding:map(function(a)
-                return UDim2.new(0.02, 0, 0.95, 0):Lerp(UDim2.new(0.01, 0, 0.95, 0), a.playedat)
+                return UDim2.new(0.02, 0, 0.9, 0):Lerp(UDim2.new(0.01, 0, 0.9, 0), a.playedat)
             end);
             TextTransparency = self.motorBinding:map(function(a)
                 return 1-a.playedat
             end);
             Size = UDim2.new(0.6, 0, 0.085, 0),
             Font = Enum.Font.GothamSemibold,
-            Text = string.format("Press 'Enter' to return to the menu."),
+            Text = string.format("Press '%s' to return to the menu", "Enter"),
             TextColor3 = Color3.fromRGB(252, 255, 166),
-            TextScaled = false,
-            TextSize = 30,
+            TextScaled = true,
             TextStrokeTransparency = 0.5,
-            TextWrapped = true,
             TextXAlignment = Enum.TextXAlignment.Left,
         }),
     })
