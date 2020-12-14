@@ -1,23 +1,24 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local Button = require(game.ReplicatedStorage.Client.Components.Primitive.Button)
+
 local TabLayout = Roact.Component:extend("TabLayout")
 
 function TabLayout:render()
     local _buttons = {}
     local num = math.max(5, #self.props.buttons)
     for i, v in pairs(self.props.buttons) do
-        _buttons[i] = Roact.createElement("TextButton", {
+        _buttons[i] = Roact.createElement(Button, {
             Size = UDim2.new((1/num)*(1-(num*0.01)),0,0.8,0);
             Text = v.Text;
             TextScaled = true;
             TextColor3 = Color3.fromRGB(255, 255, 255);
             Font = Enum.Font.GothamBold;
             BackgroundColor3 = Color3.fromRGB(40,40,40);
-            [Roact.Event.MouseButton1Click] = v.OnActivated;
+            shrinkBy = -0.02;
+            darkenBy = 20;
+            onActivated = v.OnActivated;
         }, {
-            Corner = Roact.createElement("UICorner", {
-                CornerRadius = UDim.new(0, 4)
-            });
             TextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
                 MaxTextSize = 40;
                 MinTextSize = 12;

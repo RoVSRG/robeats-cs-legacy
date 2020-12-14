@@ -3,7 +3,7 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Score = require(script.Parent.Score)
 local Accuracy = require(script.Parent.Accuracy)
 local TimeLeft = require(script.Parent.TimeLeft)
-local SpreadDisplay = require(script.Parent.SpreadDisplay)
+local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.Results.SpreadDisplay)
 local Combo = require(script.Parent.Combo)
 
 local ScoreOverlay = Roact.Component:extend("ScoreOverlay")
@@ -34,8 +34,8 @@ function ScoreOverlay:render()
             Position = UDim2.new(0.98,0,0.2,0);
             Size = UDim2.new(0.127,0,0.3,0);
             AnchorPoint = Vector2.new(1,0);
-            marvs = self.props.marvs;
-            perfs = self.props.perfs;
+            marvelouses = self.props.marvs;
+            perfects = self.props.perfs;
             greats = self.props.greats;
             goods = self.props.goods;
             bads = self.props.bads;

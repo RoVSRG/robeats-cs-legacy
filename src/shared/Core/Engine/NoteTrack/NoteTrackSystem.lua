@@ -54,6 +54,7 @@ function NoteTrackSystem:new(_game, _game_slot)
 	end
 
 	function self:update(dt_scale)
+		local time_started = tick()
 		for i=1, _tracks:count() do
 			local itr_track = _tracks:get(i)
 			itr_track:update(dt_scale)
@@ -69,6 +70,7 @@ function NoteTrackSystem:new(_game, _game_slot)
 				_notes:remove_at(i)
 			end
 		end
+		print(tick()-time_started)
 	end
 	
 	function self:get_game_slot()

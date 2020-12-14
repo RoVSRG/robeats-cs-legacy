@@ -98,7 +98,6 @@ function NpsGraph:render()
                 BackgroundColor3 = Color3.fromRGB(20,20,20);
                 TextColor3 = Color3.fromRGB(255, 255, 255);
                 Font = Enum.Font.GothamBold;
-                TextSize = 18;
                 TextScaled = true;
                 TextTransparency = self.motorBinding:map(function(a)
                     return 1-a
@@ -117,7 +116,7 @@ function NpsGraph:render()
                     CornerRadius = UDim.new(0, 4),
                 });
                 TextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
-                    MaxTextSize = 18;
+                    MaxTextSize = 12;
                     MinTextSize = 8;
                 })
             })

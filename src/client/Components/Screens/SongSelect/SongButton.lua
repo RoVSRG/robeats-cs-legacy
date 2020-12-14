@@ -2,6 +2,9 @@ local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongData
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+local Gradient = require(game.ReplicatedStorage.Shared.Utils.Gradient)
+
+local Button = require(game.ReplicatedStorage.Client.Components.Primitive.Button)
 
 local NpsGraph = require(game.ReplicatedStorage.Client.Components.Graph.NpsGraph)
 
@@ -10,25 +13,36 @@ local SongButton = Roact.Component:extend("SongButton")
 local function noop() end
 
 function SongButton:init()
-    self.on_click = self.props.on_click and SPUtil:input_callback(function(...)
-         self.props.on_click(self.props.song_key)
-    end) or noop
+    self.on_click = self.props.on_click or noop
 end
 
 function SongButton:shouldUpdate(nextProps, nextState)
     return self.props.visible ~= nextProps.visible
 end
 
+function SongButton:getGradient()
+    local gradient = Gradient:new()
+
+    for i = 0, 1, 0.1 do
+        gradient:add_number_keypoint(i, 1-i)
+    end
+
+    return gradient:number_sequence()
+end
+
 function SongButton:render()
     local _song_key = self.props.song_key
-    return Roact.createElement("Frame", {
+    return Roact.createElement(Button, {
         Visible = self.props.visible;
-        Name = "SongListElementProto",
         BackgroundColor3 = Color3.fromRGB(15, 15, 15),
         BorderMode = Enum.BorderMode.Inset,
         BorderSizePixel = 0,
         Size = UDim2.new(1, 0, 0.19, 0),
-        [Roact.Event.InputBegan] = self.on_click
+        onActivated = function()
+            self.on_click(self.props.song_key)
+        end;
+        Text = "";
+        shrinkBy = 0.015;
     }, {
         Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),
@@ -40,13 +54,16 @@ function SongButton:render()
         Roact.createElement("ImageLabel", {
             Name = "SongCover",
             AnchorPoint = Vector2.new(1, 0.5),
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+            BackgroundTransparency = 1;
             BorderSizePixel = 0,
             Position = UDim2.new(1, 0, 0.5, 0),
             Size = UDim2.new(0.5, 0, 1, 0),
             ScaleType = Enum.ScaleType.Crop,
             Image = self.props.image
         }, {
+            Roact.createElement("UIGradient", {
+                Transparency = self:getGradient()
+            }),
             Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
             }),
@@ -69,7 +86,7 @@ function SongButton:render()
             Roact.createElement("UITextSizeConstraint", {
                 MaxTextSize = 18,
                 MinTextSize = 10,
-            })
+            });
         }),
         Roact.createElement("TextLabel", {
             Name = "NameDisplay",

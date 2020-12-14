@@ -1,15 +1,15 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
+
 local SongInfoDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongInfoDisplay)
 
-return function(target)
-    local testApp = Roact.createElement(SongInfoDisplay, {
-        song_key = 1
+local SongInfoDisplayApp = Story:new()
+
+function SongInfoDisplayApp:render()
+    return Roact.createElement(SongInfoDisplay, {
+        song_key = 18
     })
-
-    local fr = Roact.mount(testApp, target)
-
-    return function()
-        Roact.unmount(fr)
-    end 
 end
+
+return SongInfoDisplayApp
