@@ -5,8 +5,12 @@ local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local SpreadBar = Roact.Component:extend("SpreadBar")
 
+function SpreadBar:getAlpha()
+    return self.props.total > 0 and self.props.count/self.props.total or 0
+end
+
 function SpreadBar:didMount()
-    self.motor:setGoal(Flipper.Spring.new(1, {
+    self.motor:setGoal(Flipper.Spring.new(self:getAlpha(), {
         frequency = 4;
         dampingRatio = 2.5;
     }))
@@ -16,6 +20,13 @@ function SpreadBar:init()
     self.motor = Flipper.SingleMotor.new(0);
 
     self.motorBinding = RoactFlipper.getBinding(self.motor)
+end
+
+function SpreadBar:didUpdate()
+    self.motor:setGoal(Flipper.Spring.new(self:getAlpha(), {
+        frequency = 4;
+        dampingRatio = 2.5;
+    }))
 end
 
 function SpreadBar:render()
@@ -34,7 +45,7 @@ function SpreadBar:render()
             BackgroundColor3 = total_color,
             BorderSizePixel = 0,
             Size = self.motorBinding:map(function(a)
-                return UDim2.new((self.props.count/self.props.total)*a, 0, 1, 0)
+                return UDim2.new(a, 0, 1, 0)
             end)
         }, {
             Corner = Roact.createElement("UICorner", {
