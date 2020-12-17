@@ -63,7 +63,8 @@ function SongSelectUI:init()
 
     self.motor = Flipper.GroupMotor.new({
         songButtonLayout = 0;
-        songInfoDisplay = 0
+        songInfoDisplay = 0;
+        tabLayout = 0;
     })
     self.motorBinding = RoactFlipper.getBinding(self.motor)
 end
@@ -80,6 +81,10 @@ function SongSelectUI:didMount()
         });
         songButtonLayout = Flipper.Spring.new(1, {
             frequency = 4;
+            dampingRatio = 2.5;
+        });
+        tabLayout = Flipper.Spring.new(1, {
+            frequency = 5;
             dampingRatio = 2.5;
         });
     })
@@ -229,7 +234,7 @@ function SongSelectUI:render()
                 songs = self.getSongs();
                 AnchorPoint = Vector2.new(1,0);
                 Position = self.motorBinding:map(function(a)
-                    return UDim2.new(a.songButtonLayout, 0, 0, 0)
+                    return UDim2.new(2-a.songButtonLayout, 0, 0, 0)
                 end);
                 Size = UDim2.new(0.645, 0, 0.94, 0);
                 on_button_click = self.select_song_key
@@ -240,7 +245,9 @@ function SongSelectUI:render()
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.5, 0, 0.01, 0),
+            Position = self.motorBinding:map(function(a)
+                return UDim2.new(0.5*a.tabLayout, 0, 0.01, 0)
+            end),
             Size = UDim2.new(0.985, 0, 0.055, 0),
             buttons = {
                 {

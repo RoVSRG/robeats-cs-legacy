@@ -14,13 +14,13 @@ function TabLayout:render()
             TextScaled = true;
             TextColor3 = Color3.fromRGB(255, 255, 255);
             Font = Enum.Font.GothamBold;
-            BackgroundColor3 = Color3.fromRGB(40,40,40);
+            BackgroundColor3 = v.Color or Color3.fromRGB(40,40,40);
             shrinkBy = -0.02;
             darkenBy = 20;
             onActivated = v.OnActivated;
         }, {
             TextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
-                MaxTextSize = 40;
+                MaxTextSize = 20;
                 MinTextSize = 12;
             })
         })

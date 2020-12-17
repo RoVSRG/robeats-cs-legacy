@@ -19,7 +19,7 @@ function Button:render()
     return Roact.createElement("TextButton", {
         Size = self.motorBinding:map(function(a)
             local sb = self.props.shrinkBy or 0.1
-            return (self.props.Size or UDim2.new(1,0,1,0))-UDim2.new(sb*a, 0, sb*a, 0)
+            return (self.props.Size or UDim2.new(1,0,1,0))-UDim2.new(self.props.suppressXAxis and 0 or sb*a, 0, self.props.suppressYAxis and 0 or sb*a, 0)
         end);
         Position = self.props.Position;
         AnchorPoint = self.props.AnchorPoint;
@@ -60,6 +60,7 @@ function Button:render()
         AutoButtonColor = false;
         TextColor3 = self.props.TextColor3;
         Visible = self.props.Visible;
+        TextScaled = self.props.TextScaled;
     }, {
         Corner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0,4);

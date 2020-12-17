@@ -14,7 +14,7 @@ function IntSetting:render()
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 1, 0),
+        Size = self.props.Size or UDim2.new(1, 0, 1, 0),
     }, {
         Minus = Roact.createElement("TextButton", {
             AnchorPoint = Vector2.new(0, 0.5),
@@ -46,8 +46,6 @@ function IntSetting:render()
                 Text = "-",
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextScaled = true,
-                TextSize = 14,
-                TextWrapped = true,
             })
         }),
         Plus = Roact.createElement("TextButton", {
