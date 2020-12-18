@@ -8,49 +8,10 @@ local PlayfieldApp = Story:new()
 function PlayfieldApp:render()
     local hitObjects = {
         {
-            type = 1;
-            pressAlpha = 0.4;
-            lane = 1
-        };
-        {
-            type = 1;
-            pressAlpha = 0.4;
-            lane = 2
-        };
-        {
-            type = 1;
-            pressAlpha = 0.4;
-            lane = 3
-        };
-        {
-            type = 1;
-            pressAlpha = 0.5;
-            lane = 3
-        };
-        {
-            type = 1;
-            pressAlpha = 0.65;
-            lane = 4
-        };
-        {
-            type = 1;
-            pressAlpha = 0.4;
-            lane = 4
-        };
-        {
-            type = 1;
-            pressAlpha = 0.65;
-            lane = 2
-        };
-        {
-            type = 1;
-            pressAlpha = 0.65;
-            lane = 1;
-        };
-        {
-            type = 1;
-            pressAlpha = 0.65;
-            lane = 3
+            type = 2;
+            pressAlpha = 0.7;
+            lane = 4;
+            releaseAlpha = 0;
         };
     }
     return Roact.createElement(Playfield, {

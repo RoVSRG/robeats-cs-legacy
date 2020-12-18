@@ -24,10 +24,11 @@ function Engine:new(props)
     self.state = Engine.States.Loading
     self.didInitialize = false
     self.currentAudioTime = 0
-    --self.scoreManager = ScoreManager:new()
+    self.scoreManager = ScoreManager:new()
     self.objectPool = HitObjectPool:new({
         scrollSpeed = props.scrollSpeed;
         key = props.key;
+        scoreManager = self.scoreManager;
     })
     
     function self:load()
@@ -64,13 +65,23 @@ function Engine:new(props)
 
         for i, hitObject in ipairs(hitObjects) do
             ret[i] = {
-                type = 1;
+                type = hitObject.type;
                 pressAlpha = hitObject.pressTimeAlpha;
+                releaseAlpha = hitObject.releaseTimeAlpha;
                 lane = hitObject.lane;
+                headPressed = hitObject.headPressed;
             }
         end
 
         return ret
+    end
+
+    function self:press(lane)
+        self.objectPool:pressAgainst(lane)
+    end
+
+    function self:release(lane)
+        self.objectPool:releaseAgainst(lane)
     end
 
     function self:teardown()

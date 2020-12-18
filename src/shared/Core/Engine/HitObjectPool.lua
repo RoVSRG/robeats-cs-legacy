@@ -13,6 +13,7 @@ function HitObjectPool:new(props)
     self.index = 1
     self.currentAudioTime = 0
     self.scrollSpeed = props.scrollSpeed
+    self.scoreManager = props.scoreManager
 
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
@@ -41,6 +42,7 @@ function HitObjectPool:new(props)
         for i = 1, self.pool:count() do
             local hitObject = self.pool:get(i)
             if hitObject and hitObject:shouldRemove() then
+                self.scoreManager:registerHit(hitObject:currentPressJudgement())
                 self.pool:remove_at(i)
             end
         end
@@ -49,6 +51,64 @@ function HitObjectPool:new(props)
     function self:updateNotes()
         for i = 1, self.pool:count() do
             self.pool:get(i):update(self.currentAudioTime)
+        end
+    end
+
+    function self:getCandidate(lane)
+        local candidates = {}
+
+        for i = 1, self.pool:count() do
+            local hitObject = self.pool:get(i)
+            if hitObject.lane == lane then
+                candidates[#candidates+1] = {
+                    hitObject = hitObject;
+                    indexInPool = i;
+                }
+            end
+        end
+
+        table.sort(candidates, function(candidateA, candidateB)
+            return candidateA.hitObject.pressTime < candidateB.hitObject.pressTime
+        end)
+
+        local candidate = candidates[1]
+
+        return candidate
+    end
+
+    function self:pressAgainst(lane)
+        local candidate = self:getCandidate(lane)
+
+        if candidate then
+            if candidate.hitObject.type == 1 then
+                local judgement = candidate.hitObject:currentPressJudgement().judgement
+                if judgement ~= 0 then
+                    self.scoreManager:registerHit(judgement)
+                    self.pool:remove_at(candidate.indexInPool)
+                end
+            elseif candidate.hitObject.type == 2 then
+                local hitObject = candidate.hitObject
+                local judgement = hitObject:currentPressJudgement().judgement
+                if judgement ~= 0 and not hitObject.headPressed then
+                    hitObject.headPressed = true
+                    self.scoreManager:registerHit(judgement)
+                end
+            end
+        end
+    end
+
+    function self:releaseAgainst(lane)
+        local candidate = self:getCandidate(lane)
+
+        if candidate then
+            if candidate.hitObject.type == 2 then
+                local hitObject = candidate.hitObject
+                local judgement = hitObject:currentReleaseJudgement().judgement
+                if judgement ~= 0 then
+                    self.scoreManager:registerHit(judgement)
+                    self.pool:remove_at(candidate.indexInPool)
+                end
+            end
         end
     end
 

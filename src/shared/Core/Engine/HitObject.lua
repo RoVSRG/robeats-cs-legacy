@@ -50,16 +50,6 @@ function HitObject:new(props)
         })
     end
 
-    function self:press()
-        if self.type == 1 then
-
-        end
-    end
-
-    function self:release()
-        if self.type == 2 then return end
-    end
-
     function self:shouldRemove()
         local removeBy = self.type == 1 and self.pressTime or self.releaseTime
 

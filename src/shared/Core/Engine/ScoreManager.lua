@@ -139,12 +139,7 @@ function ScoreManager:new(_game)
 
 	local _frame_has_played_sfx = false
 
-	function self:registerHit(
-		note_result,
-		slot_index,
-		track_index,
-		params
-	)
+	function self:registerHit(note_result)
 
 		local _add_to_devaince = true
 		
@@ -163,22 +158,15 @@ function ScoreManager:new(_game)
 			chain = chain + 1
 			badCount = badCount + 1
 		else
-			if chain > 0 then
-				chain = 0
-				missCount = missCount + 1
-
-			elseif params.TimeMiss == true then
-				missCount = missCount + 1
-			else
-				_add_to_devaince = false
-			end
+			chain = 0
+			missCount = missCount + 1
 		end
 
-		if _add_to_devaince then
-			self:addHitToDeviance(params.HitTime, params.TimeToEnd, note_result)
-		end
+		-- if _add_to_devaince then
+		-- 	self:addHitToDeviance(params.HitTime, params.TimeToEnd, note_result)
+		-- end
 		
-		local totalnotes =_game._audio_manager:get_note_count()
+		local totalnotes = 500
 		self.score = self.score + self:resultToPointTotal(note_result,totalnotes)
 		
 		maxChain = math.max(chain,maxChain)
@@ -188,7 +176,7 @@ function ScoreManager:new(_game)
 
 	function self:getStatTable()
 		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = self:getEndRecords()
-		local combo = self:getchain()
+		local combo = self:getChain()
 		local accuracy = self:getAccuracy()
 
 		return {
@@ -216,8 +204,6 @@ function ScoreManager:new(_game)
 	function self:update(dt_scale)
 		_frame_has_played_sfx = false
 	end
-
-	self:fireChange()
 
 	return self
 end

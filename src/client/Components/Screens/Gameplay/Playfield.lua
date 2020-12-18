@@ -2,6 +2,7 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local Receptor = require(script.Parent.Receptor)
 local Note = require(script.Parent.Note)
+local Hold = require(script.Parent.Hold)
 
 local Playfield = Roact.Component:extend("Playfield")
 
@@ -13,13 +14,24 @@ function Playfield:render()
     local hitObjs = {}
 
     for i, itrHitObj in ipairs(self.props.hitObjects) do
-        hitObjs[i] = Roact.createElement(Note, {
-            alpha = itrHitObj.pressAlpha;
-            numberOfLanes = 4;
-            lane = itrHitObj.lane;
-            Image = "rbxassetid://5571834044";
-            rotateArrow = true;
-        })
+        if itrHitObj.type == 1 then
+            hitObjs[i] = Roact.createElement(Note, {
+                alpha = itrHitObj.pressAlpha;
+                numberOfLanes = 4;
+                lane = itrHitObj.lane;
+                Image = "rbxassetid://5571834044";
+                rotateArrow = true;
+            })
+        elseif itrHitObj.type == 2 then
+            hitObjs[i] = Roact.createElement(Hold, {
+                alpha = itrHitObj.headPressed and 1 or itrHitObj.pressAlpha;
+                releaseAlpha = itrHitObj.releaseAlpha;
+                numberOfLanes = 4;
+                lane = itrHitObj.lane;
+                Image = "rbxassetid://5571834044";
+                rotateArrow = true;
+            })
+        end
     end
 
     return Roact.createElement("Frame", {

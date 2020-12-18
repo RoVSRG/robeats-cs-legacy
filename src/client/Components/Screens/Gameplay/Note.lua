@@ -18,11 +18,13 @@ function Note:render()
         Position = UDim2.new(((self.props.lane-1)/self.props.numberOfLanes)+0.125, 0, self.props.upscroll and 1-self.props.alpha or self.props.alpha, 0);
         AnchorPoint = Vector2.new(0.5, 1);
         BackgroundTransparency = 1;
-        Rotation = self.props.rotateArrow and self.laneToNoteRotation[self.props.lane]
+        Rotation = self.props.rotateArrow and self.laneToNoteRotation[self.props.lane];
+        ZIndex = 25;
     }, {
         UIAspectRatioConstraint = Roact.createElement("UIAspectRatioConstraint", {
             AspectRatio = 1;
-        })
+        });
+        Chdn = Roact.createFragment(self.props[Roact.Children]);
     })
 end
 
