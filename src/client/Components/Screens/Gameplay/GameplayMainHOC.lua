@@ -34,12 +34,6 @@ function GameplayMainHOC:didMount()
     self.game:load()
 
     self.boundToFrame = SPUtil:bind_to_frame(function(dt)
-        -- if self.game._audio_manager:is_ready_to_play() == true and not self.didStart then
-        --     self.didStart = true
-        --     self.game:start_game()
-        -- elseif self.didStart then
-        --     self.game:update(CurveUtil:DeltaTimeToTimescale(dt))
-        -- end
         self.game:update(dt)
 
         self:setState({
