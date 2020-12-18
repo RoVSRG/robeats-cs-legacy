@@ -24,6 +24,10 @@ function GameplayMainHOC:init()
     self.backOut = function()
         self.props.history:push("/results")
     end
+
+    self:setState({
+        hitObjects = self.game:getCurrentHitObjectsSerialized()
+    })
 end
 
 function GameplayMainHOC:didMount()
@@ -37,6 +41,10 @@ function GameplayMainHOC:didMount()
         --     self.game:update(CurveUtil:DeltaTimeToTimescale(dt))
         -- end
         self.game:update(dt)
+
+        self:setState({
+            hitObjects = self.game:getCurrentHitObjectsSerialized()
+        })
     end)
 end
 
@@ -44,6 +52,7 @@ function GameplayMainHOC:render()
     return Roact.createElement(GameplayMain, {
         stats = self.props.stats;
         backOut = self.backOut;
+        hitObjects = self.state.hitObjects;
     }, self.props[Roact.Children])
 end
 

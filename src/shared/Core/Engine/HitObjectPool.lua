@@ -2,6 +2,8 @@ local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongData
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local HitObject = require(script.Parent.HitObject)
 
+local NoteConsole = require(script.Parent.NoteConsole)
+
 local HitObjectPool = {}
 
 function HitObjectPool:new(props)
@@ -14,25 +16,15 @@ function HitObjectPool:new(props)
 
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
-
         self:checkNewNotes()
         self:cleanUpRemovingNotes()
-        self:update()
+        self:updateNotes()
     end
 
     function self:checkNewNotes()
-        local w = 0
         for i = self.index, #self.hitData do
-            w = w + 1
             local noteData = self.hitData[i]
             if self.currentAudioTime >= noteData.Time - self.scrollSpeed then
-                print(string.format("%s %s %s %s",
-                    tostring(noteData.Track == 1),
-                    tostring(noteData.Track == 2),
-                    tostring(noteData.Track == 3),
-                    tostring(noteData.Track == 4)
-                ))
-
                 self:add({
                     pressTime = noteData.Time;
                     releaseTime = noteData.Type == 2 and noteData.Time + noteData.Duration;
@@ -48,8 +40,7 @@ function HitObjectPool:new(props)
     function self:cleanUpRemovingNotes()
         for i = 1, self.pool:count() do
             local hitObject = self.pool:get(i)
-            if hitObject:shouldRemove() then
-                print("HA BONKED")
+            if hitObject and hitObject:shouldRemove() then
                 self.pool:remove_at(i)
             end
         end

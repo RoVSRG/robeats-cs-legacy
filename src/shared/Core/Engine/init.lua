@@ -23,7 +23,7 @@ function Engine:new(props)
     self.audioTime = props.audioTime or 0
     self.state = Engine.States.Loading
     self.didInitialize = false
-    self.currentTime = 0
+    self.currentAudioTime = 0
     --self.scoreManager = ScoreManager:new()
     self.objectPool = HitObjectPool:new({
         scrollSpeed = props.scrollSpeed;
@@ -44,12 +44,31 @@ function Engine:new(props)
                 self.state = Engine.States.Playing
             end
         elseif self.state == Engine.States.Playing then
-            self.objectPool:update(self.currentTime)
-            self.currentTime = self.currentTime + (dt*1000)
+            self.objectPool:update(self.currentAudioTime)
+            self.currentAudioTime = self.currentAudioTime + (dt*1000)
         elseif self.state == Engine.State.Cleanup then
             self.audio:stop()
             self.state = Engine.States.Idle
         end
+    end
+
+    function self:getCurrentHitObjects()
+        return self.objectPool.pool._table
+    end
+
+    function self:getCurrentHitObjectsSerialized()
+        local hitObjects = self:getCurrentHitObjects()
+        local ret = {}
+
+        for i, hitObject in ipairs(hitObjects) do
+            ret[i] = {
+                type = 1;
+                pressAlpha = hitObject.pressTimeAlpha;
+                lane = hitObject.lane;
+            }
+        end
+
+        return ret
     end
 
     function self:teardown()

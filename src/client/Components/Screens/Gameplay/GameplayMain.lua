@@ -7,6 +7,7 @@ local Accuracy = require(script.Parent.Accuracy)
 local TimeLeft = require(script.Parent.TimeLeft)
 local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.Results.SpreadDisplay)
 local Combo = require(script.Parent.Combo)
+local Playfield = require(script.Parent.Playfield)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
@@ -40,6 +41,10 @@ function GameplayMain:render()
 		BorderSizePixel = 0,
 		Size = UDim2.new(1, 0, 1, 0),
 	}, {
+        Playfield = Roact.createElement(Playfield, {
+            hitObjects = self.props.hitObjects or {};
+            XOffset = 0.1;
+        });
         Score = Roact.createElement(Score, {
             Position = self.motorBinding:map(function(a)
                 return UDim2.new(0.98*(2-a),0,0.02,0);
