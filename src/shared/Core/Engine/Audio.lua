@@ -23,8 +23,15 @@ function Audio:new(_callback)
 		self.sound:Pause()
 	end
 
-	function self:stop()
+	function self:stop(doDestroy)
 		self.sound:Stop()
+		if doDestroy then
+			self:destroy()
+		end
+	end
+
+	function self:destroy()
+		self.sound:Destroy()
 	end
 
 	function self:loaded()

@@ -13,7 +13,7 @@ local GameplayMainHOC = Roact.Component:extend("GameplayMainHOC")
 function GameplayMainHOC:init()
     self.game = RobeatsGame:new({
         scrollSpeed = 1000;
-        key = 1;
+        key = 50;
     })
 
     self.sendStatsToGlobal = self.props.sendStatsToGlobal
@@ -24,6 +24,8 @@ function GameplayMainHOC:init()
     self.backOut = function()
         self.props.history:push("/results")
     end
+
+    self.game:load()
 
     self:setState({
         hitObjects = self.game:getCurrentHitObjectsSerialized()

@@ -38,17 +38,19 @@ function Engine:new(props)
         self.audio:play()
     end
 
+    function self:stop()
+        self.audio:stop(true)
+    end
+
     function self:update(dt)
         if self.state == Engine.States.Loading then
             if self.audio:loaded() then
+                self:play()
                 self.state = Engine.States.Playing
             end
         elseif self.state == Engine.States.Playing then
             self.objectPool:update(self.currentAudioTime)
             self.currentAudioTime = self.currentAudioTime + (dt*1000)
-        elseif self.state == Engine.State.Cleanup then
-            self.audio:stop()
-            self.state = Engine.States.Idle
         end
     end
 
@@ -72,7 +74,8 @@ function Engine:new(props)
     end
 
     function self:teardown()
-        self.state = Engine.States.Cleanup
+        self:stop()
+        -- self.state = Engine.States.Cleanup
     end
 
     self:cons()
