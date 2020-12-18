@@ -11,16 +11,14 @@ local GameplayMain = require(script.Parent.GameplayMain)
 local GameplayMainHOC = Roact.Component:extend("GameplayMainHOC")
 
 function GameplayMainHOC:init()
-    self.game_instance = RobeatsGame:new(EnvironmentSetup:get_game_environment_center_position())
-    self.game_instance._audio_manager:load_song(self.props.selectedSongKey)
-    self.game_instance:setup_world(1)
+    self.game = RobeatsGame:new()
 
     self.sendStatsToGlobal = self.props.sendStatsToGlobal
     self.sendHitDevianceToGlobal = self.props.sendHitDevianceToGlobal
 
     self.didStart = false
 
-    self.onStatChange = self.game_instance._score_manager:bind_to_change(function(stats)
+    self.onStatChange = self.game._score_manager:bind_to_change(function(stats)
         self.sendStatsToGlobal(stats)
     end)
 
@@ -31,12 +29,12 @@ end
 
 function GameplayMainHOC:didMount()
     self.boundToFrame = SPUtil:bind_to_frame(function(dt)
-        if self.game_instance._audio_manager:is_ready_to_play() == true and not self.didStart then
-            self.didStart = true
-            self.game_instance:start_game()
-        elseif self.didStart then
-            self.game_instance:update(CurveUtil:DeltaTimeToTimescale(dt))
-        end
+        -- if self.game._audio_manager:is_ready_to_play() == true and not self.didStart then
+        --     self.didStart = true
+        --     self.game:start_game()
+        -- elseif self.didStart then
+        --     self.game:update(CurveUtil:DeltaTimeToTimescale(dt))
+        -- end
     end)
 end
 
@@ -48,9 +46,9 @@ function GameplayMainHOC:render()
 end
 
 function GameplayMainHOC:willUnmount()
-    self.sendStatsToGlobal(self.game_instance._score_manager:get_stat_table())
-    self.sendHitDevianceToGlobal(self.game_instance._score_manager:get_hit_deviance())
-    self.game_instance:teardown()
+    self.sendStatsToGlobal(self.game._score_manager:get_stat_table())
+    self.sendHitDevianceToGlobal(self.game._score_manager:get_hit_deviance())
+    self.game:teardown()
     self.onStatChange:Disconnect()
     self.boundToFrame:Disconnect()
 end
