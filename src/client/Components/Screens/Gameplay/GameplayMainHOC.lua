@@ -11,16 +11,15 @@ local GameplayMain = require(script.Parent.GameplayMain)
 local GameplayMainHOC = Roact.Component:extend("GameplayMainHOC")
 
 function GameplayMainHOC:init()
-    self.game = RobeatsGame:new()
+    self.game = RobeatsGame:new({
+        scrollSpeed = 1000;
+        key = 1;
+    })
 
     self.sendStatsToGlobal = self.props.sendStatsToGlobal
     self.sendHitDevianceToGlobal = self.props.sendHitDevianceToGlobal
 
     self.didStart = false
-
-    self.onStatChange = self.game._score_manager:bind_to_change(function(stats)
-        self.sendStatsToGlobal(stats)
-    end)
 
     self.backOut = function()
         self.props.history:push("/results")
@@ -28,6 +27,8 @@ function GameplayMainHOC:init()
 end
 
 function GameplayMainHOC:didMount()
+    self.game:load()
+
     self.boundToFrame = SPUtil:bind_to_frame(function(dt)
         -- if self.game._audio_manager:is_ready_to_play() == true and not self.didStart then
         --     self.didStart = true
@@ -35,6 +36,7 @@ function GameplayMainHOC:didMount()
         -- elseif self.didStart then
         --     self.game:update(CurveUtil:DeltaTimeToTimescale(dt))
         -- end
+        self.game:update(dt)
     end)
 end
 
@@ -46,10 +48,7 @@ function GameplayMainHOC:render()
 end
 
 function GameplayMainHOC:willUnmount()
-    self.sendStatsToGlobal(self.game._score_manager:get_stat_table())
-    self.sendHitDevianceToGlobal(self.game._score_manager:get_hit_deviance())
     self.game:teardown()
-    self.onStatChange:Disconnect()
     self.boundToFrame:Disconnect()
 end
 

@@ -1,8 +1,3 @@
-local NoteResult = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.NoteResult)
-local SFXManager = require(game.ReplicatedStorage.Shared.Core.Engine.SFXManager)
-local NoteResultPopupEffect = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.NoteResultPopupEffect)
-local HoldingNoteEffect = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.HoldingNoteEffect)
-
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local ScoreManager = {}
@@ -12,7 +7,7 @@ function ScoreManager:new(_game)
 	self.hit_deviance = {}
 	
 	local chain = 0
-	function self:getchain() return chain end
+	function self:getChain() return chain end
 	
 	self.bonus = 100
 	self.score = 0
@@ -86,23 +81,23 @@ function ScoreManager:new(_game)
 		local totalnotes =_game._audio_manager:get_note_count()
 		local marv = 0
 		for total = 1, spread[1] do
-			marv = marv + self:resultToPointTotal(NoteResult.Marvelous,totalnotes)
+			marv = marv + self:resultToPointTotal(5,totalnotes)
 		end
 		local perf = 0
 		for total = 1, spread[2] do
-			perf = perf + self:resultToPointTotal(NoteResult.Perfect,totalnotes)
+			perf = perf + self:resultToPointTotal(4,totalnotes)
 		end
 		local great = 0
 		for total = 1, spread[3] do
-			great = great + self:resultToPointTotal(NoteResult.Great,totalnotes)
+			great = great + self:resultToPointTotal(3,totalnotes)
 		end
 		local good = 0
 		for total = 1, spread[4] do
-			good = good + self:resultToPointTotal(NoteResult.Good,totalnotes)
+			good = good + self:resultToPointTotal(2,totalnotes)
 		end
 		local bad = 0
 		for total = 1, spread[5] do
-			bad = bad + self:resultToPointTotal(NoteResult.Bad,totalnotes)
+			bad = bad + self:resultToPointTotal(1,totalnotes)
 		end
 		return marv + perf + great + good + bad
 	end
@@ -123,15 +118,15 @@ function ScoreManager:new(_game)
 	end
 
 	function self:resultToPointTotal(note_result,totalnotes)
-		if note_result == NoteResult.Marvelous then
+		if note_result == 5 then
 			return self:calculateNoteScore(totalnotes,320,32,2,0)
-		elseif note_result == NoteResult.Perfect then
+		elseif note_result == 4 then
 			return self:calculateNoteScore(totalnotes,300,32,1,0)
-		elseif note_result == NoteResult.Great then
+		elseif note_result == 3 then
 			return self:calculateNoteScore(totalnotes,200,16,0,8)
-		elseif note_result == NoteResult.Good then
+		elseif note_result == 2 then
 			return self:calculateNoteScore(totalnotes,100,8,0,24)
-		elseif note_result == NoteResult.Bad then
+		elseif note_result == 1 then
 			return self:calculateNoteScore(totalnotes,50,4,0,44)
 		else
 			if totalCount > 0 then
@@ -150,60 +145,21 @@ function ScoreManager:new(_game)
 		track_index,
 		params
 	)
-		local track = _game:get_tracksystem(slot_index):get_track(track_index)
-		_game._effects:add_effect(NoteResultPopupEffect:new(
-			_game,
-			track:get_end_position() + Vector3.new(0,0.25,0),
-			note_result
-		))
-
-		if params.PlaySFX == true then
-			
-			--Make sure only one sfx is played per frame
-			if _frame_has_played_sfx == false then
-				if note_result == NoteResult.Perfect or note_result == NoteResult.Marvelous then
-					if params.IsHeldNoteBegin == true then
-						_game._audio_manager:get_hit_sfx_group():play_first()
-					else
-						_game._audio_manager:get_hit_sfx_group():play_alternating()
-					end
-
-				elseif note_result == NoteResult.Great then
-					_game._audio_manager.get_hit_sfx_group():play_first()
-				elseif note_result == NoteResult.Good or note_result == NoteResult.Bad then
-					_game._sfx_manager:play_sfx(SFXManager.SFX_DRUM_OKAY)
-				else
-					_game._sfx_manager:play_sfx(SFXManager.SFX_MISS)
-				end
-				_frame_has_played_sfx = true
-			end
-			
-			--Create an effect at HoldEffectPosition if PlayHoldEffect is true
-			if params.PlayHoldEffect then
-				if note_result ~= NoteResult.Miss then
-					_game._effects:add_effect(HoldingNoteEffect:new(
-						_game,
-						params.HoldEffectPosition,
-						note_result
-					))
-				end
-			end
-		end
 
 		local _add_to_devaince = true
 		
 		--Incregertment stats
-		if note_result == NoteResult.Marvelous then
+		if note_result == 5 then
 			chain = chain + 1
 			marvCount = marvCount + 1
-		elseif note_result == NoteResult.Perfect then
+		elseif note_result == 4 then
 			chain = chain + 1
 			perfectCount = perfectCount + 1
-		elseif note_result == NoteResult.Great then
+		elseif note_result == 3 then
 			 greatCount =  greatCount + 1
-		elseif note_result == NoteResult.Good then
+		elseif note_result == 2 then
 			goodCount = goodCount + 1
-		elseif note_result == NoteResult.Bad then
+		elseif note_result == 1 then
 			chain = chain + 1
 			badCount = badCount + 1
 		else

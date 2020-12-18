@@ -24,9 +24,10 @@ function Engine:new(props)
     self.state = Engine.States.Loading
     self.didInitialize = false
     self.currentTime = 0
-    self.scoreManager = ScoreManager:new()
+    --self.scoreManager = ScoreManager:new()
     self.objectPool = HitObjectPool:new({
         scrollSpeed = props.scrollSpeed;
+        key = props.key;
     })
     
     function self:load()
@@ -43,9 +44,8 @@ function Engine:new(props)
                 self.state = Engine.States.Playing
             end
         elseif self.state == Engine.States.Playing then
-            self.objectPool:update(dt)
-
-            self.currentTime = self.currentTime + dt
+            self.objectPool:update(self.currentTime)
+            self.currentTime = self.currentTime + (dt*1000)
         elseif self.state == Engine.State.Cleanup then
             self.audio:stop()
             self.state = Engine.States.Idle
