@@ -25,8 +25,10 @@ function SongDatabase:new()
 		for i=1,#SongMapList do
 			local audio_data = require(SongMapList[i])
 			SongErrorParser:scan_audiodata_for_errors(audio_data)
-			self:add_key_to_data(i,audio_data)
-			_name_to_key:add(SongMapList[i].Name,i)
+			if SongErrorParser:can_add_to_song_database(audio_data) then
+				self:add_key_to_data(i,audio_data)
+				_name_to_key:add(SongMapList[i].Name,i)
+			end
 		end
 	end
 

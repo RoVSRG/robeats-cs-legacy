@@ -9,8 +9,8 @@ local function track_time_to_hash(p_track,p_time)
 end
 
 function SongErrorParser:scan_audiodata_for_errors(audio_data)
-	local tracked_notes = SPDict:new()	
-	
+	local tracked_notes = SPDict:new()
+
 	for i=1,#audio_data.HitObjects do
 		local itr_hitobj = audio_data.HitObjects[i]
 		
@@ -50,6 +50,11 @@ function SongErrorParser:scan_audiodata_for_errors(audio_data)
 		end		
 	end	
 	
+end
+
+function SongErrorParser:can_add_to_song_database(map_data)
+	return map_data.AudioArtist ~= nil
+		and map_data.AudioFilename ~= nil
 end
 
 return SongErrorParser 
