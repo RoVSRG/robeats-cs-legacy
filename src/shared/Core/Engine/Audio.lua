@@ -16,6 +16,7 @@ function Audio:new(_callback)
 	end
 	
 	function self:play()
+		wait(1)
 		self.sound:Play()
 	end
 	

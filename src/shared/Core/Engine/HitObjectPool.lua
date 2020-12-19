@@ -1,6 +1,7 @@
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local HitObject = require(script.Parent.HitObject)
+local Hitsound = require(script.Parent.Hitsound)
 
 local NoteConsole = require(script.Parent.NoteConsole)
 
@@ -13,7 +14,8 @@ function HitObjectPool:new(props)
     self.index = 1
     self.currentAudioTime = 0
     self.scrollSpeed = props.scrollSpeed
-    self.scoreManager = props.scoreManager
+	self.scoreManager = props.scoreManager
+	self.Hitsound = Hitsound:new(props)
 
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
@@ -27,8 +29,8 @@ function HitObjectPool:new(props)
             local noteData = self.hitData[i]
             if self.currentAudioTime >= noteData.Time - self.scrollSpeed then
                 self:add({
-                    pressTime = noteData.Time;
-                    releaseTime = noteData.Type == 2 and noteData.Time + noteData.Duration;
+                    pressTime = noteData.Time + 1000;
+					releaseTime = noteData.Type == 2 and (noteData.Time + 1000) + noteData.Duration;
                     lane = noteData.Track;
                     scrollSpeed = self.scrollSpeed;
                 })
@@ -84,14 +86,16 @@ function HitObjectPool:new(props)
                 local judgement = candidate.hitObject:currentPressJudgement().judgement
                 if judgement ~= 0 then
                     self.scoreManager:registerHit(judgement)
-                    self.pool:remove_at(candidate.indexInPool)
+					self.pool:remove_at(candidate.indexInPool)
+					self.Hitsound:PlayHitsound(1)
                 end
             elseif candidate.hitObject.type == 2 then
                 local hitObject = candidate.hitObject
                 local judgement = hitObject:currentPressJudgement().judgement
                 if judgement ~= 0 and not hitObject.headPressed then
                     hitObject.headPressed = true
-                    self.scoreManager:registerHit(judgement)
+					self.scoreManager:registerHit(judgement)
+					self.Hitsound:PlayHitsound(1)
                 end
             end
         end
@@ -106,7 +110,8 @@ function HitObjectPool:new(props)
                 local judgement = hitObject:currentReleaseJudgement().judgement
                 if judgement ~= 0 then
                     self.scoreManager:registerHit(judgement)
-                    self.pool:remove_at(candidate.indexInPool)
+					self.pool:remove_at(candidate.indexInPool)
+					self.Hitsound:PlayHitsound(0.5)
                 end
             end
         end
