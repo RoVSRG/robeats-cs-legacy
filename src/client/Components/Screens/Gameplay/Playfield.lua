@@ -36,7 +36,7 @@ function Playfield:render()
 
     return Roact.createElement("Frame", {
         BackgroundColor3 = Color3.fromRGB(0, 0, 0);
-        Size = UDim2.new(0.35, 0, 1, 0);
+        Size = UDim2.new(0.25, 0, 1, 0);
         Position = UDim2.new(0.5, 0, 0, 0);
         AnchorPoint = Vector2.new(0.5, 0);
         BorderSizePixel = 0;
