@@ -10,18 +10,19 @@ function Audio:new(_callback)
 	function self:load(id)
 		id = typeof(id) == "string" and id or "rbxassetid://"..tostring(id)
 		self.sound.SoundId = id
+		self.sound.Playing = true
+		self.sound.PlaybackSpeed = 0
 		return function()
 			self:play()
 		end
 	end
 	
 	function self:play()
-		wait(1)
-		self.sound:Play()
+		self.sound.PlaybackSpeed = 1
 	end
 	
 	function self:pause()
-		self.sound:Pause()
+		self.sound.PlaybackSpeed = 0
 	end
 
 	function self:stop(doDestroy)
@@ -29,6 +30,10 @@ function Audio:new(_callback)
 		if doDestroy then
 			self:destroy()
 		end
+	end
+
+	function self:is_playing()
+		return self.sound.PlaybackSpeed > 0
 	end
 
 	function self:destroy()

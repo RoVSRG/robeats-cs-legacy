@@ -99,8 +99,8 @@ function GameplayMainHOC:render()
 end
 
 function GameplayMainHOC:willUnmount()
-    self.game:teardown()
     self.boundToFrame:Disconnect()
+    self.game:teardown()
     for _, keyConnection in ipairs(self.keyConnections) do
         keyConnection:Disconnect()
     end

@@ -20,19 +20,21 @@ function Engine:new(props)
         self.audio:parent(workspace)
     end
 
-    self.audioTime = props.audioTime or 0
     self.state = Engine.States.Loading
     self.didInitialize = false
-    self.currentAudioTime = 0
+    self.currentAudioTime = -5000
     self.scoreManager = ScoreManager:new()
     self.objectPool = HitObjectPool:new({
         scrollSpeed = props.scrollSpeed;
         key = props.key;
         scoreManager = self.scoreManager;
     })
+
+    self.didStart = false
     
     function self:load()
         self.audio:load(SongDatabase:get_data_for_key(props.key).AudioAssetId)
+        self.offset = SongDatabase:get_data_for_key(props.key).AudioTimeOffset
     end
 
     function self:play()
@@ -45,11 +47,13 @@ function Engine:new(props)
 
     function self:update(dt)
         if self.state == Engine.States.Loading then
-            if self.audio:loaded() then
+            self.state = self.audio:loaded() and Engine.States.Playing or Engine.States.Loading
+        elseif self.state == Engine.States.Playing then
+            if (not self.didStart) and self.currentAudioTime > self.offset then
                 self:play()
+                self.didStart = true
                 self.state = Engine.States.Playing
             end
-        elseif self.state == Engine.States.Playing then
             self.objectPool:update(self.currentAudioTime)
             self.currentAudioTime = self.currentAudioTime + (dt*1000)
         end
@@ -86,7 +90,7 @@ function Engine:new(props)
 
     function self:teardown()
         self:stop()
-        -- self.state = Engine.States.Cleanup
+        self.state = Engine.States.Cleanup
     end
 
     self:cons()
