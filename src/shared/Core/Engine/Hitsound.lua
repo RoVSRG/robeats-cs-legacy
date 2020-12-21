@@ -2,7 +2,7 @@ local SFXManager = require(script.Parent.SFXManager)
 
 local Hitsound = {}
 
-function Hitsound:new(props)
+function Hitsound:new()
 	local self = {}
 	
 	function self:cons()
@@ -17,6 +17,10 @@ function Hitsound:new(props)
 
 	function self:playHitsound(volume)
 		self.sfxManager:playSfx(SFXManager.SFX_HITFXHIT, volume/2)
+	end
+
+	function self:teardown()
+		self.sfxManager:teardown()
 	end
 
 	self:cons()

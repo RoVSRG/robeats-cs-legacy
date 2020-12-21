@@ -26,6 +26,13 @@ function GameplayMainHOC:init()
     end
 
     self.game:load()
+
+    self.keybinds = {
+        [Enum.KeyCode.Q] = 1;
+        [Enum.KeyCode.W] = 2;
+        [Enum.KeyCode.O] = 3;
+        [Enum.KeyCode.P] = 4;
+    }
     
 
     self:setState({
@@ -45,37 +52,17 @@ function GameplayMainHOC:init()
     })
 
     self.keyConnections = {
-        SPUtil:bind_to_key(Enum.KeyCode.Q, function()
-            self.game:press(1)
+        SPUtil:bind_to_key(Enum.KeyCode, function(keyCode)
+            if self.keybinds[keyCode] then
+                self.game:press(self.keybinds[keyCode])
+            end
         end);
-        SPUtil:bind_to_key(Enum.KeyCode.W, function()
-            self.game:press(2)
-        end);
-        SPUtil:bind_to_key(Enum.KeyCode.O, function()
-            self.game:press(3)
-        end);
-        SPUtil:bind_to_key(Enum.KeyCode.P, function()
-            self.game:press(4)
-        end);
-        SPUtil:bind_to_key_release(Enum.KeyCode.Q, function()
-            self.game:release(1)
-        end);
-        SPUtil:bind_to_key_release(Enum.KeyCode.W, function()
-            self.game:release(2)
-        end);
-        SPUtil:bind_to_key_release(Enum.KeyCode.O, function()
-            self.game:release(3)
-        end);
-        SPUtil:bind_to_key_release(Enum.KeyCode.P, function()
-            self.game:release(4)
-        end);
+        SPUtil:bind_to_key_release(Enum.KeyCode, function(keyCode)
+            if self.keybinds[keyCode] then
+                self.game:release(self.keybinds[keyCode])
+            end
+        end)
     }
-
-    self.game.scoreManager:bindToChange(function(stats)
-        self:setState({
-            stats = stats
-        })
-    end)
 end
 
 function GameplayMainHOC:didMount()
@@ -85,16 +72,19 @@ function GameplayMainHOC:didMount()
         self.game:update(dt)
 
         self:setState({
-            hitObjects = self.game:getCurrentHitObjectsSerialized()
+            hitObjects = self.game:getCurrentHitObjectsSerialized();
+            mostRecentJudgement = self.game.scoreManager.mostRecentJudgement;
+            stats = self.game.scoreManager.stats;
         })
     end)
 end
 
 function GameplayMainHOC:render()
     return Roact.createElement(GameplayMain, {
-        stats = self.state.stats;
+        stats = self.game.scoreManager.stats;
         backOut = self.backOut;
         hitObjects = self.state.hitObjects;
+        judgement = self.state.mostRecentJudgement;
     }, self.props[Roact.Children])
 end
 

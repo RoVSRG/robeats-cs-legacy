@@ -1,4 +1,5 @@
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
+local HitObject = require(script.Parent.HitObject)
 
 local Track = {}
 
@@ -7,10 +8,11 @@ function Track:new(props)
 
     self.hitObjects = SPList:new()
     self.scoreManager = props.scoreManager
+    self.hitsound = props.hitsound
     self.currentAudioTime = 0
 
-    function self:add(hitOb)
-        self.hitObjects:push_back(hitOb)
+    function self:add(props)
+        self.hitObjects:push_back(HitObject:new(props))
     end
 
     function self:getCandidate()
@@ -24,11 +26,12 @@ function Track:new(props)
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
 
-
+        self:cleanUpRemovingNotes()
+        self:updateNotes()
     end
 
     function self:cleanUpRemovingNotes()
-        for i = 1, self.pool:count() do
+        for i = 1, self.hitObjects:count() do
             local hitObject = self.hitObjects:get(i)
             if hitObject and hitObject:shouldRemove() then
                 self.scoreManager:registerHit(hitObject:currentPressJudgement())
@@ -38,7 +41,7 @@ function Track:new(props)
     end
 
     function self:updateNotes()
-        for i = 1, self.pool:count() do
+        for i = 1, self.hitObjects:count() do
             self.hitObjects:get(i):update(self.currentAudioTime)
         end
     end
@@ -58,6 +61,65 @@ function Track:new(props)
         end
 
         return ret
+    end
+
+    function self:pressAgainst()
+        local candidate = self:getCandidate()
+        if candidate then
+            if candidate.type == 1 then
+                local judgement = candidate:currentPressJudgement().judgement
+                if judgement ~= 0 then
+                    self.scoreManager:registerHit(judgement)
+                    self.hitObjects:remove_at(1)
+                    self.hitsound:playHitsound(1)
+                end
+            elseif candidate.type == 2 then
+                local judgement = candidate:currentPressJudgement().judgement
+                if not candidate.headPressed then
+                    if judgement ~= 0 then
+                        candidate.headPressed = true
+                        self.scoreManager:registerHit(judgement)
+                        self.hitsound:playHitsound(1)
+                    end
+                else
+                    -- local nextObject = candidates[2]
+                    -- if nextObject then
+                    --     local nextObjectJudgement = nextObject.hitObject:currentPressJudgement().judgement
+                    --     if nextObjectJudgement ~= 0 then
+                    --         self.hitObjects:remove_at(candidate.indexInPool)
+                    --         self.scoreManager:registerHit(0)
+                    --         if nextObject.hitObject.type == 1 then
+                    --             print("Note on lane " .. nextObject.hitObject.lane .. "removing")
+                    --             self.hitObjects:remove_at(nextObject.indexInPool)
+                    --         else
+                    --             nextObject.hitObject.headPressed = true
+                    --         end
+                    --         self.scoreManager:registerHit(nextObjectJudgement)
+                    --         self.hitsound:playHitsound(1)
+                    --     end
+                    -- end
+                end
+            end
+        end 
+    end
+
+    function self:releaseAgainst()
+        local candidate = self:getCandidate()
+        if candidate then
+            if candidate.type == 2 then
+                local judgement = candidate:currentReleaseJudgement().judgement
+                if judgement ~= 0 then
+                    self.scoreManager:registerHit(judgement)
+                    self.hitObjects:remove_at(1)
+                    self.hitsound:playHitsound(1)
+                else
+                    if (not candidate.releasedEarly) and candidate.headPressed then
+                        candidate.releasedEarly = true
+                        self.scoreManager:registerHit(judgement)
+                    end
+                end
+            end
+        end
     end
 
     return self

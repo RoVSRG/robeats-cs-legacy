@@ -3,6 +3,7 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Receptor = require(script.Parent.Receptor)
 local Note = require(script.Parent.Note)
 local Hold = require(script.Parent.Hold)
+local Judgement = require(script.Parent.Judgement)
 
 local Playfield = Roact.Component:extend("Playfield")
 
@@ -13,24 +14,27 @@ end
 function Playfield:render()
     local hitObjs = {}
 
-    for i, itrHitObj in ipairs(self.props.hitObjects) do
-        if itrHitObj.type == 1 then
-            hitObjs[i] = Roact.createElement(Note, {
-                alpha = itrHitObj.pressAlpha;
-                numberOfLanes = 4;
-                lane = itrHitObj.lane;
-                Image = "rbxassetid://5571834044";
-                rotateArrow = true;
-            })
-        elseif itrHitObj.type == 2 then
-            hitObjs[i] = Roact.createElement(Hold, {
-                alpha = itrHitObj.headPressed and 1 or itrHitObj.pressAlpha;
-                releaseAlpha = itrHitObj.releaseAlpha;
-                numberOfLanes = 4;
-                lane = itrHitObj.lane;
-                Image = "rbxassetid://5571834044";
-                rotateArrow = true;
-            })
+    for _, track in ipairs(self.props.hitObjects) do
+        for k = 1, #track do
+            local itrHitObj = track[k]
+            if itrHitObj.type == 1 then
+                hitObjs[#hitObjs+1] = Roact.createElement(Note, {
+                    alpha = itrHitObj.pressAlpha;
+                    numberOfLanes = 4;
+                    lane = itrHitObj.lane;
+                    Image = "rbxassetid://5571834044";
+                    rotateArrow = true;
+                })
+            elseif itrHitObj.type == 2 then
+                hitObjs[#hitObjs+1] = Roact.createElement(Hold, {
+                    alpha = itrHitObj.headPressed and 1 or itrHitObj.pressAlpha;
+                    releaseAlpha = itrHitObj.releaseAlpha;
+                    numberOfLanes = 4;
+                    lane = itrHitObj.lane;
+                    Image = "rbxassetid://5571834044";
+                    rotateArrow = true;
+                })
+            end
         end
     end
 
@@ -81,6 +85,9 @@ function Playfield:render()
             Position = UDim2.new(0, 0, 0, 0);
             BackgroundTransparency = self.props.hitObjectBackgroundTransparency or 1;
         }, hitObjs);
+        -- Judgement = Roact.createElement(Judgement, {
+        --     stats = self.props.stats;
+        -- })
     })
 end
 

@@ -1,4 +1,6 @@
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
+local Bindable = require(game.ReplicatedStorage.Libraries.Bindable)
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local ScoreManager = {}
 
@@ -12,6 +14,8 @@ function ScoreManager:new(_game)
 	self.bonus = 100
 	self.score = 0
 	self.chain = 0
+
+	self.mostRecentJudgement = 0
 	
 	local marvCount = 0
 	local perfectCount = 0
@@ -22,7 +26,7 @@ function ScoreManager:new(_game)
 	local maxChain = 0
 	local totalCount = 0
 	local maxscore = 1000000
-	
+
 	local hit_color = {
 		[0] = Color3.fromRGB(255, 0, 0);
 		[1] = Color3.fromRGB(190, 10, 240);
@@ -31,8 +35,6 @@ function ScoreManager:new(_game)
 		[4] = Color3.fromRGB(252, 244, 5);
 		[5] = Color3.fromRGB(255, 255, 255);
 	}
-
-	local _didChange = Instance.new("BindableEvent")
 
 	function self:getEndRecords() return  marvCount, perfectCount, greatCount, goodCount, badCount, missCount, maxChain, self.score end
 	function self:getAccuracy()
@@ -140,38 +142,42 @@ function ScoreManager:new(_game)
 	local _frame_has_played_sfx = false
 
 	function self:registerHit(note_result)
+		SPUtil:spawn(function()
+			local _add_to_devaince = true
+			
+			--Incregertment stats
+			if note_result == 5 then
+				chain = chain + 1
+				marvCount = marvCount + 1
+			elseif note_result == 4 then
+				chain = chain + 1
+				perfectCount = perfectCount + 1
+			elseif note_result == 3 then
+				greatCount =  greatCount + 1
+			elseif note_result == 2 then
+				goodCount = goodCount + 1
+			elseif note_result == 1 then
+				chain = chain + 1
+				badCount = badCount + 1
+			else
+				chain = 0
+				missCount = missCount + 1
+			end
 
-		local _add_to_devaince = true
-		
-		--Incregertment stats
-		if note_result == 5 then
-			chain = chain + 1
-			marvCount = marvCount + 1
-		elseif note_result == 4 then
-			chain = chain + 1
-			perfectCount = perfectCount + 1
-		elseif note_result == 3 then
-			 greatCount =  greatCount + 1
-		elseif note_result == 2 then
-			goodCount = goodCount + 1
-		elseif note_result == 1 then
-			chain = chain + 1
-			badCount = badCount + 1
-		else
-			chain = 0
-			missCount = missCount + 1
-		end
+			-- if _add_to_devaince then
+			-- 	self:addHitToDeviance(params.HitTime, params.TimeToEnd, note_result)
+			-- end
+			
+			local totalnotes = 500
+			self.score = self.score + self:resultToPointTotal(note_result,totalnotes)
+			
+			maxChain = math.max(chain,maxChain)
 
-		-- if _add_to_devaince then
-		-- 	self:addHitToDeviance(params.HitTime, params.TimeToEnd, note_result)
-		-- end
-		
-		local totalnotes = 500
-		self.score = self.score + self:resultToPointTotal(note_result,totalnotes)
-		
-		maxChain = math.max(chain,maxChain)
-
-		self:fireChange()
+			self.mostRecentJudgement = note_result
+			local t = tick()
+			self.stats:change(self:getStatTable())
+			print(tick() - t)
+		end)
 	end
 
 	function self:getStatTable()
@@ -190,20 +196,15 @@ function ScoreManager:new(_game)
 			combo = combo;
 			accuracy = accuracy;
 			max_combo = max_combo;
+			most_recent = self.mostRecentJudgement;
 		}
-	end
-
-	function self:fireChange()
-		_didChange:Fire(self:getStatTable())
-	end
-
-	function self:bindToChange(_callback)
-		return _didChange.Event:Connect(_callback)
 	end
 
 	function self:update(dt_scale)
 		_frame_has_played_sfx = false
 	end
+
+	self.stats = Bindable:new(self:getStatTable())
 
 	return self
 end

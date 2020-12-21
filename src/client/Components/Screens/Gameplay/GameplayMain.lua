@@ -30,10 +30,43 @@ function GameplayMain:init()
 
 	self.motor = Flipper.SingleMotor.new(0)
     self.motorBinding = RoactFlipper.getBinding(self.motor)
+
+    self.stats = self.props.stats
+
+    self:setState({
+        stats = {
+            marvelouses = 0;
+            perfects = 0;
+            greats = 0;
+            goods = 0;
+            bads = 0;
+            misses = 0;
+            accuracy = 0;
+            score = 0;
+            time_left = 0;
+            combo = 0;
+        }
+    })
+
+    self.stats.onChange.Event:Connect(function(stats)
+        self:setState({
+            stats = {
+                marvelouses = stats.marvelouses;
+                perfects = stats.perfects;
+                greats = stats.greats;
+                goods = stats.goods;
+                bads = stats.bads;
+                misses = stats.misses;
+                accuracy = stats.accuracy;
+                score = stats.score;
+                combo = stats.combo;
+            }
+        })
+    end)
 end
 
 function GameplayMain:render()
-	local stats = self.props.stats
+	local stats = self.state.stats
 	return Roact.createElement("Frame", {
 		Name = "GameplayMain",
 		BackgroundColor3 = Color3.fromRGB(35, 35, 35),
@@ -43,6 +76,7 @@ function GameplayMain:render()
 	}, {
         Playfield = Roact.createElement(Playfield, {
             hitObjects = self.props.hitObjects or {};
+            stats = self.stats;
             XOffset = 0.1;
         });
         Score = Roact.createElement(Score, {

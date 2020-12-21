@@ -1,6 +1,7 @@
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local ScoreManager = require(script.ScoreManager)
 local HitObjectPool = require(script.HitObjectPool)
+local Hitsound = require(script.Hitsound)
 local Audio = require(script.Audio)
 
 local Engine = {
@@ -24,10 +25,12 @@ function Engine:new(props)
     self.didInitialize = false
     self.currentAudioTime = -5000
     self.scoreManager = ScoreManager:new()
+    self.hitsound = Hitsound:new()
     self.objectPool = HitObjectPool:new({
         scrollSpeed = props.scrollSpeed;
         key = props.key;
         scoreManager = self.scoreManager;
+        hitsound = self.hitsound;
     })
 
     self.didStart = false
@@ -59,37 +62,21 @@ function Engine:new(props)
         end
     end
 
-    function self:getCurrentHitObjects()
-        return self.objectPool.pool._table
-    end
-
     function self:getCurrentHitObjectsSerialized()
-        local hitObjects = self:getCurrentHitObjects()
-        local ret = {}
-
-        for i, hitObject in ipairs(hitObjects) do
-            ret[i] = {
-                type = hitObject.type;
-                pressAlpha = hitObject.pressTimeAlpha;
-                releaseAlpha = hitObject.releaseTimeAlpha;
-                lane = hitObject.lane;
-                headPressed = hitObject.headPressed;
-            }
-        end
-
-        return ret
+        return self.objectPool.trackSystem:getSerialized()
     end
 
     function self:press(lane)
-        self.objectPool:pressAgainst(lane)
+        self.objectPool.trackSystem:getTrack(lane):pressAgainst()
     end
 
     function self:release(lane)
-        self.objectPool:releaseAgainst(lane)
+        self.objectPool.trackSystem:getTrack(lane):releaseAgainst()
     end
 
     function self:teardown()
         self:stop()
+        self.hitsound:teardown()
         self.state = Engine.States.Cleanup
     end
 

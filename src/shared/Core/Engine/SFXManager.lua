@@ -125,6 +125,11 @@ function SFXManager:new()
 		end
 	end
 
+	function self:teardown()
+		sfxPooledParent:Destroy()
+		sfxActiveParent:Destroy()
+	end
+
 	self:cons()
 	return self;
 end
