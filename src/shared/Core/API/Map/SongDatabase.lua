@@ -2,6 +2,8 @@ local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local SongErrorParser = require(game.ReplicatedStorage.Shared.Core.API.Map.SongErrorParser)
+local MD5 = require(game.ReplicatedStorage.Libraries.MD5)
+local Promise = require(game.ReplicatedStorage.Libraries.Promise)
 
 local SongMapList = workspace.SongMaps:GetChildren()
 
@@ -72,6 +74,19 @@ function SongDatabase:new()
 		else
 			overlay_image.Visible = false
 		end
+	end
+
+	function self:get_chart_hash_for_key(key)
+		return Promise.new(function(resolve, reject)
+			local songdata = self:get_data_for_key(key)
+			local s = ""
+
+			for _, hitOb in pairs(songdata.HitObjects) do
+				s ..= string.format("%s%s", hitOb.Time, hitOb.Track)
+			end
+
+			resolve(MD5.tohex(MD5.sum(MD5.tohex(s))))
+		end)
 	end
 
 	function self:render_bannerimage_for_key(banner_image, key)
