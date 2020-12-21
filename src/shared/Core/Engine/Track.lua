@@ -82,22 +82,21 @@ function Track:new(props)
                         self.hitsound:playHitsound(1)
                     end
                 else
-                    -- local nextObject = candidates[2]
-                    -- if nextObject then
-                    --     local nextObjectJudgement = nextObject.hitObject:currentPressJudgement().judgement
-                    --     if nextObjectJudgement ~= 0 then
-                    --         self.hitObjects:remove_at(candidate.indexInPool)
-                    --         self.scoreManager:registerHit(0)
-                    --         if nextObject.hitObject.type == 1 then
-                    --             print("Note on lane " .. nextObject.hitObject.lane .. "removing")
-                    --             self.hitObjects:remove_at(nextObject.indexInPool)
-                    --         else
-                    --             nextObject.hitObject.headPressed = true
-                    --         end
-                    --         self.scoreManager:registerHit(nextObjectJudgement)
-                    --         self.hitsound:playHitsound(1)
-                    --     end
-                    -- end
+                    local nextObject = self.hitObjects:get(2)
+                    if nextObject then
+                        local nextObjectJudgement = nextObject:currentPressJudgement().judgement
+                        if nextObjectJudgement ~= 0 then
+                            self.hitObjects:remove_at(1)
+                            self.scoreManager:registerHit(0)
+                            if nextObject.type == 1 then
+                                self.hitObjects:remove_at(1)
+                            else
+                                nextObject.headPressed = true
+                            end
+                            self.scoreManager:registerHit(nextObjectJudgement)
+                            self.hitsound:playHitsound(1)
+                        end
+                    end
                 end
             end
         end 
