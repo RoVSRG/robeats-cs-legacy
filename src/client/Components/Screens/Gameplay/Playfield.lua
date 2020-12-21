@@ -85,9 +85,9 @@ function Playfield:render()
             Position = UDim2.new(0, 0, 0, 0);
             BackgroundTransparency = self.props.hitObjectBackgroundTransparency or 1;
         }, hitObjs);
-        -- Judgement = Roact.createElement(Judgement, {
-        --     stats = self.props.stats;
-        -- })
+        Judgement = Roact.createElement(Judgement, {
+            judgement = self.props.judgement;
+        })
     })
 end
 

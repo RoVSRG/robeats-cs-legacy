@@ -20,41 +20,14 @@ function Judgement:init()
         [4] = judgement("Perfect", Color3.fromRGB(238, 241, 16));
         [5] = judgement("Marvelous", Color3.fromRGB(255, 255, 255));
     }
-
-    self.stats = self.props.stats
-
-    self:setState({
-        judgement = 0;
-    })
-
-    self.stats.onChange.Event:Connect(function(stats)
-        self:setState({
-            judgement = stats.most_recent;
-        })
-    end)
-end
-
-function Judgement:didUpdate(prevProps, prevState)
-    if self.canAnimate then
-        self.canAnimate = false
-        self.motor:setGoal(Flipper.Instant.new(0.6))
-        self.motor:step(0)
-        
-        self.motor:setGoal(Flipper.Spring.new(1, {
-            frequency = 7;
-            dampingRatio = 3.5;
-        }))
-    end
 end
 
 function Judgement:render()
     return Roact.createElement("TextLabel", {
-        Size = self.motorBinding:map(function(a)
-            return UDim2.new(0.4, 0, 0.15, 0);
-        end);
+        Size = UDim2.new(0.4, 0, 0.15, 0);
         Position = UDim2.new(0.5, 0, 0.35, 0);
-        Text = self.judgements[self.state.judgement] and self.judgements[self.state.judgement].name;
-        TextColor3 = self.judgements[self.state.judgement] and self.judgements[self.state.judgement].color;
+        Text = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].name;
+        TextColor3 = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].color;
         TextScaled = true;
         Font = Enum.Font.GothamBold;
         BackgroundTransparency = 1;

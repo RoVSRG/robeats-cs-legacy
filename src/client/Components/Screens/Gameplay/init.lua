@@ -1,7 +1,7 @@
 local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 local with = require(game.ReplicatedStorage.Client.State.with)
 
-local GameplayMainHOC = require(script.GameplayMainHOC)
+local GameplayMain = require(script.GameplayMain)
 
 return with(function(state, props)
     return {
@@ -11,9 +11,6 @@ return with(function(state, props)
 end,
 function(dispatch)
     return {
-        backOut = function()
-            dispatch({type = "setForceQuit", value = true})
-        end;
         sendStatsToGlobal = function(stats)
             dispatch(Llama.Dictionary.join({type = "changeStats"}, stats))
         end;
@@ -21,4 +18,4 @@ function(dispatch)
             dispatch({type = "setHitDeviance", value = hit_deviance})
         end
     }
-end)(GameplayMainHOC)
+end)(GameplayMain)
