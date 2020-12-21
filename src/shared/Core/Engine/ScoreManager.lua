@@ -174,9 +174,7 @@ function ScoreManager:new(_game)
 			maxChain = math.max(chain,maxChain)
 
 			self.mostRecentJudgement = note_result
-			local t = tick()
 			self.stats:change(self:getStatTable())
-			print(tick() - t)
 		end)
 	end
 
