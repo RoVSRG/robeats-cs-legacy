@@ -2,7 +2,7 @@ local HttpService = game:GetService("HttpService")
 
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
-local Room = require(game.ServerScriptService.Multiplayer.Room)
+local Room = require(game.ServerScriptService:WaitForChild("Server")["Multiplayer"])
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 
 local RoomManager = {}
