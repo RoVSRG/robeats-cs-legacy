@@ -34,7 +34,8 @@ function Track:new(props)
         for i = 1, self.hitObjects:count() do
             local hitObject = self.hitObjects:get(i)
             if hitObject and hitObject:shouldRemove() then
-                self.scoreManager:registerHit(hitObject:currentPressJudgement())
+                local judgement = hitObject:currentPressJudgement().judgement
+                self.scoreManager:registerHit(judgement)
                 self.hitObjects:remove_at(i)
             end
         end
