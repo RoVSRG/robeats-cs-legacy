@@ -153,11 +153,12 @@ function ScoreManager:new(_game)
 				chain = chain + 1
 				perfectCount = perfectCount + 1
 			elseif note_result == 3 then
+				chain = chain + 1
 				greatCount =  greatCount + 1
 			elseif note_result == 2 then
+				chain = chain + 1
 				goodCount = goodCount + 1
 			elseif note_result == 1 then
-				chain = chain + 1
 				badCount = badCount + 1
 			else
 				chain = 0

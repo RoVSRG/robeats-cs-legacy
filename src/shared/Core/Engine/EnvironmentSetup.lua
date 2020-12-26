@@ -99,7 +99,10 @@ function EnvironmentSetup:setup_three_dimensional_world()
 		local itr_proto = _element_protos_folder.TriggerButtonProto:Clone()
 
 		itr_proto.Parent = _obj["Track"..i]
-		itr_proto.PrimaryPart.Position = _obj["Track"..i].EndPosition.Position + Vector3.new(0,2,0)
+		itr_proto.PrimaryPart.Position = _obj["Track"..i].EndPosition.Position
+
+		local itr_track = _obj["Track"..i]
+		itr_track.PlayerTrackProto.Color = Color3.new(0.7, 0.7, 0.7)
 	end
 
 

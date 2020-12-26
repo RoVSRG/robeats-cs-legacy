@@ -26,19 +26,6 @@ function EngineHOC:init()
     self:setState({
         data = {
             hitObjects = self.game:getCurrentHitObjectsSerialized();
-            stats = {
-                accuracy = 0;
-                maxcombo = 0;
-                marvelouses = 0;
-                perfects = 0;
-                greats = 0;
-                goods = 0;
-                bads = 0;
-                misses = 0;
-                combo = 0;
-                score = 0;
-            };
-            mostRecentJudgement = 0;
         }
     })
 
@@ -56,6 +43,7 @@ function EngineHOC:init()
     }
 
     self.onExit = self.props.onExit or noop
+    self.onJudgement = self.props.onJudgement or noop
 end
 
 function EngineHOC:didMount()
@@ -65,11 +53,11 @@ function EngineHOC:didMount()
         self:setState({
             data = {
                 hitObjects = self.game:getCurrentHitObjectsSerialized();
-                mostRecentJudgement = self.game.scoreManager.mostRecentJudgement;
-                stats = self.game.scoreManager.stats:getValue();
             }
         })
     end)
+
+    self.game.scoreManager.stats.onChange.Event:Connect(self.onJudgement)
 end
 
 function EngineHOC:render()
@@ -83,7 +71,7 @@ function EngineHOC:willUnmount()
         keyConnection:Disconnect()
     end
 
-    self.onExit(self.state.data.stats)
+    self.onExit(self.game.scoreManager:getStatTable())
 end
 
 return EngineHOC

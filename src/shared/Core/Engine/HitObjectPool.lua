@@ -35,7 +35,7 @@ function HitObjectPool:new(props)
             if self.currentAudioTime >= noteData.Time - self.scrollSpeed then
                 self:add({
                     pressTime = noteData.Time;
-					releaseTime = noteData.Type == 2 and (noteData.Time + 1000) + noteData.Duration;
+					releaseTime = noteData.Type == 2 and (noteData.Time) + noteData.Duration;
                     lane = noteData.Track;
                     scrollSpeed = self.scrollSpeed;
                     poolId = i;

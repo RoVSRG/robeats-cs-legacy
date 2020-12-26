@@ -12,7 +12,9 @@ local _outline_top_adorn_default
 
 local ThreeDimensionalHitObject = {}
 
-function ThreeDimensionalHitObject:new(_note_obj, props)
+function ThreeDimensionalHitObject:new(props)
+	local _note_obj = EnvironmentSetup:get_element_protos_folder().SingleNoteAdornProto
+
     local self = {}
 	self.noteInstance = _note_obj
 	self.parent = nil

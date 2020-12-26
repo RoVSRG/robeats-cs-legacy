@@ -26,8 +26,8 @@ function Judgement:render()
     return Roact.createElement("TextLabel", {
         Size = UDim2.new(0.4, 0, 0.15, 0);
         Position = UDim2.new(0.5, 0, 0.35, 0);
-        Text = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].name;
-        TextColor3 = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].color;
+        Text = self.judgements[self.state.judgement] and self.judgements[self.state.judgement].name;
+        TextColor3 = self.judgements[self.state.judgement] and self.judgements[self.state.judgement].color;
         TextScaled = true;
         Font = Enum.Font.GothamBold;
         BackgroundTransparency = 1;

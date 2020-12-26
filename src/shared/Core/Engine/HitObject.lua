@@ -32,9 +32,6 @@ function HitObject:new(props)
         self.pressTimeAlpha = NumberUtil.InverseLerp(spawnTime, self.pressTime, self.currentAudioTime)
 
         if self.type == 1 then
-            if self.poolId == 1 then
-                print(spawnTime, self.pressTime)
-            end
             return
         end
 
