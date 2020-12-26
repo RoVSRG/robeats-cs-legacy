@@ -26,6 +26,7 @@ function Engine:new(props)
     self.currentAudioTime = -5000
     self.scoreManager = ScoreManager:new()
     self.hitsound = Hitsound:new()
+    self.scrollSpeed = props.scrollSpeed
     self.objectPool = HitObjectPool:new({
         scrollSpeed = props.scrollSpeed;
         key = props.key;

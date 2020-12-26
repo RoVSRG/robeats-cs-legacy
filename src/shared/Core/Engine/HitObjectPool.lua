@@ -13,7 +13,7 @@ function HitObjectPool:new(props)
     self.pool = SPList:new()
     self.hitData = SongDatabase:get_hit_objects_for_key(props.key)
     self.index = 1
-    self.currentAudioTime = 0
+    self.currentAudioTime = -5000
     self.scrollSpeed = props.scrollSpeed
 	self.scoreManager = props.scoreManager
     self.hitsound = props.hitsound
@@ -34,10 +34,11 @@ function HitObjectPool:new(props)
             local noteData = self.hitData[i]
             if self.currentAudioTime >= noteData.Time - self.scrollSpeed then
                 self:add({
-                    pressTime = noteData.Time + 1000;
+                    pressTime = noteData.Time;
 					releaseTime = noteData.Type == 2 and (noteData.Time + 1000) + noteData.Duration;
                     lane = noteData.Track;
                     scrollSpeed = self.scrollSpeed;
+                    poolId = i;
                 })
                 self.index = self.index + 1
                 else break

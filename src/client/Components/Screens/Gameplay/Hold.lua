@@ -11,6 +11,8 @@ function Hold:init()
         90,
         180,
     }
+
+    self.threeDimensionalPlayfield = self.props.threeDimensionalPlayfield
 end
 
 function Hold:render()
@@ -21,9 +23,10 @@ function Hold:render()
             alpha = self.props.alpha;
             numberOfLanes = 4;
             upscroll = false;
+            threeDimensionalPlayfield = self.threeDimensionalPlayfield;
         });
         Body = Roact.createElement("Frame", {
-            BackgroundColor3 = Color3.fromRGB(119, 117, 117);
+            BackgroundColor3 = self.props.releasedEarly and Color3.fromRGB(63, 62, 62) or Color3.fromRGB(119, 117, 117);
             Size = UDim2.new(0.25, 0, self.props.alpha-self.props.releaseAlpha, 0);
             Position = UDim2.new((self.props.lane-1)/4, 0, self.props.alpha, 0);
             AnchorPoint = Vector2.new(0, 1);

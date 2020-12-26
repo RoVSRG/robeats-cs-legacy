@@ -57,6 +57,8 @@ function Track:new(props)
                 releaseAlpha = hitObject.releaseTimeAlpha;
                 lane = hitObject.lane;
                 headPressed = hitObject.headPressed;
+                releasedEarly = hitObject.releasedEarly;
+                poolId = hitObject.poolId;
             }
         end
 

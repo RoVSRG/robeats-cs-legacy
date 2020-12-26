@@ -17,6 +17,7 @@ function HitObject:new(props)
     self.currentAudioTime = 0
     self.lane = props.lane
     self.type = self.releaseTime and 2 or 1 -- implicitly define note type based on whether a "release time" was specified or not
+    self.poolId = props.poolId
 
     self.releasedEarly = false
     self.headPressed = false
@@ -30,7 +31,12 @@ function HitObject:new(props)
         local spawnTime = self.pressTime - self.scrollSpeed
         self.pressTimeAlpha = NumberUtil.InverseLerp(spawnTime, self.pressTime, self.currentAudioTime)
 
-        if self.type == 1 then return end
+        if self.type == 1 then
+            if self.poolId == 1 then
+                print(spawnTime, self.pressTime)
+            end
+            return
+        end
 
         local spawnTimeRelease = self.releaseTime - self.scrollSpeed
         self.releaseTimeAlpha = NumberUtil.InverseLerp(spawnTimeRelease, self.releaseTime, self.currentAudioTime)

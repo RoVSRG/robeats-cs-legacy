@@ -43,7 +43,7 @@ function NoteTrack:new(_game, _parent_track_system, _track_obj, _game_track)
 	
 	function self:press()
 		_trigger_button:press()
-	end
+	end 
 	function self:release()
 		_trigger_button:release()
 	end

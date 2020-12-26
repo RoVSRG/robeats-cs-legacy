@@ -29,11 +29,18 @@ function GameplayMain:init()
     self.backOut = function()
         self.props.history:push("/results")
     end
+
+    self.doStats = self.props.doStats
+    self.doHitDeviance = self.props.doHitDeviance
 end
 
 function GameplayMain:render()
 	return Roact.createElement(Engine, {
         selectedSongKey = self.props.selectedSongKey;
+        onExit = function(data)
+            self.doStats(data)
+            self.doHitDeviance({})
+        end;
         render = function(data)
             local stats = data.stats
             return Roact.createElement("Frame", {

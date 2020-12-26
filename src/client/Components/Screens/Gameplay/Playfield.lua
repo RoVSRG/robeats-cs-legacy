@@ -1,5 +1,7 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
+
 local Receptor = require(script.Parent.Receptor)
 local Note = require(script.Parent.Note)
 local Hold = require(script.Parent.Hold)
@@ -11,6 +13,10 @@ function Playfield:init()
     self.DEFAULT_X_OFFSET = 0
 end
 
+function Playfield:didMount()
+    self.playfield = EnvironmentSetup:setup_three_dimensional_world()
+end
+
 function Playfield:render()
     local hitObjs = {}
 
@@ -18,21 +24,24 @@ function Playfield:render()
         for k = 1, #track do
             local itrHitObj = track[k]
             if itrHitObj.type == 1 then
-                hitObjs[#hitObjs+1] = Roact.createElement(Note, {
+                hitObjs[itrHitObj.poolId] = Roact.createElement(Note, {
                     alpha = itrHitObj.pressAlpha;
                     numberOfLanes = 4;
                     lane = itrHitObj.lane;
                     Image = "rbxassetid://5571834044";
                     rotateArrow = true;
+                    threeDimensionalPlayfield = self.playfield;
                 })
             elseif itrHitObj.type == 2 then
-                hitObjs[#hitObjs+1] = Roact.createElement(Hold, {
+                hitObjs[itrHitObj.poolId] = Roact.createElement(Hold, {
                     alpha = itrHitObj.headPressed and 1 or itrHitObj.pressAlpha;
                     releaseAlpha = itrHitObj.releaseAlpha;
                     numberOfLanes = 4;
                     lane = itrHitObj.lane;
+                    releasedEarly = itrHitObj.releasedEarly;
                     Image = "rbxassetid://5571834044";
                     rotateArrow = true;
+                    threeDimensionalPlayfield = self.playfield;
                 })
             end
         end
@@ -41,9 +50,10 @@ function Playfield:render()
     return Roact.createElement("Frame", {
         BackgroundColor3 = Color3.fromRGB(0, 0, 0);
         Size = UDim2.new(0.25, 0, 1, 0);
-        Position = UDim2.new(0.5, 0, 0, 0);
+        Position = UDim2.new(0.1, 0, 0, 0);
         AnchorPoint = Vector2.new(0.5, 0);
         BorderSizePixel = 0;
+        Visible = true;
     }, {
         Receptors = Roact.createElement("Frame", {
             Size = UDim2.new(1, 0, 0.2, 0);

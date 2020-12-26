@@ -5,9 +5,11 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local EngineHOC = Roact.Component:extend("EngineHOC")
 
+local function noop() end
+
 function EngineHOC:init()
     self.game = Engine:new({
-        scrollSpeed = 450;
+        scrollSpeed = 523;
         key = self.props.selectedSongKey;
     })
 
@@ -52,6 +54,8 @@ function EngineHOC:init()
             end
         end)
     }
+
+    self.onExit = self.props.onExit or noop
 end
 
 function EngineHOC:didMount()
@@ -78,6 +82,8 @@ function EngineHOC:willUnmount()
     for _, keyConnection in ipairs(self.keyConnections) do
         keyConnection:Disconnect()
     end
+
+    self.onExit(self.state.data.stats)
 end
 
 return EngineHOC
