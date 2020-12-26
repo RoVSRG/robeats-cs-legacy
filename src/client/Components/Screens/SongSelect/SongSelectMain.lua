@@ -230,8 +230,13 @@ function SongSelectUI:render()
                 },
 
                 {
-                    Text = "📃 Update Log",
+                    Text = "Multiplayer",
                     OnActivated = noop
+                    --[[if
+                    OnActivated = function()
+                        self.props.history:push("/multiplayer")
+                    end
+                    ]]
                 },
             }
         })
