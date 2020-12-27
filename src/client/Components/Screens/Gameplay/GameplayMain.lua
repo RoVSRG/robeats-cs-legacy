@@ -8,7 +8,7 @@ local Accuracy = require(script.Parent.Accuracy)
 local TimeLeft = require(script.Parent.TimeLeft)
 local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.Results.SpreadDisplay)
 local Combo = require(script.Parent.Combo)
-local Playfield = require(script.Parent.Playfield)
+local Playfield3D = require(script.Parent.Playfield3D)
 local Judgement = require(script.Parent.Judgement)
 local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
 
@@ -76,9 +76,15 @@ function GameplayMain:render()
             };
             render = function(data, press, release)
                 return Roact.createFragment({
-                    Playfield = Roact.createElement(Playfield, {
+                    Playfield = Roact.createElement(Playfield3D, {
                         XOffset = 0.1;
                         hitObjects = data.hitObjects;
+                        keybinds = {
+                            Enum.KeyCode.R;
+                            Enum.KeyCode.T;
+                            Enum.KeyCode.KeypadSeven;
+                            Enum.KeyCode.KeypadEight;
+                        }
                     });
                     TapButtons = ConditionalReturn(self.isMobile, (
                         Roact.createElement(TabLayout, {
