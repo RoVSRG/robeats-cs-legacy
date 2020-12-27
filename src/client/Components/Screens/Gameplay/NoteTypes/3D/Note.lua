@@ -43,6 +43,8 @@ function Note:didUpdate()
         SPUtil:clamp(self.props.alpha,0,1)
     )
     
+    -- Body is not a valid member of Model "SingleNoteAdornProto" ???????????? what
+
     local _body = self.noteInstance.Body
     local _outline_top = self.noteInstance.OutlineTop
     local _outline_bottom = self.noteInstance.OutlineBottom

@@ -2,10 +2,8 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
 
-local Receptor = require(script.Parent.Receptor)
 local Note = require(script.Parent.NoteTypes["3D"].Note)
 local Hold = require(script.Parent.NoteTypes["3D"].Hold)
-local Judgement = require(script.Parent.Judgement)
 
 local Playfield = Roact.Component:extend("Playfield")
 
@@ -102,6 +100,10 @@ function Playfield:render()
     --         judgement = self.props.judgement;
     --     })
     -- })
+end
+
+function Playfield:willUnmount()
+    self.playfield:Destroy()
 end
 
 return Playfield

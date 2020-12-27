@@ -22,12 +22,23 @@ function Judgement:init()
     }
 end
 
+function Judgement:didUpdate()
+    self.motor:setGoal(Flipper.Instant.new(0))
+    self.motor:step(0)
+    self.motor:setGoal(Flipper.Spring.new(1, {
+        frequency = 10;
+        dampingRatio = 2.5;
+    }))
+end
+
 function Judgement:render()
     return Roact.createElement("TextLabel", {
         Size = UDim2.new(0.4, 0, 0.15, 0);
-        Position = UDim2.new(0.5, 0, 0.35, 0);
-        Text = self.judgements[self.state.judgement] and self.judgements[self.state.judgement].name;
-        TextColor3 = self.judgements[self.state.judgement] and self.judgements[self.state.judgement].color;
+        Position = self.motorBinding:map(function(a)
+            return UDim2.new(0.5, 0, 0.59, a*20)
+        end);
+        Text = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].name;
+        TextColor3 = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].color;
         TextScaled = true;
         Font = Enum.Font.GothamBold;
         BackgroundTransparency = 1;

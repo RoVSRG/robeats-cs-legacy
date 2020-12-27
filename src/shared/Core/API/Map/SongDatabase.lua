@@ -119,9 +119,24 @@ function SongDatabase:new()
 		return songdata.AudioCoverImageAssetId
 	end
 	
-	function self:get_hit_objects_for_key(key)
+	function self:get_hit_objects_for_key(key, rate)
 		local songdata = self:get_data_for_key(key)
-		return songdata.HitObjects
+		if rate == nil then
+			return songdata.HitObjects
+		end
+
+		local hitObjects = {}
+
+		for i, v in ipairs(songdata.HitObjects) do
+			hitObjects[i] = {
+				Time = v.Time / rate;
+				Track = v.Track;
+				Duration = v.Duration and v.Duration / rate;
+				Type = v.Duration and 2 or 1;
+			}
+		end
+		
+		return hitObjects
 	end
 
 	function self:get_song_length_for_key(key)

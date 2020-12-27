@@ -2,7 +2,10 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
+local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
+
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local BannerCard = Roact.Component:extend("BannerCard")
 
@@ -153,25 +156,27 @@ function BannerCard:render()
                 MaxTextSize = 20;
             })
         });
-        Indicator = Roact.createElement("TextLabel", {
-            AnchorPoint = Vector2.new(0, 1),
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            Position = self.motorBinding:map(function(a)
-                return UDim2.new(0.02, 0, 0.9, 0):Lerp(UDim2.new(0.01, 0, 0.9, 0), a.playedat)
-            end);
-            TextTransparency = self.motorBinding:map(function(a)
-                return 1-a.playedat
-            end);
-            Size = UDim2.new(0.6, 0, 0.085, 0),
-            Font = Enum.Font.GothamSemibold,
-            Text = string.format("Press '%s' to return to the menu", "Enter"),
-            TextColor3 = Color3.fromRGB(252, 255, 166),
-            TextScaled = true,
-            TextStrokeTransparency = 0.5,
-            TextXAlignment = Enum.TextXAlignment.Left,
-        }),
+        Indicator = ConditionalReturn(not SPUtil:is_mobile(), (
+            Roact.createElement("TextLabel", {
+                AnchorPoint = Vector2.new(0, 1),
+                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                Position = self.motorBinding:map(function(a)
+                    return UDim2.new(0.02, 0, 0.9, 0):Lerp(UDim2.new(0.01, 0, 0.9, 0), a.playedat)
+                end);
+                TextTransparency = self.motorBinding:map(function(a)
+                    return 1-a.playedat
+                end);
+                Size = UDim2.new(0.6, 0, 0.085, 0),
+                Font = Enum.Font.GothamSemibold,
+                Text = string.format("Press '%s' to return to the menu", "Enter"),
+                TextColor3 = Color3.fromRGB(252, 255, 166),
+                TextScaled = true,
+                TextStrokeTransparency = 0.5,
+                TextXAlignment = Enum.TextXAlignment.Left,
+            })
+        ))
     })
 end
 

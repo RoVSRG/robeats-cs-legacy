@@ -7,6 +7,8 @@ return with(function(state, props)
     return {
         isPlaying = state.gameState.isPlaying;
         stats = state.gameData.stats;
+        settings = state.gameSettings;
+        data = state.gameData;
     }
 end,
 function(dispatch)

@@ -57,7 +57,7 @@ function SettingsMain:render()
 		Settings = Roact.createElement(Slideshow, {
 			slide = self.state.selectedTab;
 			Position = UDim2.new(0.191, 0, 0.07, 0),
-			Size = UDim2.new(1, 0, 0.915, 0),
+			Size = UDim2.new(0.802, 0, 0.915, 0),
 			BackgroundTransparency = 1;
 			render = function(slide)
 				return Roact.createFragment({
@@ -72,31 +72,7 @@ function SettingsMain:render()
 								value = self.props.settings.NoteSpeed;
 								changeSetting = self.changeValue;
 								name = "NoteSpeed";
-								title = "Notespeed";
-							});
-							Roact.createElement(IntSetting, {
-								value = self.props.settings.NoteSpeed;
-								changeSetting = self.changeValue;
-								name = "NoteSpeed";
-								title = "Notespeed";
-							});
-							Roact.createElement(IntSetting, {
-								value = self.props.settings.NoteSpeed;
-								changeSetting = self.changeValue;
-								name = "NoteSpeed";
-								title = "Notespeed";
-							});
-							Roact.createElement(IntSetting, {
-								value = self.props.settings.NoteSpeed;
-								changeSetting = self.changeValue;
-								name = "NoteSpeed";
-								title = "Notespeed";
-							});
-							Roact.createElement(IntSetting, {
-								value = self.props.settings.NoteSpeed;
-								changeSetting = self.changeValue;
-								name = "NoteSpeed";
-								title = "Notespeed";
+								title = "Note Speed";
 							});
 						});
 					});
@@ -107,11 +83,18 @@ function SettingsMain:render()
 						grid = Roact.createElement(SettingsList, {
 							Size = UDim2.new(1, 0, 1, 0),
 						}, {
-							NoteSpeed = Roact.createElement(IntSetting, {
-								value = self.props.settings.NoteSpeed;
+							MusicVolume = Roact.createElement(IntSetting, {
+								value = self.props.settings.MusicVolume;
 								changeSetting = self.changeValue;
-								name = "NoteSpeed";
-								title = "Notespeed";
+								name = "MusicVolume";
+								title = "Music Volume";
+								useSlider = true;
+								getDerivedText = function(v)
+									return string.format("%0d%%", v)
+								end;
+								initialPercent = self.props.settings.MusicVolume;
+								minValue = 0;
+								maxValue = 100;
 							});
 						});
 					});

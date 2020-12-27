@@ -9,9 +9,12 @@ local TimeLeft = require(script.Parent.TimeLeft)
 local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.Results.SpreadDisplay)
 local Combo = require(script.Parent.Combo)
 local Playfield = require(script.Parent.Playfield)
+local Judgement = require(script.Parent.Judgement)
+local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
+local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
 
 local GameplayMain = Roact.Component:extend("GameplayMain")
 
@@ -44,12 +47,16 @@ function GameplayMain:init()
 			misses = 0;
 			combo = 0;
 			accuracy = 0;
-			max_combo = 0;
-		}
+            max_combo = 0;
+            most_recent = 0;
+        };
     })
+
+    self.isMobile = SPUtil:is_mobile()
 end
 
 function GameplayMain:render()
+    local settings = self.props.settings
 	return Roact.createFragment({
         Engine = Roact.createElement(Engine, {
             selectedSongKey = self.props.selectedSongKey;
@@ -58,13 +65,69 @@ function GameplayMain:render()
                 self.doHitDeviance({})
             end;
             onJudgement = function(stats)
-                print(stats)                
+                self:setState({
+                    stats = stats;
+                })
             end;
-            render = function(data)
-                return Roact.createElement(Playfield, {
-                    XOffset = 0.1;
-                    hitObjects = data.hitObjects;
-                });
+            settings = {
+                volume = settings.MusicVolume;
+                scrollSpeed = settings.NoteSpeed;
+                rate = self.props.data.songRate / 100
+            };
+            render = function(data, press, release)
+                return Roact.createFragment({
+                    Playfield = Roact.createElement(Playfield, {
+                        XOffset = 0.1;
+                        hitObjects = data.hitObjects;
+                    });
+                    TapButtons = ConditionalReturn(self.isMobile, (
+                        Roact.createElement(TabLayout, {
+                            totalButtons = 4;
+                            Size = UDim2.new(1, 0, 0.2, 0);
+                            AnchorPoint = Vector2.new(0, 1);
+                            Position = UDim2.new(0, 0, 1, 0);
+                            buttons = {
+                                {
+                                    Text = "1",
+                                    onPress = function()
+                                        press(1)
+                                    end;
+                                    onRelease = function()
+                                        release(1)
+                                    end
+                                },
+                                {
+                                    Text = "2",
+                                    onPress = function()
+                                        press(2)
+                                    end;
+                                    onRelease = function()
+                                        release(2)
+                                    end
+                                },
+                                {
+                                    Text = "3",
+                                    onPress = function()
+                                        press(3)
+                                    end;
+                                    onRelease = function()
+                                        release(3)
+                                    end
+                                },
+                                {
+                                    Text = "4",
+                                    onPress = function()
+                                        press(4)
+                                    end;
+                                    onRelease = function()
+                                        release(4)
+                                    end
+                                }
+                            }
+                        })
+                    ))
+                })
+                
             end
         });
         Stats = Roact.createElement("Frame", {
@@ -131,8 +194,11 @@ function GameplayMain:render()
                 UICorner = Roact.createElement("UICorner", {
                     CornerRadius = UDim.new(0, 4),
                 })
+            });
+            Judgement = Roact.createElement(Judgement, {
+                judgement = self.state.stats.most_recent;
             })
-        })
+        });
     })
 end
 

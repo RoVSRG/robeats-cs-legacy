@@ -11,7 +11,7 @@ local HitObjectPool = {}
 function HitObjectPool:new(props)
     local self = {}
     self.pool = SPList:new()
-    self.hitData = SongDatabase:get_hit_objects_for_key(props.key)
+    self.hitData = SongDatabase:get_hit_objects_for_key(props.key, props.rate)
     self.index = 1
     self.currentAudioTime = -5000
     self.scrollSpeed = props.scrollSpeed

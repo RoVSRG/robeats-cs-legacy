@@ -1,4 +1,5 @@
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
 local ScoreManager = require(script.ScoreManager)
 local HitObjectPool = require(script.HitObjectPool)
 local Hitsound = require(script.Hitsound)
@@ -18,6 +19,9 @@ function Engine:new(props)
     function self:cons()
         self.audio = Audio:new()
         
+        self.audio:set_volume(props.volume/2 or 0.5)
+        self.audio:set_rate(props.rate or 1)
+
         self.audio:parent(workspace)
     end
 
@@ -26,12 +30,15 @@ function Engine:new(props)
     self.currentAudioTime = -5000
     self.scoreManager = ScoreManager:new()
     self.hitsound = Hitsound:new()
-    self.scrollSpeed = props.scrollSpeed
+
+    self.scrollSpeed = 1000 * CurveUtil:YForPointOf2PtLine(Vector2.new(0,1), Vector2.new(40,0.2), props.scrollSpeed)
+    
     self.objectPool = HitObjectPool:new({
-        scrollSpeed = props.scrollSpeed;
+        scrollSpeed = self.scrollSpeed;
         key = props.key;
         scoreManager = self.scoreManager;
         hitsound = self.hitsound;
+        rate = props.rate;
     })
 
     self.didStart = false

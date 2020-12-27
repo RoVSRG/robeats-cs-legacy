@@ -6,6 +6,7 @@ function Audio:new(_callback)
 	local self = {}
 	self.sound = Instance.new("Sound")
 	self.sound.Loaded:Connect(_callback or noop)
+	self.playbackSpeed = 1
 	
 	function self:load(id)
 		id = typeof(id) == "string" and id or "rbxassetid://"..tostring(id)
@@ -16,9 +17,17 @@ function Audio:new(_callback)
 			self:play()
 		end
 	end
+
+	function self:set_rate(rate)
+		self.playbackSpeed = rate
+	end
+
+	function self:set_volume(volume)
+		self.sound.Volume = volume
+	end
 	
 	function self:play()
-		self.sound.PlaybackSpeed = 1
+		self.sound.PlaybackSpeed = self.playbackSpeed
 	end
 	
 	function self:pause()

@@ -7,6 +7,6 @@ return {
         Enum.KeyCode.KeypadOne;
         Enum.KeyCode.KeypadTwo;
     };
-    AudioVolume = 1;
+    MusicVolume = 100;
     EffectVolume = 0.7;
 }

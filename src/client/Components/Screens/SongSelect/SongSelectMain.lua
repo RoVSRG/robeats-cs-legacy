@@ -39,6 +39,8 @@ function SongSelectUI:init()
         selectedTab = 1
     })
 
+    self.changeRate = self.props.changeRate
+
     self.on_play_button_pressed = function()
         self.props.startGame()
         self.props.history:push("/gameplay")
@@ -58,6 +60,17 @@ function SongSelectUI:init()
         self._current_sfx:Play()
     end)
     self._current_sfx.Looped = true
+
+    self.changeRateBinding = SPUtil:bind_to_key(Enum.KeyCode, function(keyCode)
+        local ktd = {
+            [Enum.KeyCode.Minus] = -5;
+            [Enum.KeyCode.Equals] = 5;
+        }
+
+        if ktd[keyCode] then
+            self.changeRate(ktd[keyCode])
+        end
+    end)
 
     -- MOTOR
 
@@ -246,6 +259,8 @@ end
 function SongSelectUI:willUnmount()
     self._current_sfx:Stop()
     self._current_sfx:Destroy()
+
+    self.changeRateBinding:Disconnect()
 end
 
 return SongSelectUI

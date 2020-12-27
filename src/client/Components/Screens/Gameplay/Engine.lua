@@ -9,17 +9,19 @@ local function noop() end
 
 function EngineHOC:init()
     self.game = Engine:new({
-        scrollSpeed = 523;
+        scrollSpeed = self.props.settings.scrollSpeed or 0;
         key = self.props.selectedSongKey;
+        volume = self.props.settings.volume;
+        rate = self.props.settings.rate;
     })
 
     self.game:load()
 
     self.keybinds = {
-        [Enum.KeyCode.Q] = 1;
-        [Enum.KeyCode.W] = 2;
-        [Enum.KeyCode.O] = 3;
-        [Enum.KeyCode.P] = 4;
+        [Enum.KeyCode.R] = 1;
+        [Enum.KeyCode.T] = 2;
+        [Enum.KeyCode.KeypadSeven] = 3;
+        [Enum.KeyCode.KeypadEight] = 4;
     }
     
 
@@ -29,15 +31,23 @@ function EngineHOC:init()
         }
     })
 
+    self.press = function(lane)
+        self.game:press(lane)
+    end
+
+    self.release = function(lane)
+        self.game:release(lane)
+    end
+
     self.keyConnections = {
         SPUtil:bind_to_key(Enum.KeyCode, function(keyCode)
             if self.keybinds[keyCode] then
-                self.game:press(self.keybinds[keyCode])
+                self.press(self.keybinds[keyCode])
             end
         end);
         SPUtil:bind_to_key_release(Enum.KeyCode, function(keyCode)
             if self.keybinds[keyCode] then
-                self.game:release(self.keybinds[keyCode])
+                self.release(self.keybinds[keyCode])
             end
         end)
     }
@@ -61,7 +71,7 @@ function EngineHOC:didMount()
 end
 
 function EngineHOC:render()
-    return Roact.createFragment(self.props.render(self.state.data))
+    return Roact.createFragment(self.props.render(self.state.data, self.press, self.release))
 end
 
 function EngineHOC:willUnmount()

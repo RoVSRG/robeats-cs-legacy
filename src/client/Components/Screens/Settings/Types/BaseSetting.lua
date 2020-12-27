@@ -13,7 +13,7 @@ function BaseSetting:render()
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
-        Size = self.props.Size or UDim2.new(1, 0, 0.2, 0),
+        Size = self.props.Size or UDim2.new(0.98, 0, 0.15, 0),
     }, {
         Labl = Roact.createElement("TextLabel", {
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -31,6 +31,11 @@ function BaseSetting:render()
         }),
         Crnr = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),
+        });
+        Aspt = Roact.createElement("UIAspectRatioConstraint", {
+            AspectRatio = 11;
+            AspectType = "ScaleWithParentSize",
+            DominantAxis = "Width";
         });
         Display = Roact.createElement("TextLabel", {
             AnchorPoint = Vector2.new(0, 0.5),

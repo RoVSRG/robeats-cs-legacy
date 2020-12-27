@@ -18,6 +18,8 @@ function Button:init()
     self.motorBinding = RoactFlipper.getBinding(self.motor)
 
     self.onActivated = self.props.onActivated or noop
+    self.onPress = self.props.onPress or noop
+    self.onRelease = self.props.onRelease or noop
 end
 
 function Button:didUpdate()
@@ -92,6 +94,8 @@ function Button:render()
         Visible = self.props.Visible;
         TextScaled = self.props.TextScaled;
         LayoutOrder = self.props.LayoutOrder;
+        [Roact.Event.MouseButton1Up] = self.onRelease;
+        [Roact.Event.MouseButton1Down] = self.onPress
     }, {
         Corner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0,4);

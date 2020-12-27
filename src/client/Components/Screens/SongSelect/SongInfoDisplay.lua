@@ -24,22 +24,24 @@ function SongInfoDisplay:init()
     self.motorBinding = RoactFlipper.getBinding(self.motor)
 end
 
-function SongInfoDisplay:didUpdate()
-    self.motor:setGoal({
-        title = Flipper.Instant.new(0);
-        artist = Flipper.Instant.new(0);
-    })
-    self.motor:step(0)
-    self.motor:setGoal({
-        title = Flipper.Spring.new(1, {
-            frequency = 2;
-            dampingRatio = 2.5;
-        });
-        artist = Flipper.Spring.new(1, {
-            frequency = 2.5;
-            dampingRatio = 2.5;
-        });
-    })
+function SongInfoDisplay:didUpdate(prevProps)
+    if self.props.song_key ~= prevProps.song_key then
+        self.motor:setGoal({
+            title = Flipper.Instant.new(0);
+            artist = Flipper.Instant.new(0);
+        })
+        self.motor:step(0)
+        self.motor:setGoal({
+            title = Flipper.Spring.new(1, {
+                frequency = 2;
+                dampingRatio = 2.5;
+            });
+            artist = Flipper.Spring.new(1, {
+                frequency = 2.5;
+                dampingRatio = 2.5;
+            });
+        })
+    end
 end
 
 function SongInfoDisplay:didMount()
