@@ -1,3 +1,6 @@
+local Knit = require(game:GetService("ReplicatedStorage").Knit)
+Knit.Start():Catch(warn):Await()
+
 local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
 
 local function game_init()

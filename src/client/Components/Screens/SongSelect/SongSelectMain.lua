@@ -1,5 +1,7 @@
 local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local Knit = require(game.ReplicatedStorage.Knit)
+
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
@@ -24,6 +26,10 @@ local Slide = require(game.ReplicatedStorage.Client.Components.Primitive.Slidesh
 local noop = function() end
 
 function SongSelectUI:init()
+    Knit.GetService("TestService"):GET_TEXTPromise():Then(function(text)
+        print(text)
+    end)
+
     self.getSongs = function()
         if self._songs then return self._songs end
         local songs = {}
