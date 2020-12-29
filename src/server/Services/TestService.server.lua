@@ -5,5 +5,5 @@ local TestService = Knit.CreateService {
 }
 
 function TestService.Client:GET_TEXT()
-    return "HELLO YOU FUCKEN LOSER"
+    return "HELLO"
 end
