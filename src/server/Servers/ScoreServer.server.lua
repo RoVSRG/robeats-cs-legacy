@@ -1,11 +1,11 @@
-local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
+local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDatastoreService)
 
 local _db_version = "v2.3"
 
 local ScoreDatabase = DataStoreService:GetDataStore("ScoreDatabase".._db_version)
 local NoteDevianceDatabase = DataStoreService:GetDataStore("NoteDevianceDatabase".._db_version)
 
-local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
+local Metrics = require(game:GetService("ReplicatedStorage"):WaitForChild("Libraries").RobeatsData["Metrics"])
 local Network = require(game.ReplicatedStorage.Libraries.Network)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
