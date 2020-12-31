@@ -3,7 +3,7 @@ local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 local Network = require(game.ReplicatedStorage.Libraries.Network)
-local Multiplayer = game.ServerScriptService.Multiplayer
+local Multiplayer = game:GetService("ServerScriptService").Server["Multiplayer"]
 local RoomManager = require(Multiplayer.RoomManager)
 
 Network.AddEvent("JoinRoom"):Connect(function(player, data)
