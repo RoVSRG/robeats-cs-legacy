@@ -11,6 +11,9 @@ return with(nil, function(dispatch)
         startGame = function()
             dispatch({type = "setIsPlaying", value = true})
             dispatch({type = "setIsLoading", value = true})
+        end;
+        changeRate = function(rate)
+            dispatch({type = "changeRate", delta = rate})
         end
     }
 end)(SongSelect)

@@ -5,7 +5,7 @@ local GameStateReducer = require(script.Reducers.GameStateReducer)
 local GameDataReducer = require(script.Reducers.GameDataReducer)
 local GameSettingsReducer = require(script.Reducers.GameSettingsReducer)
 
-local _use_debug = false --game:GetService("RunService"):IsStudio()
+local _use_debug = game:GetService("RunService"):IsStudio()
 
 return Rodux.Store.new(Rodux.combineReducers({
     gameData = GameDataReducer;

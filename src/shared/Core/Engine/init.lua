@@ -1,108 +1,98 @@
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
-local InputUtil = require(game.ReplicatedStorage.Shared.Utils.InputUtil)
-local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
-local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
-local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
-local AudioManager = require(game.ReplicatedStorage.Shared.Core.Engine.AudioManager)
-local SFXManager = require(game.ReplicatedStorage.Shared.Core.Engine.SFXManager)
-local ScoreManager = require(game.ReplicatedStorage.Shared.Core.Engine.ScoreManager)
-local NoteTrackSystem = require(game.ReplicatedStorage.Shared.Core.Engine.NoteTrack.NoteTrackSystem)
-local EffectSystem = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.EffectSystem)
-local GameSlot = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.GameSlot)
-local GameTrack = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.GameTrack)
-local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
-local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
-local ObjectPool = require(game.ReplicatedStorage.Shared.Core.Engine.ObjectPool)
+local ScoreManager = require(script.ScoreManager)
+local HitObjectPool = require(script.HitObjectPool)
+local Hitsound = require(script.Hitsound)
+local Audio = require(script.Audio)
+local Replay = require(script.Replay)
 
-local RobeatsGame = {}
-RobeatsGame.Mode = {
-	Setup = 1;
-	Game = 2;
-	GameEnded = 3;
+local Engine = {
+    States = {
+        Idle = 0;
+        Loading = 1;
+        Playing = 2;
+        Cleanup = 3;
+    }
 }
 
-function RobeatsGame:new(_game_environment_center_position)
-	local self = {
-		_tracksystems = SPDict:new();
-		_audio_manager = nil;
-		_score_manager = nil;
-		_effects = EffectSystem:new();
-		_input = InputUtil:new();
-		_sfx_manager = SFXManager:new();
-		_object_pool = ObjectPool:new();
-	}
-	self._audio_manager = AudioManager:new(self)
-	self._score_manager = ScoreManager:new(self)
-	
-	local _local_game_slot = 0
-	function self:get_local_game_slot() return _local_game_slot end
-	
-	local _current_mode = RobeatsGame.Mode.Setup
-	function self:get_mode() return _current_mode end
-	function self:set_mode(val) 
-		AssertType:is_enum_member(val, RobeatsGame.Mode)
-		_current_mode = val 
-	end
+function Engine:new(props)
+    local self = {}
+    function self:cons()
+        self.audio = Audio:new()
 
-	function self:get_game_environment_center_position()
-		return _game_environment_center_position
-	end
+        self.audio:set_volume((props.volume/100)/2 or 0.5)
+        self.audio:set_rate(props.rate or 1)
 
-	function self:setup_world(game_slot)
-		_local_game_slot = game_slot
-		workspace.CurrentCamera.CFrame = GameSlot:slot_to_camera_cframe_offset(self:get_local_game_slot()) + self:get_game_environment_center_position()
-		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-		workspace.CurrentCamera.CameraSubject = nil
-	end
+        self.audio:parent(workspace)
+    end
 
-	function self:start_game()
-		self._tracksystems:add(self:get_local_game_slot(),NoteTrackSystem:new(self,self:get_local_game_slot()))
-		self._audio_manager:start_play()
-		_current_mode = RobeatsGame.Mode.Game
-	end
+    self.state = Engine.States.Loading
+    self.didInitialize = false
+    self.currentAudioTime = -5000
+    self.scoreManager = ScoreManager:new()
+    self.hitsound = Hitsound:new()
 
-	function self:get_tracksystem(index)
-		return self._tracksystems:get(index)
-	end
-	function self:get_local_tracksystem()
-		return self:get_tracksystem(self:get_local_game_slot())
-	end
-	function self:tracksystems_itr()
-		return self._tracksystems:key_itr()
-	end
+    self.scrollSpeed = 1000 * CurveUtil:YForPointOf2PtLine(Vector2.new(0,1), Vector2.new(40,0.2), props.scrollSpeed)
+    
+    self.objectPool = HitObjectPool:new({
+        replay = Replay.perfectReplay(props.key, props.rate);
+        scrollSpeed = self.scrollSpeed;
+        key = props.key;
+        scoreManager = self.scoreManager;
+        hitsound = self.hitsound;
+        rate = props.rate;
+    })
 
-	function self:update(dt_scale)
-		if _current_mode == RobeatsGame.Mode.Game then
-			self._audio_manager:update(dt_scale,self)
-			for itr_key,itr_index in GameTrack:inpututil_key_to_track_index():key_itr() do
-				if self._input:control_just_pressed(itr_key) then
-					self:get_local_tracksystem():press_track_index(itr_index)
-				end
-				if self._input:control_just_released(itr_key) then
-					self:get_local_tracksystem():release_track_index(itr_index)
-				end
-			end
-			
-			for slot,itr in self._tracksystems:key_itr() do
-				itr:update(dt_scale)
-			end
-			
-			self._sfx_manager:update(dt_scale)
-			self._input:post_update()
-			self._effects:update(dt_scale)
-			self._score_manager:update(dt_scale)
-		end
-	end
-	
-	function self:teardown()
-		for key,val in self:tracksystems_itr() do
-			val:teardown()
-		end
-		self._audio_manager:teardown()
-		self._effects:teardown()
-	end
+    self.didStart = false
+    
+    function self:load()
+        self.audio:load(SongDatabase:get_data_for_key(props.key).AudioAssetId)
+        self.offset = SongDatabase:get_data_for_key(props.key).AudioTimeOffset
+    end
 
-	return self
+    function self:play()
+        self.audio:play()
+    end
+
+    function self:stop()
+        self.audio:stop(true)
+    end
+
+    function self:update(dt)
+        if self.state == Engine.States.Loading then
+            self.state = self.audio:loaded() and Engine.States.Playing or Engine.States.Loading
+        elseif self.state == Engine.States.Playing then
+            if (not self.didStart) and self.currentAudioTime > self.offset then
+                self:play()
+                self.didStart = true
+                self.state = Engine.States.Playing
+            end
+            self.objectPool:update(self.currentAudioTime)
+            self.currentAudioTime = self.currentAudioTime + (dt*1000)
+        end
+    end
+
+    function self:getCurrentHitObjectsSerialized()
+        return self.objectPool.trackSystem:getSerialized()
+    end
+
+    function self:press(lane)
+        self.objectPool.trackSystem:getTrack(lane):pressAgainst()
+    end
+
+    function self:release(lane)
+        self.objectPool.trackSystem:getTrack(lane):releaseAgainst()
+    end
+
+    function self:teardown()
+        self:stop()
+        self.hitsound:teardown()
+        self.state = Engine.States.Cleanup
+    end
+
+    self:cons()
+
+    return self
 end
 
-return RobeatsGame
+return Engine

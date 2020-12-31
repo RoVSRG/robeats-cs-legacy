@@ -13,6 +13,8 @@ local TweenService = game:GetService("TweenService")
 
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
+local PreviewController = require(game.ReplicatedStorage.Client.Controllers.PreviewController)
+
 local SongButtonLayout = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButtonLayout)
 local LeaderboardDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.LeaderboardDisplay)
 local TabLayout = require(game.ReplicatedStorage.Client.Components.Layout.TabLayout)
@@ -39,25 +41,23 @@ function SongSelectUI:init()
         selectedTab = 1
     })
 
+    self.changeRate = self.props.changeRate
+
     self.on_play_button_pressed = function()
         self.props.startGame()
         self.props.history:push("/gameplay")
     end
 
-    self._current_sfx = Instance.new("Sound")
-    self._current_sfx.Parent = workspace
-    self._current_sfx.Loaded:Connect(function()
-        self._current_sfx.TimePosition = NumberUtil.Lerp(0,self._current_sfx.TimeLength,0.35)
-        self._current_sfx.PlaybackSpeed = 1
-        self._current_sfx.Volume = 0
-        local volume_tween_info = TweenInfo.new(3)
-        local volume_tween = TweenService:Create(self._current_sfx, volume_tween_info, {
-            Volume = 0.5
-        })
-        volume_tween:Play()
-        self._current_sfx:Play()
+    self.changeRateBinding = SPUtil:bind_to_key(Enum.KeyCode, function(keyCode)
+        local ktd = {
+            [Enum.KeyCode.Minus] = -5;
+            [Enum.KeyCode.Equals] = 5;
+        }
+
+        if ktd[keyCode] then
+            self.changeRate(ktd[keyCode])
+        end
     end)
-    self._current_sfx.Looped = true
 
     -- MOTOR
 
@@ -91,15 +91,15 @@ function SongSelectUI:didMount()
 end
 
 function SongSelectUI:update_preview()
-    local _selected_songkey = self.props.selectedSongKey
-    if _selected_songkey == SongDatabase:invalid_songkey() then return end
+    -- local _selected_songkey = self.props.selectedSongKey
+    -- if _selected_songkey == SongDatabase:invalid_songkey() then return end
 
-    if self._current_sfx then
-        self._current_sfx:Stop()
-    end
+    -- if self._current_sfx then
+    --     self._current_sfx:Stop()
+    -- end
 
-    local audio_id = SongDatabase:get_data_for_key(_selected_songkey).AudioAssetId
-    self._current_sfx.SoundId = audio_id
+    -- local audio_id = SongDatabase:get_data_for_key(_selected_songkey).AudioAssetId
+    -- self._current_sfx.SoundId = audio_id
 end
 
 function SongSelectUI:render()
@@ -161,34 +161,6 @@ function SongSelectUI:render()
                                         time = 1596444113,
                                         accuracy = 98.98,
                                         place = 1,
-                                        score = 0,
-                                    },
-                                    {
-                                        userid = 160677253,
-                                        playername = "DetWasTaken",
-                                        marvelouses = 6,
-                                        perfects = 5,
-                                        greats = 4,
-                                        goods = 3,
-                                        bads = 2,
-                                        misses = 1,
-                                        time = 1596666465,
-                                        accuracy = 95.67,
-                                        place = 2,
-                                        score = 0,
-                                    },
-                                    {
-                                        userid = 160677253,
-                                        playername = "DetWasTaken",
-                                        marvelouses = 6,
-                                        perfects = 5,
-                                        greats = 4,
-                                        goods = 3,
-                                        bads = 2,
-                                        misses = 1,
-                                        time = 1596666465,
-                                        accuracy = 95.67,
-                                        place = 3,
                                         score = 0,
                                     }
                                 },
@@ -258,8 +230,13 @@ function SongSelectUI:render()
                 },
 
                 {
-                    Text = "📃 Update Log",
+                    Text = "Multiplayer",
                     OnActivated = noop
+                    --[[if
+                    OnActivated = function()
+                        self.props.history:push("/multiplayer")
+                    end
+                    ]]
                 },
             }
         })
@@ -267,8 +244,10 @@ function SongSelectUI:render()
 end
 
 function SongSelectUI:willUnmount()
-    self._current_sfx:Stop()
-    self._current_sfx:Destroy()
+    -- self._current_sfx:Stop()
+    -- self._current_sfx:Destroy()
+
+    self.changeRateBinding:Disconnect()
 end
 
 return SongSelectUI

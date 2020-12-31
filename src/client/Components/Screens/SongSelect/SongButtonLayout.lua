@@ -37,7 +37,7 @@ function SongButtonLayout:search(search, _songkey)
     for i = 1, #search do
         local search_term = search[i]
         if string.find(_to_search:lower(), search_term:lower()) ~= nil then
-            found += 1
+            found = found + 1
         end
     end
 
@@ -48,7 +48,6 @@ function SongButtonLayout:renderableButtons()
     local _buttons = {}
     
     for key_itr, itr_data in pairs(self.props.songs) do
-        if key_itr >= 50 then break end
         _buttons["SongKey"..key_itr] = Roact.createElement(SongButton, {
             song_key = key_itr or 1,
             artist = itr_data.AudioArtist,

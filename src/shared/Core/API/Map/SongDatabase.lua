@@ -2,6 +2,8 @@ local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local SongErrorParser = require(game.ReplicatedStorage.Shared.Core.API.Map.SongErrorParser)
+local MD5 = require(game.ReplicatedStorage.Libraries.MD5)
+local Promise = require(game.ReplicatedStorage.Libraries.Promise)
 
 local SongMapList = workspace.SongMaps:GetChildren()
 
@@ -25,8 +27,10 @@ function SongDatabase:new()
 		for i=1,#SongMapList do
 			local audio_data = require(SongMapList[i])
 			SongErrorParser:scan_audiodata_for_errors(audio_data)
-			self:add_key_to_data(i,audio_data)
-			_name_to_key:add(SongMapList[i].Name,i)
+			if SongErrorParser:can_add_to_song_database(audio_data) then
+				self:add_key_to_data(i,audio_data)
+				_name_to_key:add(SongMapList[i].Name,i)
+			end
 		end
 	end
 
@@ -72,6 +76,19 @@ function SongDatabase:new()
 		end
 	end
 
+	function self:get_chart_hash_for_key(key)
+		return Promise.new(function(resolve, reject)
+			local songdata = self:get_data_for_key(key)
+			local s = ""
+
+			for _, hitOb in pairs(songdata.HitObjects) do
+				s ..= string.format("%s%s", hitOb.Time, hitOb.Track)
+			end
+
+			resolve(MD5.tohex(MD5.sum(MD5.tohex(s))))
+		end)
+	end
+
 	function self:render_bannerimage_for_key(banner_image, key)
 		local data = self:get_data_for_key(key)
 		banner_image.Image = data.AudioCoverImageAssetId
@@ -91,7 +108,7 @@ function SongDatabase:new()
 		local songdata = self:get_data_for_key(key)
 		return songdata.AudioDifficulty
 	end
-
+	
 	function self:get_description_for_key(key)
 		local songdata = self:get_data_for_key(key)
 		return songdata.AudioDescription
@@ -101,7 +118,26 @@ function SongDatabase:new()
 		local songdata = self:get_data_for_key(key)
 		return songdata.AudioCoverImageAssetId
 	end
+	
+	function self:get_hit_objects_for_key(key, rate)
+		local songdata = self:get_data_for_key(key)
+		if rate == nil then
+			return songdata.HitObjects
+		end
 
+		local hitObjects = {}
+
+		for i, v in ipairs(songdata.HitObjects) do
+			hitObjects[i] = {
+				Time = v.Time / rate;
+				Track = v.Track;
+				Duration = v.Duration and v.Duration / rate;
+				Type = v.Duration and 2 or 1;
+			}
+		end
+		
+		return hitObjects
+	end
 
 	function self:get_song_length_for_key(key)
 		local data = self:get_data_for_key(key)

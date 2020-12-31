@@ -1,10 +1,10 @@
 return {
     NoteSpeed = 0;
-    FOV = 0;
-    Keybinds = {
-        Enum.KeyCode.V;
-        Enum.KeyCode.B;
-        Enum.KeyCode.KeypadOne;
-        Enum.KeyCode.KeypadTwo;
-    };
+    FOV = 70;
+    Keybind1 = Enum.KeyCode.V;
+    Keybind2 = Enum.KeyCode.B;
+    Keybind3 = Enum.KeyCode.KeypadOne;
+    Keybind4 = Enum.KeyCode.KeypadTwo;
+    MusicVolume = 80;
+    EffectVolume = 50;
 }

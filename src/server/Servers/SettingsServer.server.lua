@@ -1,4 +1,4 @@
-local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
+local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDatastoreService)
 local SettingsDatabase = DataStoreService:GetDataStore("ScoreDatabase")
 local HttpService = game:GetService("HttpService")
 local DatastoreSerializer = require(game.ReplicatedStorage.Libraries.Serialization.Datastore)

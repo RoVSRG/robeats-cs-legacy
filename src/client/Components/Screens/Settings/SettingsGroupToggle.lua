@@ -21,6 +21,7 @@ function SettingsGroupToggle:render()
         onActivated = self.onActivated;
         suppressXAxis = true;
         shrinkBy = -0.025;
+        LayoutOrder = self.props.LayoutOrder;
     }, {
         UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
             MaxTextSize = 20;

@@ -9,7 +9,7 @@ local Slider = Roact.Component:extend("Slider")
 local function noop() end
 
 function Slider:init()
-    self.motor = Flipper.SingleMotor.new(self.props.initialPercent)
+    self.motor = Flipper.SingleMotor.new(self.props.percent)
     self.motorBinding = RoactFlipper.getBinding(self.motor)
 
     self.held = false
@@ -17,13 +17,20 @@ function Slider:init()
     self.barRef = Roact.createRef()
 
     self:setState({
-        percent = self.props.initialPercent
+        percent = self.props.percent
     })
 
     self.onDrag = self.props.onDrag or noop
 end
 
-function Slider:didUpdate()
+function Slider:didUpdate(prevProps)
+    if prevProps.percent ~= self.props.percent then
+        self.motor:setGoal(Flipper.Spring.new(self.props.percent, {
+            frequency = 8;
+            dampingRatio = 2.5;
+        }))
+        return 
+    end
     self.motor:setGoal(Flipper.Spring.new(self.state.percent, {
         frequency = 8;
         dampingRatio = 2.5;
@@ -43,19 +50,6 @@ function Slider:render()
             Position = UDim2.new(0, 0, 0.5, 0);
             BackgroundColor3 = self.props.BackgroundColor3;
             [Roact.Ref] = self.barRef;
-            [Roact.Event.MouseMoved] = function(o, x, y)
-                if self.held == false then return end
-
-                local bar = self.barRef:getValue()
-
-                local a = NumberUtil.InverseLerp(bar.AbsolutePosition.X, bar.AbsolutePosition.X + bar.AbsoluteSize.X, x)
-
-                self:setState({
-                    percent = a*100;
-                })
-
-                self.onDrag(a)
-            end;
         }, {
             Corner = Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 180);
@@ -68,9 +62,9 @@ function Slider:render()
             Position = self.motorBinding:map(function(a)
                 return UDim2.new(a/100, 0, 0.5, 0);
             end);
-            Size = UDim2.new(0.2, 0, 0.6, 0);
+            Size = UDim2.new(0.25, 0, 0.75, 0);
             AnchorPoint = self.motorBinding:map(function(a)
-                return Vector2.new(a/100, 0.5)
+                return Vector2.new(0.5, 0.5)
             end);
             [Roact.Event.MouseButton1Down] = function()
                 self.held = true;
@@ -83,6 +77,26 @@ function Slider:render()
             AspectRatioContraint = Roact.createElement("UIAspectRatioConstraint", {
                 AspectRatio = 1;
             })
+        });
+        SliderSurfaceArea = Roact.createElement("Frame", {
+            BackgroundTransparency = 1;
+            Size = UDim2.new(2, 0, 14, 0);
+            Position = UDim2.new(0.5, 0, 0.5, 0);
+            AnchorPoint = Vector2.new(0.5, 0.5);
+            [Roact.Event.MouseMoved] = function(o, x, y)
+                if self.held == false then return end
+
+                local bar = self.barRef:getValue()
+
+                local a = NumberUtil.InverseLerp(bar.AbsolutePosition.X, bar.AbsolutePosition.X + bar.AbsoluteSize.X, x)
+                a = math.clamp(a, 0, 1)
+
+                self:setState({
+                    percent = a*100;
+                })
+
+                self.onDrag(a)
+            end;
         })
     })
 end

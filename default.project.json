@@ -14,6 +14,9 @@
 		},
 		"Shared": {
 			"$path": "src/shared"
+		},
+		"Knit": {
+			"$path": "_knit"
 		}
 	  },
   

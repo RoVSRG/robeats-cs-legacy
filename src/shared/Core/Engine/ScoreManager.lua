@@ -1,9 +1,6 @@
-local NoteResult = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.NoteResult)
-local SFXManager = require(game.ReplicatedStorage.Shared.Core.Engine.SFXManager)
-local NoteResultPopupEffect = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.NoteResultPopupEffect)
-local HoldingNoteEffect = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.HoldingNoteEffect)
-
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
+local Bindable = require(game.ReplicatedStorage.Libraries.Bindable)
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local ScoreManager = {}
 
@@ -11,23 +8,25 @@ function ScoreManager:new(_game)
 	local self = {}
 	self.hit_deviance = {}
 	
-	local _chain = 0
-	function self:get_chain() return _chain end
+	local chain = 0
+	function self:getChain() return chain end
 	
-	self._bonus = 100
-	self._score = 0
-	self._chain = 0
+	self.bonus = 100
+	self.score = 0
+	self.chain = 0
+
+	self.mostRecentJudgement = 0
 	
-	local _marv_count = 0
-	local _perfect_count = 0
-	local _great_count = 0
-	local _good_count = 0
-	local _bad_count = 0
-	local _miss_count = 0
-	local _max_chain = 0
-	local _total_count = 0
+	local marvCount = 0
+	local perfectCount = 0
+	local greatCount = 0
+	local goodCount = 0
+	local badCount = 0
+	local missCount = 0
+	local maxChain = 0
+	local totalCount = 0
 	local maxscore = 1000000
-	
+
 	local hit_color = {
 		[0] = Color3.fromRGB(255, 0, 0);
 		[1] = Color3.fromRGB(190, 10, 240);
@@ -37,38 +36,36 @@ function ScoreManager:new(_game)
 		[5] = Color3.fromRGB(255, 255, 255);
 	}
 
-	local _didChange = Instance.new("BindableEvent")
-
-	function self:get_end_records() return  _marv_count,_perfect_count,_great_count, _good_count, _bad_count,_miss_count,_max_chain, self._score end
-	function self:get_accuracy()
-		local _total_count = _marv_count + _perfect_count + _great_count + _good_count + _bad_count + _miss_count
-		if _total_count == 0 then 
+	function self:getEndRecords() return  marvCount, perfectCount, greatCount, goodCount, badCount, missCount, maxChain, self.score end
+	function self:getAccuracy()
+		local totalCount = marvCount + perfectCount +  greatCount + goodCount + badCount + missCount
+		if totalCount == 0 then 
 			return 0
 		else
-			return 100*( ( _marv_count + _perfect_count + (_great_count*0.66) + (_good_count*0.33) + (_bad_count*0.166) ) / _total_count)
+			return 100*( ( marvCount + perfectCount + (greatCount*0.66) + (goodCount*0.33) + (badCount*0.166) ) / totalCount)
 		end
 	end
 	
-	function self:get_global_accuracy(marv,perf,great,good,bad,miss)
-		local _total_count = marv + perf + great + good + bad + miss
-		if _total_count == 0 then 
+	function self:getGlobalAccuracy(marv,perf,great,good,bad,miss)
+		local totalCount = marv + perf + great + good + bad + miss
+		if totalCount == 0 then 
 			return 0
 		else
-			return 100*( ( marv + perf + (great*0.66) + (good*0.33) + (bad*0.166) ) / _total_count)
+			return 100*( ( marv + perf + (great*0.66) + (good*0.33) + (bad*0.166) ) / totalCount)
 		end
 	end
 	
-	function self:get_score()
-		local spread = {_marv_count, _perfect_count, _great_count, _good_count, _bad_count}
-		return self:calculate_total_score(spread)
+	function self:getScore()
+		local spread = {marvCount, perfectCount, greatCount, goodCount, badCount}
+		return self:calculateTotalScore(spread)
 	end
 	
-	function self:get_global_score(marv,perf,great,good,bad)
+	function self:getGlobalScore(marv,perf,great,good,bad)
 		local spread = {marv,perf,great,good,bad}
-		return self:calculate_total_score(spread)
+		return self:calculateTotalScore(spread)
 	end
 
-	function self:add_hit_to_deviance(hit_time_ms, time_to_end, note_result)
+	function self:addHitToDeviance(hit_time_ms, time_to_end, note_result)
 		local song_length = _game._audio_manager:get_song_length_ms()
 		local to_add = {
 			x = (hit_time_ms-time_to_end)/song_length,
@@ -80,62 +77,62 @@ function ScoreManager:new(_game)
 		self.hit_deviance[#self.hit_deviance+1] = to_add
 	end
 
-	function self:get_hit_deviance() return self.hit_deviance end
+	function self:getHitDeviance() return self.hit_deviance end
 	
-	function self:calculate_total_score(spread)
+	function self:calculateTotalScore(spread)
 		local totalnotes =_game._audio_manager:get_note_count()
 		local marv = 0
 		for total = 1, spread[1] do
-			marv = marv + self:result_to_point_total(NoteResult.Marvelous,totalnotes)
+			marv = marv + self:resultToPointTotal(5,totalnotes)
 		end
 		local perf = 0
 		for total = 1, spread[2] do
-			perf = perf + self:result_to_point_total(NoteResult.Perfect,totalnotes)
+			perf = perf + self:resultToPointTotal(4,totalnotes)
 		end
 		local great = 0
 		for total = 1, spread[3] do
-			great = great + self:result_to_point_total(NoteResult.Great,totalnotes)
+			great = great + self:resultToPointTotal(3,totalnotes)
 		end
 		local good = 0
 		for total = 1, spread[4] do
-			good = good + self:result_to_point_total(NoteResult.Good,totalnotes)
+			good = good + self:resultToPointTotal(2,totalnotes)
 		end
 		local bad = 0
 		for total = 1, spread[5] do
-			bad = bad + self:result_to_point_total(NoteResult.Bad,totalnotes)
+			bad = bad + self:resultToPointTotal(1,totalnotes)
 		end
 		return marv + perf + great + good + bad
 	end
 	
-	function self:calculate_note_score(totalnotes,hitvalue,hitbonusvalue,hitbonus,hitpunishment)
-		local prebonus = self._bonus + hitbonus - hitpunishment
+	function self:calculateNoteScore(totalnotes,hitvalue,hitbonusvalue,hitbonus,hitpunishment)
+		local prebonus = self.bonus + hitbonus - hitpunishment
 		if prebonus>100 then
-			self._bonus = 100
+			self.bonus = 100
 		elseif prebonus<0 then
-			self._bonus = 0
+			self.bonus = 0
 		else
-			self._bonus = prebonus
+			self.bonus = prebonus
 		end
 		local basescore = (maxscore * 0.5 / totalnotes) * (hitvalue / 320)
-		local bonusscore = (maxscore * 0.5 / totalnotes) * (hitbonusvalue * math.sqrt(self._bonus) / 320)
+		local bonusscore = (maxscore * 0.5 / totalnotes) * (hitbonusvalue * math.sqrt(self.bonus) / 320)
 		local score = basescore + bonusscore
 		return score
 	end
 
-	function self:result_to_point_total(note_result,totalnotes)
-		if note_result == NoteResult.Marvelous then
-			return self:calculate_note_score(totalnotes,320,32,2,0)
-		elseif note_result == NoteResult.Perfect then
-			return self:calculate_note_score(totalnotes,300,32,1,0)
-		elseif note_result == NoteResult.Great then
-			return self:calculate_note_score(totalnotes,200,16,0,8)
-		elseif note_result == NoteResult.Good then
-			return self:calculate_note_score(totalnotes,100,8,0,24)
-		elseif note_result == NoteResult.Bad then
-			return self:calculate_note_score(totalnotes,50,4,0,44)
+	function self:resultToPointTotal(note_result,totalnotes)
+		if note_result == 5 then
+			return self:calculateNoteScore(totalnotes,320,32,2,0)
+		elseif note_result == 4 then
+			return self:calculateNoteScore(totalnotes,300,32,1,0)
+		elseif note_result == 3 then
+			return self:calculateNoteScore(totalnotes,200,16,0,8)
+		elseif note_result == 2 then
+			return self:calculateNoteScore(totalnotes,100,8,0,24)
+		elseif note_result == 1 then
+			return self:calculateNoteScore(totalnotes,50,4,0,44)
 		else
-			if _total_count > 0 then
-				return self:calculate_note_score(totalnotes,0,0,0,100)
+			if totalCount > 0 then
+				return self:calculateNoteScore(totalnotes,0,0,0,100)
 			else
 				return 0
 			end
@@ -144,96 +141,48 @@ function ScoreManager:new(_game)
 
 	local _frame_has_played_sfx = false
 
-	function self:register_hit(
-		note_result,
-		slot_index,
-		track_index,
-		params
-	)
-		local track = _game:get_tracksystem(slot_index):get_track(track_index)
-		_game._effects:add_effect(NoteResultPopupEffect:new(
-			_game,
-			track:get_end_position() + Vector3.new(0,0.25,0),
-			note_result
-		))
-
-		if params.PlaySFX == true then
+	function self:registerHit(note_result)
+		SPUtil:spawn(function()
+			local _add_to_devaince = true
 			
-			--Make sure only one sfx is played per frame
-			if _frame_has_played_sfx == false then
-				if note_result == NoteResult.Perfect or note_result == NoteResult.Marvelous then
-					if params.IsHeldNoteBegin == true then
-						_game._audio_manager:get_hit_sfx_group():play_first()
-					else
-						_game._audio_manager:get_hit_sfx_group():play_alternating()
-					end
-
-				elseif note_result == NoteResult.Great then
-					_game._audio_manager.get_hit_sfx_group():play_first()
-				elseif note_result == NoteResult.Good or note_result == NoteResult.Bad then
-					_game._sfx_manager:play_sfx(SFXManager.SFX_DRUM_OKAY)
-				else
-					_game._sfx_manager:play_sfx(SFXManager.SFX_MISS)
-				end
-				_frame_has_played_sfx = true
-			end
-			
-			--Create an effect at HoldEffectPosition if PlayHoldEffect is true
-			if params.PlayHoldEffect then
-				if note_result ~= NoteResult.Miss then
-					_game._effects:add_effect(HoldingNoteEffect:new(
-						_game,
-						params.HoldEffectPosition,
-						note_result
-					))
-				end
-			end
-		end
-
-		local _add_to_devaince = true
-		
-		--Incregertment stats
-		if note_result == NoteResult.Marvelous then
-			_chain = _chain + 1
-			_marv_count = _marv_count + 1
-		elseif note_result == NoteResult.Perfect then
-			_chain = _chain + 1
-			_perfect_count = _perfect_count + 1
-		elseif note_result == NoteResult.Great then
-			_great_count = _great_count + 1
-		elseif note_result == NoteResult.Good then
-			_good_count = _good_count + 1
-		elseif note_result == NoteResult.Bad then
-			_chain = _chain + 1
-			_bad_count = _bad_count + 1
-		else
-			if _chain > 0 then
-				_chain = 0
-				_miss_count = _miss_count + 1
-
-			elseif params.TimeMiss == true then
-				_miss_count = _miss_count + 1
+			--Incregertment stats
+			if note_result == 5 then
+				chain = chain + 1
+				marvCount = marvCount + 1
+			elseif note_result == 4 then
+				chain = chain + 1
+				perfectCount = perfectCount + 1
+			elseif note_result == 3 then
+				chain = chain + 1
+				greatCount =  greatCount + 1
+			elseif note_result == 2 then
+				chain = chain + 1
+				goodCount = goodCount + 1
+			elseif note_result == 1 then
+				badCount = badCount + 1
 			else
-				_add_to_devaince = false
+				chain = 0
+				missCount = missCount + 1
 			end
-		end
 
-		if _add_to_devaince then
-			self:add_hit_to_deviance(params.HitTime, params.TimeToEnd, note_result)
-		end
-		
-		local totalnotes =_game._audio_manager:get_note_count()
-		self._score = self._score + self:result_to_point_total(note_result,totalnotes)
-		
-		_max_chain = math.max(_chain,_max_chain)
+			-- if _add_to_devaince then
+			-- 	self:addHitToDeviance(params.HitTime, params.TimeToEnd, note_result)
+			-- end
+			
+			local totalnotes = 500
+			self.score = self.score + self:resultToPointTotal(note_result,totalnotes)
+			
+			maxChain = math.max(chain,maxChain)
 
-		self:fire_change()
+			self.mostRecentJudgement = note_result
+			self.stats:change(self:getStatTable())
+		end)
 	end
 
-	function self:get_stat_table()
-		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = self:get_end_records()
-		local combo = self:get_chain()
-		local accuracy = self:get_accuracy()
+	function self:getStatTable()
+		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = self:getEndRecords()
+		local combo = self:getChain()
+		local accuracy = self:getAccuracy()
 
 		return {
 			score = score;
@@ -246,22 +195,15 @@ function ScoreManager:new(_game)
 			combo = combo;
 			accuracy = accuracy;
 			max_combo = max_combo;
+			most_recent = self.mostRecentJudgement;
 		}
-	end
-
-	function self:fire_change()
-		_didChange:Fire(self:get_stat_table())
-	end
-
-	function self:bind_to_change(_callback)
-		return _didChange.Event:Connect(_callback)
 	end
 
 	function self:update(dt_scale)
 		_frame_has_played_sfx = false
 	end
 
-	self:fire_change()
+	self.stats = Bindable:new(self:getStatTable())
 
 	return self
 end
