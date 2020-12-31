@@ -1,4 +1,9 @@
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
 local RandomLua = require(game.ReplicatedStorage.Shared.Utils.RandomLua)
+
+local function noop() end
 
 local SPUtil = {}
 
@@ -152,15 +157,37 @@ function SPUtil:bind_input_fire(object_, callback_)
 end
 
 function SPUtil:input_callback(_callback)
-	return function(o, i)
+	return function(...)
+		if not _callback then return end
+		local i = select(2, ...)
 		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			_callback(o, i)
+			_callback(...)
 		end
 	end
 end
 
+function SPUtil:find_distance(x1, y1, x2, y2)
+	return math.sqrt((x2-x1)^2 + (y2-y1)^2)
+end
+
+function SPUtil:find_angle(point, center)
+	local dx = point.X - center.X;
+
+	local dy = -(point.Y - center.Y);
+
+	local inRads = math.atan2(dy, dx);
+
+	if (inRads < 0) then
+		inRads = math.abs(inRads);
+	else
+		inRads = 2 * math.pi - inRads;
+	end
+
+	return math.deg(inRads);
+end
+
 function SPUtil:button(_instance, _expand_size, _local_services, _callback)
-	local SFXManager = require(game.ReplicatedStorage.RobeatsGameCore.SFXManager)
+	local SFXManager = require(game.ReplicatedStorage.Shared.Core.Engine.SFXManager)
 	local original_size = _instance.Size
 	_expand_size = _expand_size or UDim2.new(0, 0, 0, 0)
 
@@ -184,6 +211,10 @@ function SPUtil:button(_instance, _expand_size, _local_services, _callback)
 			_callback()
 		end
 	end)
+end
+
+function SPUtil:bind_to_frame(_callback)
+	return RunService.Heartbeat:Connect(_callback)
 end
 
 function SPUtil:should_component_be_visible(a, b)
@@ -215,6 +246,24 @@ end
 
 function SPUtil:spawn(_callback)
 	spawn(_callback)
+end
+
+function SPUtil:bind_to_key(key_code, _callback)
+	_callback = _callback or noop
+	return UserInputService.InputBegan:Connect(function(inputob)
+		if inputob.KeyCode == key_code or key_code == Enum.KeyCode then
+			_callback(inputob.KeyCode)
+		end
+	end)
+end
+
+function SPUtil:bind_to_key_release(key_code, _callback)
+	_callback = _callback or noop
+	return UserInputService.InputEnded:Connect(function(inputob)
+		if inputob.KeyCode == key_code or key_code == Enum.KeyCode then
+			_callback(inputob.KeyCode)
+		end
+	end)
 end
 
 return SPUtil
