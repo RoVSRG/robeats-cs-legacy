@@ -252,7 +252,9 @@ function SPUtil:bind_to_key(key_code, _callback)
 	_callback = _callback or noop
 	return UserInputService.InputBegan:Connect(function(inputob)
 		if inputob.KeyCode == key_code or key_code == Enum.KeyCode then
-			_callback(inputob.KeyCode)
+			if inputob.KeyCode ~= Enum.KeyCode.Unknown then
+				_callback(inputob.KeyCode)
+			end
 		end
 	end)
 end
@@ -261,7 +263,9 @@ function SPUtil:bind_to_key_release(key_code, _callback)
 	_callback = _callback or noop
 	return UserInputService.InputEnded:Connect(function(inputob)
 		if inputob.KeyCode == key_code or key_code == Enum.KeyCode then
-			_callback(inputob.KeyCode)
+			if inputob.KeyCode ~= Enum.KeyCode.Unknown then
+				_callback(inputob.KeyCode)
+			end
 		end
 	end)
 end
