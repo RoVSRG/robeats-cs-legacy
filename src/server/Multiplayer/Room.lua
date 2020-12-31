@@ -1,7 +1,7 @@
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 
-local Player = require(game.ServerScriptService.Multiplayer.Player)
+local Player = require(game:GetService("ServerScriptService"):WaitForChild("Server").Multiplayer["Player"])
 
 local Room = {}
 

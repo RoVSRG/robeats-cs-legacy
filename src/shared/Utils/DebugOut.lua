@@ -21,4 +21,11 @@ function DebugOut:errf(str,...)
 	error(out_str)
 end
 
+function DebugOut:profile(name)
+	debug.profilebegin(name)
+	return function()
+		debug.profileend()
+	end
+end
+
 return DebugOut

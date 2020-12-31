@@ -3,7 +3,7 @@ local rtv = {}
           -- Converted for Robeats CS --
 
 rtv.AudioAssetId = "rbxassetid://2890616861"
-rtv.AudioTimeOffset = -70 -- Edit this if needed
+rtv.AudioTimeOffset = 300 -- Edit this if needed
 rtv.AudioVolume = 0.5 -- Do not edit this unless if audio is noticeably too quiet or loud
 
      -- You do not have to edit below here --
