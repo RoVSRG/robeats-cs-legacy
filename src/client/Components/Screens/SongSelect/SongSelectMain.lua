@@ -1,7 +1,5 @@
 local Roact: Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local Knit = require(game.ReplicatedStorage.Knit)
-
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
@@ -14,6 +12,8 @@ local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongData
 local TweenService = game:GetService("TweenService")
 
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
+
+local PreviewController = require(game.ReplicatedStorage.Client.Controllers.PreviewController)
 
 local SongButtonLayout = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButtonLayout)
 local LeaderboardDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.LeaderboardDisplay)
@@ -47,21 +47,6 @@ function SongSelectUI:init()
         self.props.startGame()
         self.props.history:push("/gameplay")
     end
-
-    self._current_sfx = Instance.new("Sound")
-    self._current_sfx.Parent = workspace
-    self._current_sfx.Loaded:Connect(function()
-        self._current_sfx.TimePosition = NumberUtil.Lerp(0,self._current_sfx.TimeLength,0.35)
-        self._current_sfx.PlaybackSpeed = 1
-        self._current_sfx.Volume = 0
-        local volume_tween_info = TweenInfo.new(3)
-        local volume_tween = TweenService:Create(self._current_sfx, volume_tween_info, {
-            Volume = 0.5
-        })
-        volume_tween:Play()
-        self._current_sfx:Play()
-    end)
-    self._current_sfx.Looped = true
 
     self.changeRateBinding = SPUtil:bind_to_key(Enum.KeyCode, function(keyCode)
         local ktd = {
@@ -106,15 +91,15 @@ function SongSelectUI:didMount()
 end
 
 function SongSelectUI:update_preview()
-    local _selected_songkey = self.props.selectedSongKey
-    if _selected_songkey == SongDatabase:invalid_songkey() then return end
+    -- local _selected_songkey = self.props.selectedSongKey
+    -- if _selected_songkey == SongDatabase:invalid_songkey() then return end
 
-    if self._current_sfx then
-        self._current_sfx:Stop()
-    end
+    -- if self._current_sfx then
+    --     self._current_sfx:Stop()
+    -- end
 
-    local audio_id = SongDatabase:get_data_for_key(_selected_songkey).AudioAssetId
-    self._current_sfx.SoundId = audio_id
+    -- local audio_id = SongDatabase:get_data_for_key(_selected_songkey).AudioAssetId
+    -- self._current_sfx.SoundId = audio_id
 end
 
 function SongSelectUI:render()
@@ -259,8 +244,8 @@ function SongSelectUI:render()
 end
 
 function SongSelectUI:willUnmount()
-    self._current_sfx:Stop()
-    self._current_sfx:Destroy()
+    -- self._current_sfx:Stop()
+    -- self._current_sfx:Destroy()
 
     self.changeRateBinding:Disconnect()
 end

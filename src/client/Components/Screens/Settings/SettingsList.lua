@@ -1,9 +1,3 @@
--- Roact.createElement("UIGridLayout", {
---     
---     
---     
--- })
-
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local SettingsList = Roact.Component:extend("SettingsList")

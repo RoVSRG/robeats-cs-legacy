@@ -11,10 +11,9 @@ local SettingsGroupToggle = require(script.Parent.SettingsGroupToggle)
 local Slideshow = require(game.ReplicatedStorage.Client.Components.Primitive.Slideshow)
 local Slide = require(game.ReplicatedStorage.Client.Components.Primitive.Slideshow.Slide)
 
-local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
-
 local Types = script.Parent.Types
 local IntSetting = require(Types.IntSetting)
+local BindSetting = require(Types.BindSetting)
 
 local function noop() end
 
@@ -74,6 +73,31 @@ function SettingsMain:render()
 								name = "NoteSpeed";
 								title = "Note Speed";
 							});
+							FOV = Roact.createElement(IntSetting, {
+								value = self.props.settings.FOV;
+								changeSetting = self.changeValue;
+								name = "FOV";
+								title = "Field of View";
+							});
+							Keybinds = Roact.createElement(BindSetting, {
+								value = {
+									self.props.settings.Keybind1;
+									self.props.settings.Keybind2;
+									self.props.settings.Keybind3;
+									self.props.settings.Keybind4;
+								};
+								changeSetting = self.changeValue;
+								name = {
+									"Keybind1";
+									"Keybind2";
+									"Keybind3";
+									"Keybind4";
+								};
+								title = "Keybinds";
+								getDerivedText = function(v)
+									return string.format("%0d%%", v)
+								end;
+							})
 						});
 					});
 					Audio = Roact.createElement(Slide, {
@@ -93,6 +117,19 @@ function SettingsMain:render()
 									return string.format("%0d%%", v)
 								end;
 								initialPercent = self.props.settings.MusicVolume;
+								minValue = 0;
+								maxValue = 100;
+							});
+							EffectVolume = Roact.createElement(IntSetting, {
+								value = self.props.settings.EffectVolume;
+								changeSetting = self.changeValue;
+								name = "EffectVolume";
+								title = "Effect Volume";
+								useSlider = true;
+								getDerivedText = function(v)
+									return string.format("%0d%%", v)
+								end;
+								initialPercent = self.props.settings.EffectVolume;
 								minValue = 0;
 								maxValue = 100;
 							});
@@ -119,7 +156,7 @@ function SettingsMain:render()
 			});
 			ToggleAudio = Roact.createElement(SettingsGroupToggle, {
 				Size = UDim2.new(1,0,0.2,0);
-				Text = "⚙ Audio";
+				Text = "🔉 Audio";
 				LayoutOrder = 2;
 				selected = self.state.selectedTab == 2;
 				onActivated = function()

@@ -4,6 +4,7 @@ local ScoreManager = require(script.ScoreManager)
 local HitObjectPool = require(script.HitObjectPool)
 local Hitsound = require(script.Hitsound)
 local Audio = require(script.Audio)
+local Replay = require(script.Replay)
 
 local Engine = {
     States = {
@@ -18,8 +19,8 @@ function Engine:new(props)
     local self = {}
     function self:cons()
         self.audio = Audio:new()
-        
-        self.audio:set_volume(props.volume/2 or 0.5)
+
+        self.audio:set_volume((props.volume/100)/2 or 0.5)
         self.audio:set_rate(props.rate or 1)
 
         self.audio:parent(workspace)
@@ -34,6 +35,7 @@ function Engine:new(props)
     self.scrollSpeed = 1000 * CurveUtil:YForPointOf2PtLine(Vector2.new(0,1), Vector2.new(40,0.2), props.scrollSpeed)
     
     self.objectPool = HitObjectPool:new({
+        replay = Replay.perfectReplay(props.key, props.rate);
         scrollSpeed = self.scrollSpeed;
         key = props.key;
         scoreManager = self.scoreManager;

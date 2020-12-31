@@ -14,7 +14,7 @@ function SettingsGroupToggleApp:render()
         Position = UDim2.new(0.5, 0, 0.5, 0);
         Text = "⚙ General";
         onActivated = function()
-            print("dfgoidkl ghjfrkdfghj ")
+            print("dfgoidkl ghjfrkdfghj")
         end
     })
 end
