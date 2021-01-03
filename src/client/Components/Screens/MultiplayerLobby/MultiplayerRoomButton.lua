@@ -93,9 +93,9 @@ function MultiplayerRoomButton:render()
         }, {
             Roact.createElement("UIListLayout", {
                 Padding = UDim.new(0.015,0);
-                sortOrder = Enum.SortOrder.LayoutOrder;
+                SortOrder = Enum.SortOrder.LayoutOrder;
                 FillDirection = Enum.FillDirection.Horizontal;
-            })
+            });
         });
         SongDisplay = Roact.createElement("TextLabel", {
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
