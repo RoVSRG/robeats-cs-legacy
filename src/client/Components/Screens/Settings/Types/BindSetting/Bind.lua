@@ -1,5 +1,7 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local USER_INPUT_SERVICE = game:GetService("UserInputService")
+
 local Button = require(game.ReplicatedStorage.Client.Components.Primitive.Button)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
@@ -21,10 +23,6 @@ function Bind:init()
             })
         end
     end)
-end
-
-function Bind:didUpdate()
-    print(self.state.currentKeyCode)
 end
 
 function Bind:willUnmount()

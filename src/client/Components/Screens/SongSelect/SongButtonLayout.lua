@@ -1,13 +1,15 @@
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local AutoSize = require(game.ReplicatedStorage.Shared.Utils.AutoSize)
+
 local SongButton = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButton)
 
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 
 function SongButtonLayout:init()
     self._songbuttons = {}
-    self._list_layout_ref = Roact.createRef()
+    self.songListRef = Roact.createRef()
     self:setState({
         search = "";
     })
@@ -21,11 +23,7 @@ function SongButtonLayout:init()
 end
 
 function SongButtonLayout:didMount()
-    local song_list_layout = self._list_layout_ref:getValue()
-    local song_list = song_list_layout.Parent
-    song_list_layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        song_list_layout.Parent.CanvasSize = UDim2.new(0, 0, 0, song_list.UIListLayout.AbsoluteContentSize.Y)
-    end)
+    AutoSize.list(self.songListRef:getValue())
 end
 
 function SongButtonLayout:search(search, _songkey)
@@ -85,12 +83,12 @@ function SongButtonLayout:render()
             ScrollBarThickness = 8,
             TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
             VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right,
+            [Roact.Ref] = self.songListRef
         }, {
             Layout = Roact.createFragment({
                 UIListLayout = Roact.createElement("UIListLayout", {
                     HorizontalAlignment = Enum.HorizontalAlignment.Right;
                     Padding = UDim.new(0, 5);
-                    [Roact.Ref] = self._list_layout_ref
                 });
                 SongButtons = Roact.createFragment(self:renderableButtons());
             })
