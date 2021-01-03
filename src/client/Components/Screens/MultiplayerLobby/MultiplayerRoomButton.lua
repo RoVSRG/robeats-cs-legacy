@@ -53,7 +53,7 @@ function MultiplayerRoomButton:render()
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.53, 0, 0.699999988, 0),
+            Position = UDim2.new(0.53, 0, 0.425, 0),
             Size = UDim2.new(5, 0, 0.200000003, 0),
             Font = Enum.Font.GothamBold,
             Text = string.format("%d players, %s, %s", self.props.players, self.props.locked and "Locked" or "Unlocked", self.props.inGame and "In-Game" or "In-Lobby"),
@@ -68,31 +68,13 @@ function MultiplayerRoomButton:render()
                 MinTextSize = 10,
             })
         }),
-        DifficultyDisplay = Roact.createElement("TextLabel", {
-            Name = "DifficultyDisplay",
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            BackgroundTransparency = 1,
-            BorderSizePixel = 0,
-            Position = UDim2.new(0.53, 0, 0.5, 0),
-            Size = UDim2.new(5, 0, 0.200000003, 0),
-            Font = Enum.Font.GothamSemibold,
-            Text = "Difficulty: 1",
-            TextColor3 = Color3.fromRGB(255, 255, 255),
-            TextScaled = true,
-            TextSize = 16,
-            TextWrapped = true,
-            TextXAlignment = Enum.TextXAlignment.Left,
-        }, {
-            UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
-                MaxTextSize = 18,
-                MinTextSize = 10,
-            })
-        }),
+
+        
         MultiNameDisplay = Roact.createElement("TextLabel", {
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.53, 0, 0.100000001, 0),
+            Position = UDim2.new(0.53, 0, 0.055, 0),
             Size = UDim2.new(0.5, 0, 0.25, 0),
             Font = Enum.Font.SourceSansBold,
             Text = self.props.name,
@@ -102,15 +84,28 @@ function MultiplayerRoomButton:render()
             TextWrapped = true,
             TextXAlignment = Enum.TextXAlignment.Left,
         }),
+        MultiPlayerImages = Roact.createElement("Frame", {
+            Name = "PlayerHeadShots";
+            BackgroundColor3 = Color3.fromRGB(255,255,255);
+            BackgroundTransparency = 0;
+            Position = UDim2.new(.515,0,.595,0);
+            Size = UDim2.new(.305, 0, .355 ,0);
+        }, {
+            Roact.createElement("UIListLayout", {
+                Padding = UDim.new(0.015,0);
+                SortOrder = Enum.SortOrder.LayoutOrder;
+                FillDirection = Enum.FillDirection.Horizontal;
+            });
+        });
         SongDisplay = Roact.createElement("TextLabel", {
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Position = UDim2.new(0.53, 0, 0.375, 0),
+            Position = UDim2.new(0.53, 0, 0.29, 0),
             Selectable = true,
             Size = UDim2.new(5, 0, 0.150000006, 0),
             Font = Enum.Font.SourceSansBold,
-            Text = "Monday Night Monsters",
+            Text = "Monday Night Monsters [1]",
             TextColor3 = Color3.fromRGB(255, 208, 87),
             TextScaled = true,
             TextSize = 26,
