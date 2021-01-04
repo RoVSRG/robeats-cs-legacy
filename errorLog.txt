@@ -1,0 +1,105 @@
+This is a list of songs that could NOT be automatically added to the rewrite, due to string formatting errors. These will have to be added manually.
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+[323][HEAVY] t+pazolite - Electric Sister
+[322][LIGHT] t+pazolite - Electric Sister
+[321][LIGHT] t+pazolite - Angelic Jelly
+[320][HEAVY] t+pazolite - Angelic Jelly
+[021] Angel Of Darkness (Nightcore) (Leo137)
+[325] Team Grimoire - C18H27NO3
+[327][OTHER] DJ UNDERJOY vs his recorder FULL MEME NIGHT (underjoy)
+[034][LIGHT] Stay Alive (Jun Kuroda Botleg) (OniiCh_n)
+[035][HEAVY] Stay Alive (Jun Kuroda Botleg) (OniiCh_n)
+Error adding file: [037][LIGHT] Camellia - R U Still xxxx? (ArcadeSona), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [038][HEAVY] Camellia - R U Still xxxx? (ArcadeSona), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[040][HEAVY] Kyouran Hey Kids!! (Draw's Hard)
+Error adding file: [043][LIGHT] Nanahira/Camellia - Speed Star Kanade (ArcadeSona), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [044][HEAVY] Nanahira/Camellia - Speed Star Kanade (ArcadeSona), "external error: The system cannot find the path specified. (os error 3)"
+[053] Haywyre - Insight
+Error adding file: [054][LIGHT]  Ryu* Vs. Sota - Go Beyond!! (DE-CADE), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [055][HEAVY]  Ryu* Vs. Sota - Go Beyond!! (DE-CADE), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [062][LIGHT] Doma Umaru - Kakushinteki*Metamaruphose! (Kuo Kyoka), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [063][HEAVY] Doma Umaru - Kakushinteki*Metamaruphose! (Kuo Kyoka), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[068] Gods & Machines (Random02)
+[078][LIGHT] The 4th KAC DJ TOTTO's SELECTION (bengbeng14)
+[079][HEAVY] The 4th KAC DJ TOTTO's SELECTION (bengbeng14)
+Error adding file: [080][LIGHT] *namirin - Koi no Hime Hime Pettanko (Litharrale), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [081][HEAVY] *namirin - Koi no Hime Hime Pettanko (Litharrale), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[095] Angerfist - Knock Knock
+[165] The Quick Brown Fox - Gotsta Terrify (Wh1teh
+[169][LIGHT] The Scales of Struggle (Fullerene-'s Insane)
+[170][HEAVY] The Scales of Struggle (Staiain)
+Error adding file: [179][LIGHT] "Mazare" - Mazare Party (sunryu), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [180][HEAVY] "Mazare" - Mazare Party (shuniki), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[204][LIGHT] Fight To The Finish! (Glitchxcity Remix v.II) (LazyMelly)
+[205][HEAVY] Fight To The Finish! (Glitchxcity Remix v.II) (LazyMelly)
+Error adding file: [212][LIGHT] DEV/NULL - Rave 7 (hi19hi19), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [213][HEAVY] DEV/NULL - Rave 7 (hi19hi19), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [249][LIGHT] Kaneko Chiharu - Lachryma<Re:Queen'M> (Fresh Chicken's ADVANCED), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [250][HEAVY] Kaneko Chiharu - Lachryma<Re:Queen'M> (Fresh Chicken's EXHAUST), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [251][EXTRA] Kaneko Chiharu - Lachryma<Re:Queen'M> (Fresh Chicken's GRAVITY), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [268] Gore**** - nhk!? (Vaenus remix) (Random02), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [279] Burn7 - Pokemon R/B Battle (honrik567), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [285] TAG underground overlay - Over the "Period" (horrortic), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[355][LIGHT] kamome sano - HE4VEN ~Tengoku e Youkoso~
+[356][HEAVY] kamome sano - HE4VEN ~Tengoku e Youkoso~
+[358]  Yuuna Sasara ft. Tai no Kobone
+- Imperishable Night 2006
+Error adding file: [516] ueotan - Firmament "Castle" Velier (hi19hi19), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [370][LIGHT] P*LIGHT - Gekkou Ranbu (4K GRAVITY Lv.14), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [371][HEAVY] P*LIGHT - Gekkou Ranbu (SY's 4K ULTIMATE Lv.15), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [372][LIGHT] P*LIGHT - Hello Happiness (Happy CS' Another), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [373][HEAVY] P*LIGHT - Hello Happiness (Everybody Say Yeah!), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [375][LIGHT] P*LIGHT - Sakura Reflection (NaxelCL's 4K Advanced Lv.18), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[329][HEAVY] P*LIGHT - Sakura Reflection(Yuno's 4K EXHAUST Lv.24))
+Error adding file: [025][HEAVY] gore**** - Satori De Pon! (Leo137), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [024][LIGHT] gore**** - Satori De Pon! (Leo137), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[377][HEAVY]typeMARS -  Triumph & Regret  ([ A v a l o n])
+[388][LIGHT] ALiCE'S EMOTiON - Dark Flight Dreamer
+[389][HEAVY] ALiCE'S EMOTiON - Dark Flight Dreamer
+Error adding file: [396] Camellia - PLANET//SHAPER (Evening), "external error: The system cannot find the path specified. (os error 3)"
+[415][LIGHT] ExileLord - Soulless 6
+[416][HEAVY] ExileLord - Soulless 6
+[430] Quarks (kradness&Camellia) - Intro + Dualive
+[442][LIGHT]depp - beforeyougo (LazyMelly)
+[376][LIGHT]typeMARS - Triumph & Regret  ([ A  v a l o n ])
+[884] Various Artists - Gamma 1.05263157895x
+[475] Various Artists - Epsilon
+[488]LIGHT] xi - Freedom Dive (ROBEATS)
+Error adding file: [581] gore**** - Toromi Hearts 2 (Leo137), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [600] Fujita Akane - Precious You* (frolica), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [862][HEAVY] Aquors - Yuki wa Doko ni? Kimi no Mune ni! (arcwinolivirus), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [624][LIGHT] kamome sano - archive::zip (ROBEATS) (Breezy), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [625][HEAVY] kamome sano - archive::zip (ROBEATS) (Breezy), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[626][EVENT] RoughSketch - 666
+Error adding file: [678] Reizoko Cj - Cosmos / The R Machine (Chrubble), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [679] DJ Mass MAD Izm* - Shakunetsu Pt.2 Long Train Running (Ciel), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [682] gore*** - Fantasy (Wh1teh), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [683] Camellia - Blastix Riotz ("Fullblast" Long ver.) (Evening), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [715][LN] Moe Shop - <3 (Todestrieb), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [863][EXTRA] Aquors - Yuki wa Doko ni? Kimi no Mune ni! (arcwinolivirus), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [740] Camellia - LET'S JUMP (Camellia's "diffractive" Hardcore Remix) (Curiossity), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [741] K/DA, Madison Beer & (G)I-DLE - POP/STARS (feat. Jaira Burns) (Valedict), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [761][LIGHT] gore**** - o'er the flood (Shoegazer), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [762][HEAVY] gore**** - o'er the flood (Shoegazer), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [771] G.G-G* - LEthAl wEApOn (Wh1teh), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [775] Camellia - *Feels Seasickness...* (Fresh_Chicken), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [779][LIGHT] P*Light - SAtAN (Murumoo), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [780][HEAVY] P*Light - SAtAN (Gyukari), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [796] Camellia - * Erm, could it be a Spatiotemporal ShockWAVE Syndrome...? (Suu is my waifu), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [861][LIGHT] Aquors - Yuki wa Doko ni? Kimi no Mune ni! (arcwinolivirus), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [892][LN] Turbo - PADORU / PADORU (BaniiYanii), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [893] Turbo - PADORU / PADORU (BaniiYanii), "external error: The system cannot find the path specified. (os error 3)"
+Error adding file: [916][LIGHT] gore**** - slavik goblins (Quick Draw's 4K MX), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [917][HEAVY] gore**** - slavik goblins (stankill), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [918] gore**** - thinking of you (YunoMaya), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [946][HEAVY] RichhardEB - Black (Metal Cover) (ROBEATS), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [971] Camellia - *Erm, could it be a Spatiotemporal ShockWAVE Syndrome...? (adamyes), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [979][LIGHT] t+pazolite vs. P*Light - IZANA (BaniiYanii), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [980][HEAVY] t+pazolite vs. P*Light - IZANA (AHHHHHHHHHHHHHH), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+Error adding file: [981][EXTRA] t+pazolite vs. P*Light - IZANA (BaniiYanii), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[983]Kobaryo - northern_limit [feat. Sennzai] (Nosteal)
+Error adding file: [987] Camellia - fastest crash (Camellia's "paroxysmal" Energetic Hitech Remix) (11Bit), "external error: The filename, directory name, or volume label syntax is incorrect. (os error 123)"
+[1010] Various Artists - Dan REFORM Stamina Mashup
+61 maps could not be added automatically. To add these, you must add them manually.

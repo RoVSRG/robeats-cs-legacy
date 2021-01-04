@@ -25,11 +25,18 @@ function SongDatabase:new()
 
 	function self:cons()
 		for i=1,#SongMapList do
-			local audio_data = require(SongMapList[i])
-			SongErrorParser:scan_audiodata_for_errors(audio_data)
-			if SongErrorParser:can_add_to_song_database(audio_data) then
-				self:add_key_to_data(i,audio_data)
-				_name_to_key:add(SongMapList[i].Name,i)
+			local suc, err = pcall(function()
+				local audio_data = require(SongMapList[i])
+				SongErrorParser:scan_audiodata_for_errors(audio_data)
+				if SongErrorParser:can_add_to_song_database(audio_data) then
+					self:add_key_to_data(i,audio_data)
+					_name_to_key:add(SongMapList[i].Name,i)
+				end
+			end)
+
+			if not suc then
+				local errorMessage = string.format("Map at key %d could not be loaded, with error: %s\nMap name: %s", i, err, SongMapList[i].Name)
+				warn(errorMessage)
 			end
 		end
 	end
