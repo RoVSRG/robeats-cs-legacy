@@ -35,7 +35,7 @@ function Engine:new(props)
     self.scrollSpeed = 1000 * CurveUtil:YForPointOf2PtLine(Vector2.new(0,1), Vector2.new(40,0.2), props.scrollSpeed)
     
     self.objectPool = HitObjectPool:new({
-        replay = Replay.perfectReplay(props.key, props.rate);
+        --replay = Replay.perfectReplay(props.key, props.rate);
         scrollSpeed = self.scrollSpeed;
         key = props.key;
         scoreManager = self.scoreManager;
