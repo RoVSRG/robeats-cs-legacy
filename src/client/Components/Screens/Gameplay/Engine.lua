@@ -8,20 +8,21 @@ local EngineHOC = Roact.Component:extend("EngineHOC")
 local function noop() end
 
 function EngineHOC:init()
+    local settings = self.props.settings
     self.game = Engine:new({
-        scrollSpeed = self.props.settings.scrollSpeed or 0;
+        scrollSpeed = settings.scrollSpeed or 0;
         key = self.props.selectedSongKey;
-        volume = self.props.settings.volume;
-        rate = self.props.settings.rate;
+        volume = settings.volume;
+        rate = settings.rate;
     })
 
     self.game:load()
 
     self.keybinds = {
-        [Enum.KeyCode.R] = 1;
-        [Enum.KeyCode.T] = 2;
-        [Enum.KeyCode.KeypadSeven] = 3;
-        [Enum.KeyCode.KeypadEight] = 4;
+        [settings.Keybind1] = 1;
+        [settings.Keybind2] = 2;
+        [settings.Keybind3] = 3;
+        [settings.Keybind4] = 4;
     }
     
 
