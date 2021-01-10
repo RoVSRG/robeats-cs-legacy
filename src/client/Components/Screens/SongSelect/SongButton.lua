@@ -32,18 +32,18 @@ function SongButton:render()
         BorderMode = Enum.BorderMode.Inset,
         BorderSizePixel = 0,
         Position = UDim2.fromOffset(0, (self.props.index-1)*125);
-        Size = UDim2.new(1, 0, 0, 20),
+        Size = UDim2.new(1, 0, 0, 120),
         onActivated = function()
             self.on_click(self.props.song_key)
         end;
         Text = "";
-        shrinkBy = 0.015;
+        shrinkBy = 0.000001;
     }, {
         Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),
         }),
         Roact.createElement("UIAspectRatioConstraint", {
-            AspectRatio = 10,
+            AspectRatio = 11,
             AspectType = Enum.AspectType.ScaleWithParentSize,
         }),
         Roact.createElement("ImageLabel", {
