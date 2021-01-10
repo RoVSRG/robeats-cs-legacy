@@ -2,6 +2,10 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local BaseSetting = Roact.Component:extend("BaseSetting")
 
+BaseSetting.defaultProps = {
+    valueDisplayVisible = true
+}
+
 function BaseSetting:init()
     self.getDerivedText = self.props.getDerivedText or function(value)
         return value
@@ -49,6 +53,7 @@ function BaseSetting:render()
             TextSize = 14,
             TextTransparency = 1,
             TextWrapped = true,
+            Visible = self.props.valueDisplayVisible
         }, {
             c = Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
