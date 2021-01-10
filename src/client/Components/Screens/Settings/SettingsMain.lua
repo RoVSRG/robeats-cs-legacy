@@ -80,19 +80,29 @@ function SettingsMain:render()
 								title = "Field of View";
 							});
 							Keybinds = Roact.createElement(BindSetting, {
-								value = {
-									self.props.settings.Keybind1;
-									self.props.settings.Keybind2;
-									self.props.settings.Keybind3;
-									self.props.settings.Keybind4;
-								};
+								bindingProps = {
+									{
+										title = "Track 1",
+										value = self.props.settings.Keybind1;
+										name = "Keybind1"
+									},
+									{
+										title = "Track 2",
+										value = self.props.settings.Keybind2;
+										name = "Keybind2"
+									},
+									{
+										title = "Track 3",
+										value = self.props.settings.Keybind3;
+										name = "Keybind3"
+									},
+									{
+										title = "Track 4",
+										value = self.props.settings.Keybind4;
+										name = "Keybind4"
+									}
+								},
 								changeSetting = self.changeValue;
-								name = {
-									"Keybind1";
-									"Keybind2";
-									"Keybind3";
-									"Keybind4";
-								};
 								title = "Keybinds";
 								getDerivedText = function(v)
 									return string.format("%0d%%", v)

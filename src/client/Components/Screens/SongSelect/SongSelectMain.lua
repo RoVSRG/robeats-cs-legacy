@@ -15,6 +15,8 @@ local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local PreviewController = require(game.ReplicatedStorage.Client.Controllers.PreviewController)
 
+local Promise = require(game.ReplicatedStorage.Libraries.Promise)
+
 local SongButtonLayout = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButtonLayout)
 local LeaderboardDisplay = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.LeaderboardDisplay)
 local TabLayout = require(game.ReplicatedStorage.Client.Components.Layout.TabLayout)
@@ -26,19 +28,11 @@ local Slide = require(game.ReplicatedStorage.Client.Components.Primitive.Slidesh
 local noop = function() end
 
 function SongSelectUI:init()
-    self.getSongs = function()
-        if self._songs then return self._songs end
-        local songs = {}
-        for itr_key, itr_data in SongDatabase:key_itr() do
-            songs[itr_key] = itr_data
-        end
-        self._songs = songs
-        return songs
-    end
     self.select_song_key = self.props.selectSongKey or function() end
 
     self:setState({
-        selectedTab = 1
+        selectedTab = 1;
+        songs = {}
     })
 
     self.changeRate = self.props.changeRate
@@ -203,7 +197,7 @@ function SongSelectUI:render()
                 })
             }),
             SongButtonLayout = Roact.createElement(SongButtonLayout, {
-                songs = self.getSongs();
+                songs = self.state.songs;
                 AnchorPoint = Vector2.new(1,0);
                 Position = self.motorBinding:map(function(a)
                     return UDim2.new(2-a.songButtonLayout, 0, 0, 0)

@@ -16,10 +16,6 @@ function SongButton:init()
     self.on_click = self.props.on_click or noop
 end
 
-function SongButton:shouldUpdate(nextProps, nextState)
-    return self.props.visible ~= nextProps.visible
-end
-
 function SongButton:getGradient()
     local gradient = Gradient:new()
 
@@ -31,13 +27,12 @@ function SongButton:getGradient()
 end
 
 function SongButton:render()
-    local _song_key = self.props.song_key
     return Roact.createElement(Button, {
-        Visible = self.props.visible;
         BackgroundColor3 = Color3.fromRGB(15, 15, 15),
         BorderMode = Enum.BorderMode.Inset,
         BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 0.19, 0),
+        Position = UDim2.fromOffset(0, (self.props.index-1)*125);
+        Size = UDim2.new(1, 0, 0, 20),
         onActivated = function()
             self.on_click(self.props.song_key)
         end;

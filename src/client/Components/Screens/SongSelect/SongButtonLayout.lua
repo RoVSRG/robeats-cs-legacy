@@ -7,11 +7,16 @@ local SongButton = require(game.ReplicatedStorage.Client.Components.Screens.Song
 
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 
+--[[
+    startIndex = floor(scrollPosition / elementHeight)
+    endIndex = ceil((scrollPosition + scrollSize) / elementHeight)
+]]
+
 function SongButtonLayout:init()
-    self._songbuttons = {}
-    self.songListRef = Roact.createRef()
     self:setState({
         search = "";
+        startIndex = 1;
+        endIndex = 115;
     })
     self.on_button_click = self.props.on_button_click
 
@@ -20,10 +25,6 @@ function SongButtonLayout:init()
             search = o.Text;
         })     
     end
-end
-
-function SongButtonLayout:didMount()
-    AutoSize.list(self.songListRef:getValue())
 end
 
 function SongButtonLayout:search(search, _songkey)
@@ -42,25 +43,24 @@ function SongButtonLayout:search(search, _songkey)
     return found == #search
 end
 
-function SongButtonLayout:renderableButtons()
+function SongButtonLayout:render()
     local _buttons = {}
-    
-    for key_itr, itr_data in pairs(self.props.songs) do
-        _buttons["SongKey"..key_itr] = Roact.createElement(SongButton, {
-            song_key = key_itr or 1,
-            artist = itr_data.AudioArtist,
-            title = itr_data.AudioFilename,
-            difficulty = itr_data.AudioDifficulty,
-            image = itr_data.AudioCoverImageAssetId,
-            on_click = self.on_button_click,
-            visible = SongButtonLayout:search(self.state.search, key_itr)
-        })
+
+    for key_itr = self.state.startIndex, self.state.endIndex do
+        local itr_data = SongDatabase:get_data_for_key(key_itr)
+        -- if SongButtonLayout:search(self.state.search, key_itr) then
+            _buttons["SongKey"..key_itr] = Roact.createElement(SongButton, {
+                song_key = key_itr or 1,
+                artist = itr_data.AudioArtist,
+                title = itr_data.AudioFilename,
+                difficulty = itr_data.AudioDifficulty,
+                image = itr_data.AudioCoverImageAssetId,
+                on_click = self.on_button_click,
+                index = key_itr
+            })
+        -- end
     end
 
-    return _buttons
-end
-
-function SongButtonLayout:render()
     return Roact.createElement("Frame", {
         Name = "SongSection",
         AnchorPoint = self.props.AnchorPoint,
@@ -83,15 +83,34 @@ function SongButtonLayout:render()
             ScrollBarThickness = 8,
             TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
             VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right,
-            [Roact.Ref] = self.songListRef
+            CanvasSize = UDim2.fromOffset(0, SongDatabase:number_of_keys()*125),
+            [Roact.Ref] = self.songListRef,
+            [Roact.Change.CanvasPosition] = function(songList)
+                local scrollPosition = songList.CanvasPosition
+                local startIndex = math.floor(scrollPosition.Y / 125)+1;
+                local endIndex = math.ceil((scrollPosition.Y + songList.AbsoluteSize.Y) / 125);
+
+                print(startIndex, endIndex)
+
+                self:setState({
+                    startIndex = startIndex;
+                    endIndex = endIndex;
+                })
+            end;
+            [Roact.Change.AbsoluteSize] = function(songList)
+                local scrollPosition = songList.CanvasPosition
+                local startIndex = math.floor(scrollPosition.Y / 125)+1;
+                local endIndex = math.ceil((scrollPosition.Y + songList.AbsoluteSize.Y) / 125);
+
+                print(startIndex, endIndex)
+
+                self:setState({
+                    startIndex = startIndex;
+                    endIndex = endIndex;
+                })
+            end;
         }, {
-            Layout = Roact.createFragment({
-                UIListLayout = Roact.createElement("UIListLayout", {
-                    HorizontalAlignment = Enum.HorizontalAlignment.Right;
-                    Padding = UDim.new(0, 5);
-                });
-                SongButtons = Roact.createFragment(self:renderableButtons());
-            })
+            SongButtons = Roact.createFragment(_buttons);
         }),
         Roact.createElement("Frame", {
             Name = "SearchBar",

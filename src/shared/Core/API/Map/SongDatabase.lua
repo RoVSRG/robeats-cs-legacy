@@ -18,48 +18,16 @@ function SongDatabase:new()
 	local self = {}
 	self.SongMode = SongDatabase.SongMode
 
-	local _all_keys = SPDict:new()
-	local _key_list = SPList:new()
-	local _name_to_key = SPDict:new()
-	local _key_to_fusionresult = SPDict:new()
-
-	function self:cons()
-		for i=1,#SongMapList do
-			local suc, err = pcall(function()
-				local audio_data = require(SongMapList[i])
-				SongErrorParser:scan_audiodata_for_errors(audio_data)
-				if SongErrorParser:can_add_to_song_database(audio_data) then
-					self:add_key_to_data(i,audio_data)
-					_name_to_key:add(SongMapList[i].Name,i)
-				end
-			end)
-
-			if not suc then
-				local errorMessage = string.format("Map at key %d could not be loaded, with error: %s\nMap name: %s", i, err, SongMapList[i].Name)
-				warn(errorMessage)
-			end
-		end
-	end
-
-	function self:add_key_to_data(key,data)
-		if _all_keys:contains(key) then
-			error("SongDatabase:add_key_to_data duplicate",key)
-		end
-		_all_keys:add(key,data)
-		data.__key = key
-		_key_list:push_back(key)
-	end
-
-	function self:key_itr()
-		return _all_keys:key_itr()
+	local function requireKey(i)
+		return require(SongMapList[i])
 	end
 
 	function self:get_data_for_key(key)
-		return _all_keys:get(key)
+		return requireKey(key)
 	end
 
 	function self:contains_key(key)
-		return _all_keys:contains(key)
+		return SongMapList[key] ~= nil
 	end
 
 	function self:key_get_audiomod(key)
@@ -209,9 +177,9 @@ function SongDatabase:new()
 		)
 	end
 	
+	function self:number_of_keys() return #SongMapList end
 	function self:invalid_songkey() return -1 end
 
-	self:cons()
 	return self
 end
 

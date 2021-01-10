@@ -51,7 +51,9 @@ function BindSettingApp:render()
     return Roact.createElement(RoactRodux.StoreProvider, {
         store = self.store
     }, {
-        bindSettingComponent = Roact.createElement(bindSettingComponent);
+        bindSettingComponent = Roact.createElement(bindSettingComponent, {
+            title = "Keybinds"
+        });
     })
 end
 

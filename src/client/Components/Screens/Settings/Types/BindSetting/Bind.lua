@@ -122,7 +122,7 @@ function Bind:render()
             Size = UDim2.new(0.4, 0, 0.3, 0);
             Position = UDim2.new(0.5, 0, 0.1, 0);
             AnchorPoint = Vector2.new(0.5, 0);
-            TextColor3 = Color3.fromRGB(255, 255, 255);
+            TextColor3 = Color3.fromRGB(175, 175, 175);
             BackgroundTransparency = 1;
             TextScaled = true;
         });
@@ -132,7 +132,7 @@ function Bind:render()
             Size = UDim2.new(0.75, 0, 0.25, 0);
             shrinkBy = 0.01;
             darkenBy = 13;
-            BackgroundColor3 = self.state.selecting and Color3.fromRGB(56, 211, 231) or Color3.fromRGB(30, 30, 30);
+            BackgroundColor3 = self.state.selecting and Color3.fromRGB(56, 211, 231) or Color3.fromRGB(15, 15, 15);
             TextColor3 = Color3.fromRGB(255, 255, 255);
             TextScaled = true;
             Text = keycode;
