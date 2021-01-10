@@ -45,14 +45,13 @@ end
 
 function SongButtonLayout:render()
     return Roact.createElement("Frame", {
-        Name = "SongSection",
         AnchorPoint = self.props.AnchorPoint,
         BackgroundTransparency = 1,
         BorderSizePixel = 0,
         Position = self.props.Position,
         Size = self.props.Size,
     }, {
-        Roact.createElement("UICorner", {
+        UICorner = Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),
         }),
         SongList = Roact.createElement(ScrollingFrame, {
@@ -79,18 +78,16 @@ function SongButtonLayout:render()
                 })
             end,
         }),
-        Roact.createElement("Frame", {
-            Name = "SearchBar",
+        SearchBar = Roact.createElement("Frame", {
             BackgroundColor3 = Color3.fromRGB(31, 31, 31),
             Position = UDim2.new(1, 0, 0.04, 0),
             Size = UDim2.new(1, 0, 0.04, 0),
             AnchorPoint = Vector2.new(1, 1),
         }, {
-            Roact.createElement("UICorner", {
+            UICorner = Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 4),
             }),
-            Roact.createElement("TextBox", {
-                Name = "SearchBox",
+            SearchBox = Roact.createElement("TextBox", {
                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 1,
                 Position = UDim2.new(0.02, 0, 0, 0),
@@ -107,7 +104,7 @@ function SongButtonLayout:render()
                 TextXAlignment = Enum.TextXAlignment.Left,
                 [Roact.Change.Text] = self.on_search_changed
             }, {
-                Roact.createElement("UITextSizeConstraint", {
+                UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
                     MaxTextSize = 17,
                     MinTextSize = 7,
                 })
