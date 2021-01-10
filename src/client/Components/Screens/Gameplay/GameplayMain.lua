@@ -72,7 +72,11 @@ function GameplayMain:render()
             settings = {
                 volume = settings.MusicVolume;
                 scrollSpeed = settings.NoteSpeed;
-                rate = self.props.data.songRate / 100
+                rate = self.props.data.songRate / 100;
+                Keybind1 = settings.Keybind1;
+                Keybind2 = settings.Keybind2;
+                Keybind3 = settings.Keybind3;
+                Keybind4 = settings.Keybind4;
             };
             render = function(data, press, release)
                 return Roact.createFragment({
