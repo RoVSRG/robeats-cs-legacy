@@ -117,7 +117,7 @@ function Bind:render()
         Position = UDim2.fromScale(self.props.position, 0.1)
     }, {
         Text = Roact.createElement("TextLabel", {
-            Font = Enum.Font.GothamBlack;
+            Font = Enum.Font.GothamSemibold;
             Text = self.props.title;
             Size = UDim2.new(0.4, 0, 0.3, 0);
             Position = UDim2.new(0.5, 0, 0.1, 0);
