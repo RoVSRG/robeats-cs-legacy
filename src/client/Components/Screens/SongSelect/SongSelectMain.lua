@@ -217,6 +217,14 @@ function SongSelectUI:render()
             Size = UDim2.new(0.985, 0, 0.055, 0),
             buttons = {
                 {
+                    Text = "< Main Menu",
+                    OnActivated = function()
+                        self.props.history:push("/mainmenu")
+                    end,
+                    Color = Color3.fromRGB(18, 214, 50)
+                },
+
+                {
                     Text = "⚙ Settings",
                     OnActivated = function()
                         self.props.history:push("/settings")

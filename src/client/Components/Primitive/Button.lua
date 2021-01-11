@@ -91,6 +91,7 @@ function Button:render()
         [Roact.Event.MouseButton1Click] = self.onActivated;
         AutoButtonColor = false;
         TextColor3 = self.props.TextColor3;
+        TextXAlignment = self.props.TextXAlignment;
         Visible = self.props.Visible;
         TextScaled = self.props.TextScaled;
         LayoutOrder = self.props.LayoutOrder;

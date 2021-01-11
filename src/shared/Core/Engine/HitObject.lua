@@ -35,6 +35,10 @@ function HitObject:new(props)
             return
         end
 
+        if self.currentAudioTime - self.pressTime > Judgement.TimingWindows[1].late then
+            self.releasedEarly = true
+        end
+
         local spawnTimeRelease = self.releaseTime - self.scrollSpeed
         self.releaseTimeAlpha = NumberUtil.InverseLerp(spawnTimeRelease, self.releaseTime, self.currentAudioTime)
     end

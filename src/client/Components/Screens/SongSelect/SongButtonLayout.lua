@@ -9,6 +9,8 @@ local ScrollingFrame = require(game.ReplicatedStorage.Client.Components.Primitiv
 
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 
+-- LOL SEARCHING GO BYE BYE, PLEASE FIX
+
 --[[
     startIndex = floor(scrollPosition / elementHeight)
     endIndex = ceil((scrollPosition + scrollSize) / elementHeight)
@@ -96,7 +98,7 @@ function SongButtonLayout:render()
                 Font = Enum.Font.GothamBold,
                 PlaceholderColor3 = Color3.fromRGB(181, 181, 181),
                 PlaceholderText = "Search here...",
-                Text = "",
+                Text = self.state.search,
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 TextScaled = true,
                 TextSize = 14,

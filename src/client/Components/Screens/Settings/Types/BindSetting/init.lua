@@ -33,7 +33,6 @@ function BindSetting:render()
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 1, 0),
         valueDisplayVisible = false,
         title = self.props.title
     }, {

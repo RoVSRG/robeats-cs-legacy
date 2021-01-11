@@ -5,6 +5,7 @@ local RoactRouter = require(game.ReplicatedStorage.Libraries.RoactRouter)
 local Components = game.ReplicatedStorage.Client.Components
 local Screens = Components.Screens
 local SongSelectMain = require(Screens.SongSelect)
+local MainMenu = require(Screens.MainMenu)
 local GameplayMain = require(Screens.Gameplay)
 local Loading = require(Screens.Loading)
 local Results = require(Screens.Results)
@@ -27,7 +28,7 @@ function RoactApp:mount(_player_gui)
 		store = require(State)
 	}, {
         Router = Roact.createElement(RoactRouter.Router, {
-            initialEntries = {"/select"};
+            initialEntries = {"/mainmenu"};
             initialIndex = 1;
         }, {
             SongSelectMain = Roact.createElement(RoactRouter.Route, {
@@ -54,6 +55,11 @@ function RoactApp:mount(_player_gui)
                 path = "/settings";
                 exact = true;
                 component = Settings;
+            });
+            MainMenu = Roact.createElement(RoactRouter.Route, {
+                path = "/mainmenu";
+                exact = true;
+                component = MainMenu;
             });
             -- Multiplayer = Roact.createElement(RoactRouter.Route, {
             --     path = "/multiplayer";

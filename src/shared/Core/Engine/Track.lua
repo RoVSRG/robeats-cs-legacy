@@ -85,6 +85,7 @@ function Track:new(props)
                         self.hitsound:playHitsound(1)
                     end
                 else
+                    --if release and next hit object is a note then lol
                     local nextObject = self.hitObjects:get(2)
                     if nextObject then
                         local nextObjectJudgement = nextObject:currentPressJudgement().judgement
