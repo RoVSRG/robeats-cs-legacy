@@ -14,6 +14,7 @@ function EngineHOC:init()
         key = self.props.selectedSongKey;
         volume = settings.volume;
         rate = settings.rate;
+        fov = settings.FOV;
     })
 
     self.game:load()
