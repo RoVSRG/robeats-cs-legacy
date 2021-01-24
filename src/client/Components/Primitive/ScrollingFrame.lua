@@ -1,3 +1,5 @@
+-- TODO: fix glitchy look lol
+
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local ScrollingFrame = Roact.Component:extend("ScrollingFrame")
@@ -34,14 +36,26 @@ function ScrollingFrame:init()
     end
 
     self.getElementForIndex = self.props.getElementForIndex
+
+    self.listRef = Roact.createRef()
+end
+
+function ScrollingFrame:didMount()
+    local _list = self.listRef:getValue()
+    _list:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
+        _list.ScrollStretchOffset.Size = UDim2.fromOffset(0, (self.state.startIndex-1)*self.props.elementSize);
+    end)
 end
 
 function ScrollingFrame:render()
     local items = {}
 
     if self.getElementForIndex then
-        for i = self.state.startIndex, self.state.endIndex do
-            table.insert(items, i, self.props.getElementForIndex(i))
+        print(math.clamp(self.state.endIndex+8, 1, self.state.endIndex))
+        for i = self.state.startIndex, self.state.endIndex+20 do
+            pcall(function() --smh
+                table.insert(items, i, self.props.getElementForIndex(i))
+            end)
         end
     end
 
@@ -59,7 +73,17 @@ function ScrollingFrame:render()
         [Roact.Ref] = self.listRef,
         [Roact.Change.CanvasPosition] = self.recalcIndexes;
         [Roact.Change.AbsoluteSize] = self.recalcIndexes;
-    }, items)
+    }, {
+        items = Roact.createFragment(items);
+        UIListLayout = Roact.createElement("UIListLayout", {
+            Padding = UDim.new(0, 5);
+            SortOrder = Enum.SortOrder.LayoutOrder;
+        });
+        ScrollStretchOffset = Roact.createElement("Frame", {
+            BackgroundTransparency = 1;
+            LayoutOrder = -1;
+        })
+    })
 end
 
 return ScrollingFrame

@@ -76,7 +76,8 @@ function SongButtonLayout:render()
                     difficulty = itr_data.AudioDifficulty,
                     image = itr_data.AudioCoverImageAssetId,
                     on_click = self.on_button_click,
-                    index = i
+                    index = i,
+                    LayoutOrder = i
                 })
             end,
         }),
