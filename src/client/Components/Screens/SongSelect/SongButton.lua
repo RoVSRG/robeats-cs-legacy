@@ -38,6 +38,7 @@ function SongButton:render()
         end;
         Text = "";
         shrinkBy = 0.000001;
+        LayoutOrder = self.props.LayoutOrder;
     }, {
         Roact.createElement("UICorner", {
             CornerRadius = UDim.new(0, 4),
