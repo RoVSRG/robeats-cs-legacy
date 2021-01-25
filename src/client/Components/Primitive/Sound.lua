@@ -9,7 +9,7 @@ local Sound = Roact.Component:extend("Sound")
 Sound.defaultProps = {
     animateVolume = false;
     Volume = 0.5;
-    SoundId = "rbxassetid://5415754345"
+    SoundId = "rbxassetid://5538250129"
 }
 
 function Sound:render()
