@@ -12,7 +12,7 @@ local version = game.ReplicatedStorage.Shared.Core.Data.version
 
 local MainMenuUI: RoactComponent = Roact.PureComponent:extend("MainMenuUI")
 local Button = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Button"])
-local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
+--local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
 
 function MainMenuUI:init()
     self.goToScreen = function(path)

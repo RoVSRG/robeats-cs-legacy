@@ -50,6 +50,7 @@ function Button:render()
         Font = Enum.Font.GothamSemibold;
         Text = self.props.Text;
         TextSize = self.props.TextSize;
+        BackgroundTransparency = self.props.BackgroundTransparency;
         BackgroundColor3 = self.motorBinding:map(function(a)
             local c = Color3.new(a.colorR, a.colorG, a.colorB);
             local db = self.props.darkenBy or 40

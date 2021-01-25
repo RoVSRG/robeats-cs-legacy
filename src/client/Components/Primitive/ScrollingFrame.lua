@@ -4,6 +4,8 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local ScrollingFrame = Roact.Component:extend("ScrollingFrame")
 
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+
 -- TODO: FIX ASPECT RATIO SCALING
 
 --[[
@@ -14,8 +16,8 @@ local ScrollingFrame = Roact.Component:extend("ScrollingFrame")
 ScrollingFrame.defaultProps = {
     CanvasSize = UDim2.fromScale(0, 0);
     items = {},
-    elementPadding = 0;
-    elementSize = 125;
+    elementPadding = 150;
+    numberOfItems = 0
 }
 
 function ScrollingFrame:init()
@@ -24,15 +26,19 @@ function ScrollingFrame:init()
         endIndex = 1;
     })
 
+    self.objectSize = 120
+
     self.recalcIndexes = function(songList)
         local scrollPosition = songList.CanvasPosition
-        local startIndex = math.floor(scrollPosition.Y / self.props.elementSize)+1;
-        local endIndex = math.ceil((scrollPosition.Y + songList.AbsoluteSize.Y + self.props.elementPadding) / self.props.elementSize);
+        local startIndex = math.floor(scrollPosition.Y / self.objectSize)+1;
+        local endIndex = math.ceil((scrollPosition.Y + songList.AbsoluteSize.Y + self.props.elementPadding) / self.objectSize);
 
-        self:setState({
-            startIndex = startIndex;
-            endIndex = endIndex;
-        })
+        if (startIndex ~= self.state.startIndex) or (endIndex ~= self.state.endIndex) then
+            self:setState({
+                startIndex = startIndex;
+                endIndex = endIndex;
+            })
+        end
     end
 
     self.getElementForIndex = self.props.getElementForIndex
@@ -42,8 +48,13 @@ end
 
 function ScrollingFrame:didMount()
     local _list = self.listRef:getValue()
-    _list:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
-        _list.ScrollStretchOffset.Size = UDim2.fromOffset(0, (self.state.startIndex-1)*self.props.elementSize);
+    self.bound = SPUtil:bind_to_frame(function()
+        for _, object in pairs(_list:GetChildren()) do
+            self.objectSize = object.AbsoluteSize.Y
+            object.Position = UDim2.fromOffset(0, (object.LayoutOrder-1)*(self.objectSize))
+        end
+
+        self.recalcIndexes(_list)
     end)
 end
 
@@ -51,10 +62,9 @@ function ScrollingFrame:render()
     local items = {}
 
     if self.getElementForIndex then
-        print(math.clamp(self.state.endIndex+8, 1, self.state.endIndex))
-        for i = self.state.startIndex, self.state.endIndex+20 do
+        for i = self.state.startIndex, self.state.endIndex do
             pcall(function() --smh
-                table.insert(items, i, self.props.getElementForIndex(i))
+                items["Song" .. i] = self.props.getElementForIndex(i)
             end)
         end
     end
@@ -69,21 +79,17 @@ function ScrollingFrame:render()
         ScrollBarThickness = self.props.ScrollBarThickness,
         TopImage = self.props.TopImage,
         VerticalScrollBarPosition = self.props.VerticalScrollBarPosition,
-        CanvasSize = self.props.CanvasSize,
+        CanvasSize = UDim2.fromOffset(0, self.objectSize*self.props.numberOfItems),
         [Roact.Ref] = self.listRef,
-        [Roact.Change.CanvasPosition] = self.recalcIndexes;
-        [Roact.Change.AbsoluteSize] = self.recalcIndexes;
+        -- [Roact.Change.CanvasPosition] = self.recalcIndexes;
+        -- [Roact.Change.AbsoluteSize] = self.recalcIndexes;
     }, {
         items = Roact.createFragment(items);
-        UIListLayout = Roact.createElement("UIListLayout", {
-            Padding = UDim.new(0, 5);
-            SortOrder = Enum.SortOrder.LayoutOrder;
-        });
-        ScrollStretchOffset = Roact.createElement("Frame", {
-            BackgroundTransparency = 1;
-            LayoutOrder = -1;
-        })
     })
+end
+
+function ScrollingFrame:willUnmount()
+    self.bound:Disconnect()
 end
 
 return ScrollingFrame

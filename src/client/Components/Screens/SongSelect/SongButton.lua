@@ -1,6 +1,9 @@
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
+local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
+local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
+
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local Gradient = require(game.ReplicatedStorage.Shared.Utils.Gradient)
 
@@ -13,6 +16,9 @@ local SongButton = Roact.Component:extend("SongButton")
 local function noop() end
 
 function SongButton:init()
+    self.motor = Flipper.SingleMotor.new(0)
+    self.motorBinding = RoactFlipper.getBinding(self.motor)
+
     self.on_click = self.props.on_click or noop
 end
 
@@ -26,12 +32,21 @@ function SongButton:getGradient()
     return gradient:number_sequence()
 end
 
+function SongButton:didMount()
+    self.motor:setGoal(Flipper.Spring.new(1, {
+        frequency = 4.5;
+        dampingRatio = 1.5;
+    }))
+end
+
 function SongButton:render()
     return Roact.createElement(Button, {
+        BackgroundTransparency = self.motorBinding:map(function(a)
+            return math.clamp(1-a, 0, 0.58)
+        end);
         BackgroundColor3 = Color3.fromRGB(15, 15, 15),
         BorderMode = Enum.BorderMode.Inset,
         BorderSizePixel = 0,
-        Position = UDim2.fromOffset(0, (self.props.index-1)*125);
         Size = UDim2.new(1, 0, 0, 120),
         onActivated = function()
             self.on_click(self.props.song_key)

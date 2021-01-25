@@ -19,6 +19,7 @@ local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 function SongButtonLayout:init()
     self:setState({
         search = "";
+        numberFound = 0
     })
     self.on_button_click = self.props.on_button_click
 
@@ -66,19 +67,21 @@ function SongButtonLayout:render()
             ScrollBarThickness = 8,
             TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
             VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Right,
-            CanvasSize = UDim2.fromOffset(0, SongDatabase:number_of_keys()*125),
+            numberOfItems = SongDatabase:number_of_keys();
             getElementForIndex = function(i)
                 local itr_data = SongDatabase:get_data_for_key(i)
-                return Roact.createElement(SongButton, {
-                    song_key = i or 1,
-                    artist = itr_data.AudioArtist,
-                    title = itr_data.AudioFilename,
-                    difficulty = itr_data.AudioDifficulty,
-                    image = itr_data.AudioCoverImageAssetId,
-                    on_click = self.on_button_click,
-                    index = i,
-                    LayoutOrder = i
-                })
+                if self:search(self.state.search, i) then
+                    return Roact.createElement(SongButton, {
+                        song_key = i or 1,
+                        artist = itr_data.AudioArtist,
+                        title = itr_data.AudioFilename,
+                        difficulty = itr_data.AudioDifficulty,
+                        image = itr_data.AudioCoverImageAssetId,
+                        on_click = self.on_button_click,
+                        index = i,
+                        LayoutOrder = i
+                    })
+                end
             end,
         }),
         SearchBar = Roact.createElement("Frame", {
