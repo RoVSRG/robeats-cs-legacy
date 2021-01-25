@@ -3,6 +3,7 @@ local ImageButton = require(game:GetService("ReplicatedStorage"):WaitForChild("C
 local Slider = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Slider"])
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local Gradient = require(game.ReplicatedStorage.Shared.Utils.Gradient)
+local Sound = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Sound"])
 
 local MusicBox = Roact.Component:extend("MusicBox")
 
@@ -23,8 +24,8 @@ end
 function MusicBox:render()
     return Roact.createElement("Frame", {
         Name = "Profile";
-        Size = UDim2.fromScale(0.35, 0.15);
-        Position = UDim2.fromScale(0.99, 0.02);
+        Size = self.props.Size;
+        Position = self.props.Position;
         BackgroundColor3 = Color3.fromRGB(17,17,17);
         ZIndex = 1;
         AnchorPoint = Vector2.new(1,0);
@@ -80,6 +81,11 @@ function MusicBox:render()
                 Transparency = self:getGradient()
             })
         });
+        
+        Sound = Roact.createElement(Sound, {
+            Playing = true;
+            SoundId = SongDatabase:get_data_for_key(self.props.songKey).AudioAssetId
+        })
     });
 end
 

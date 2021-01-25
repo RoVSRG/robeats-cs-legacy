@@ -13,9 +13,14 @@ local version = game.ReplicatedStorage.Shared.Core.Data.version
 local MainMenuUI: RoactComponent = Roact.PureComponent:extend("MainMenuUI")
 local Button = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Button"])
 local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
-local Sound = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Sound"])
+local MusicBox = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["MusicBox"])
+
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 function MainMenuUI:init()
+    self:setState({
+        selectedSongKey = math.random(1, SongDatabase:number_of_keys())
+    })
     self.goToScreen = function(path)
         self.props.history:push(path)
     end
@@ -40,9 +45,6 @@ function MainMenuUI:render()
                 AspectRatio = 1;
                 AspectType = Enum.AspectType.ScaleWithParentSize
             })
-        });
-        Sound = Roact.createElement(Sound, {
-            Playing = true;
         });
         ButtonHolder = Roact.createElement("Frame",{
             Size = UDim2.new(.275,0,.6,0);
@@ -163,9 +165,11 @@ function MainMenuUI:render()
 
         PlayerData = Roact.createElement(PlayerProfile);
 
-        --MusicPlayer = Roact.createElement(MusicBox,{
-        --     Text = "bobux man - bobux dance";
-        -- });
+        MusicPlayer = Roact.createElement(MusicBox, {
+            Size = UDim2.fromScale(0.35, 0.15);
+            Position = UDim2.fromScale(0.99, 0.02);
+            songKey = self.state.selectedSongKey;
+        });
     });
     
 end

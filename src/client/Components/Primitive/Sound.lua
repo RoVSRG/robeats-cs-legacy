@@ -9,7 +9,8 @@ local Sound = Roact.Component:extend("Sound")
 Sound.defaultProps = {
     animateVolume = false;
     Volume = 0.5;
-    SoundId = "rbxassetid://5415754345"
+    SoundId = "rbxassetid://5415754345";
+    TimePosition = 0;
 }
 
 function Sound:render()
@@ -17,6 +18,7 @@ function Sound:render()
         SoundId = self.props.SoundId;
         Playing = self.props.Playing;
         Volume = self.props.Volume;
+        TimePosition = self.props.TimePosition;
     })
 end
 
