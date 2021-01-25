@@ -13,6 +13,7 @@ local version = game.ReplicatedStorage.Shared.Core.Data.version
 local MainMenuUI: RoactComponent = Roact.PureComponent:extend("MainMenuUI")
 local Button = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Button"])
 local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
+local MusicBox = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["MusicBox"])
 local Sound = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Sound"])
 
 function MainMenuUI:init()
@@ -162,6 +163,14 @@ function MainMenuUI:render()
         });
 
         PlayerData = Roact.createElement(PlayerProfile);
+
+        Outline = Roact.createElement("Frame", {
+            BorderSizePixel = 0;
+            Position = UDim2.fromScale(0,.98);
+            Size = UDim2.fromScale(1, 0.0025);
+        });
+
+        MusicPlayer = Roact.createElement(MusicBox)
 
         --MusicPlayer = Roact.createElement(MusicBox,{
         --     Text = "bobux man - bobux dance";
