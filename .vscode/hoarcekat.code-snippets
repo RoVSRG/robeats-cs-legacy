@@ -1,0 +1,6 @@
+{
+	"Story": {
+		"prefix": "story",
+		"body": "local Roact = require(game.ReplicatedStorage.Libraries.Roact)\n\nlocal Story = require(game.ReplicatedStorage.Shared.Utils.Story)\n\nlocal ${1:StoryName} = Story:new()\n\nfunction ${1:StoryName}:init()\n\nend\n\nfunction ${1:StoryName}:render()\n\nend\n\nreturn ${1:StoryName}"
+	}
+}
