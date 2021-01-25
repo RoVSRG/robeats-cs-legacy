@@ -10,7 +10,7 @@ function noop() end
 
 
 function PlayerApp:render()
-    return noop
+    return Roact.createElement(PlayerProfile)
 end
 
 return PlayerApp
