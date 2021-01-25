@@ -13,6 +13,7 @@ local version = game.ReplicatedStorage.Shared.Core.Data.version
 local MainMenuUI: RoactComponent = Roact.PureComponent:extend("MainMenuUI")
 local Button = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Button"])
 local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
+local Sound = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Sound"])
 
 function MainMenuUI:init()
     self.goToScreen = function(path)
@@ -39,6 +40,9 @@ function MainMenuUI:render()
                 AspectRatio = 1;
                 AspectType = Enum.AspectType.ScaleWithParentSize
             })
+        });
+        Sound = Roact.createElement(Sound, {
+            
         });
         ButtonHolder = Roact.createElement("Frame",{
             Size = UDim2.new(.275,0,.6,0);
