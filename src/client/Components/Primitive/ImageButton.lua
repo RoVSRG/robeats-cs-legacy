@@ -56,6 +56,7 @@ function ImageButton:render()
         HoverImage = self.props.HoverImage;
         ScaleType = self.props.ScaleType;
         SliceScale = self.props.SliceScale;
+        BackgroundTransparency = self.props.BackgroundTransparency;
         BackgroundColor3 = self.motorBinding:map(function(a)
             local c = Color3.new(a.colorR, a.colorG, a.colorB);
             local db = self.props.darkenBy or 40
@@ -65,8 +66,8 @@ function ImageButton:render()
         [Roact.Event.MouseEnter] = function()
             self.motor:setGoal({
                 tap = Flipper.Spring.new(0.7, {
-                    frequency = 8;
-                    dampingRatio = 2.5;
+                    frequency = 5;
+                    dampingRatio = 1.5;
                 })
             })
         end;
