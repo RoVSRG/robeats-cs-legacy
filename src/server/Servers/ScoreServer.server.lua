@@ -1,21 +1,14 @@
-local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
+local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDatastoreService)
 
 local _db_version = "v2.3"
 
 local ScoreDatabase = DataStoreService:GetDataStore("ScoreDatabase".._db_version)
-local NoteDevainceDatabase = DataStoreService:GetDataStore("NoteDevainceDatabase".._db_version)
+local NoteDevianceDatabase = DataStoreService:GetDataStore("NoteDevianceDatabase".._db_version)
 
-local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
-
-local Metrics = require(game.ReplicatedStorage.Libraries.Data.Metrics)
-
---TODO: REPLACE KISPERAL'S NETWORKING MODULE WITH "sl0th"'s
-
-local HttpService = game:GetService("HttpService")
-local Network = require(game.ReplicatedStorage.Network)
-local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
-local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
-local CustomServerSettings = require(game.Workspace.CustomServerSettings)
+local Metrics = require(game:GetService("ReplicatedStorage"):WaitForChild("Libraries").RobeatsData["Metrics"])
+local Network = require(game.ReplicatedStorage.Libraries.Network)
+local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 local function getLeaderboardKey(mapid)
 	return string.format("leaderboard_songkey(%s)", tostring(mapid))
@@ -88,7 +81,7 @@ Network.AddEvent("SubmitScore"):Connect(function(player, sent_data)
 	local suc, err = pcall(function()
 		if save_hitdeviance then
 			local key = getDevianceKey(player_id, sent_data.mapid)
-			NoteDevainceDatabase:SetAsync(key, sent_data.hitdeviance)
+			NoteDevianceDatabase:SetAsync(key, sent_data.hitdeviance)
 		end
 	end)
 
@@ -118,5 +111,5 @@ Network.AddFunction("GetDeviance"):Set(function(player, request)
 	AssertType:is_true(SongDatabase:contains_key(request.mapid))
 	AssertType:is_int(request.userid)
 
-	return NoteDevainceDatabase:GetAsync(getDevianceKey(request.userid, request.mapid))
+	return NoteDevianceDatabase:GetAsync(getDevianceKey(request.userid, request.mapid))
 end)

@@ -1,6 +1,6 @@
 -- ADDS SOME EVENTS FOR IMPORTANT THINGS THAT WOULD GET TOO UNWEILDY TO PUT INTO ONE FILE
 
-local Network = require(game.ReplicatedStorage.Network)
+local Network = require(game.ReplicatedStorage.Libraries.Network)
 
 Network.AddEvent("PlayerJoinedRoom")
 Network.AddEvent("PlayerLeftRoom")

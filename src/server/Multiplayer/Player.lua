@@ -1,4 +1,4 @@
-local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 
 local Player = {}
 

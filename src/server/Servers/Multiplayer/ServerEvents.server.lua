@@ -1,9 +1,9 @@
-local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
-local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
-local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
+local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
+local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
-local Network = require(game.ReplicatedStorage.Network)
-local Multiplayer = game.ServerScriptService.Multiplayer
+local Network = require(game.ReplicatedStorage.Libraries.Network)
+local Multiplayer = game:GetService("ServerScriptService").Server["Multiplayer"]
 local RoomManager = require(Multiplayer.RoomManager)
 
 Network.AddEvent("JoinRoom"):Connect(function(player, data)

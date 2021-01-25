@@ -1,9 +1,9 @@
-local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDataStoreService)
+local DataStoreService = require(game.ReplicatedStorage.Libraries.MockDatastoreService)
 local SettingsDatabase = DataStoreService:GetDataStore("ScoreDatabase")
 local HttpService = game:GetService("HttpService")
-local DatastoreSerializer = require(game.ReplicatedStorage.Serialization.Datastore)
-local Network = require(game.ReplicatedStorage.Network)
-local AssertType = require(game.ReplicatedStorage.Shared.AssertType)
+local DatastoreSerializer = require(game.ReplicatedStorage.Libraries.Serialization.Datastore)
+local Network = require(game.ReplicatedStorage.Libraries.Network)
+local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 
 local function getPlayerSettingsKey(playerID)
 	return string.format("player_settings_playerid(%s)", tostring(playerID))

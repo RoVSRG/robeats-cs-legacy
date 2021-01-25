@@ -5,12 +5,27 @@
   
 	  "ReplicatedStorage": {
 		"$className": "ReplicatedStorage",
-		"$path": "src/shared"
+  
+		"Client": {
+			"$path": "src/client"
+		},
+		"Libraries": {
+			"$path": "libraries"
+		},
+		"Shared": {
+			"$path": "src/shared"
+		},
+		"Knit": {
+			"$path": "_knit"
+		}
 	  },
   
 	  "ServerScriptService": {
 		"$className": "ServerScriptService",
-		"$path": "src/server"
+  
+		"Server": {
+		  "$path": "src/server"
+		}
 	  },
   
 	  "StarterPlayer": {
@@ -20,7 +35,7 @@
 		  "$className": "StarterPlayerScripts",
   
 		  "Client": {
-			"$path": "src/client"
+			"$path": "src/clientplayer"
 		  }
 		}
 	  },
@@ -30,7 +45,14 @@
 		"$properties": {
 		  "FilteringEnabled": true
 		},
-		"$path": "src/services/workspace"
+		"SongMaps": {
+			"$className": "Folder",
+			"$path": "songs"
+		},
+		"Models": {
+			"$className": "Folder",
+			"$path": "models/Workspace"
+		}
 	  },
 	  "SoundService": {
 		"$className": "SoundService",
@@ -38,11 +60,24 @@
 		  "RespectFilteringEnabled": true
 		}
 	  },
+	  "Players": {
+		  "$className": "Players",
+		  "$properties": {
+			  "CharacterAutoLoads": false
+		  }
+	  },
 	  "HttpService": {
 		"$className": "HttpService",
 		"$properties": {
 		  "HttpEnabled": true
 		}
+	  },
+	  "Lighting": {
+		  "$className": "Lighting",
+		  "$properties": {
+			"ClockTime": 0
+		  },
+		  "$path": "models/Lighting"
 	  }
 	}
   }

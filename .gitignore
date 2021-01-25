@@ -21,6 +21,7 @@ sysinfo.txt
 /*.booproj
 /*.rbxl.lock
 /*.rbxlx.lock
+*.rbxlx
  
 # ============ #
 # OS generated #
@@ -35,3 +36,5 @@ ehthumbs.db
 
 do_not_commit_git*.*
 rojo.exe
+
+debug.log
