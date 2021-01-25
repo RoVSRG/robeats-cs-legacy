@@ -12,7 +12,7 @@ local version = game.ReplicatedStorage.Shared.Core.Data.version
 
 local MainMenuUI: RoactComponent = Roact.PureComponent:extend("MainMenuUI")
 local Button = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Button"])
---local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
+local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["PlayerProfile"])
 
 function MainMenuUI:init()
     self.goToScreen = function(path)
@@ -157,19 +157,11 @@ function MainMenuUI:render()
             Font = Enum.Font.GothamBlack;
         });
 
-        MusicBox = Roact.createElement("Frame", {
-            Name = "Profile";
-            Size = UDim2.fromScale(0.35, 0.15);
-            Position = UDim2.fromScale(0.99, 0.02);
-            BackgroundColor3 = Color3.fromRGB(17,17,17);
-            ZIndex = 1;
-            AnchorPoint = Vector2.new(1,0);
-            --since i dont know what the musicbox should look like, i'll just leave this preset frame for regen to get creative :picardia:
-        }, {
-            Roact.createElement("UICorner",{
-                CornerRadius = UDim.new(0,4);
-            })
-        });
+        PlayerData = Roact.createElement(PlayerProfile);
+
+        --MusicPlayer = Roact.createElement(MusicBox,{
+        --     Text = "bobux man - bobux dance";
+        -- });
     });
     
 end
