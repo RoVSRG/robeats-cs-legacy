@@ -1,0 +1,6 @@
+{
+	"Flipper Spring": {
+		"prefix": "flipperspring",
+		"body": "Flipper.Spring.new(${1:0}, {\n\tfrequency = ${2:2.5};\n\tdampingRatio = ${3:2};\n})"
+	}
+}
