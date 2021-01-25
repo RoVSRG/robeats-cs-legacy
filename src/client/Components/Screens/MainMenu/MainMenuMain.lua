@@ -42,7 +42,7 @@ function MainMenuUI:render()
             })
         });
         Sound = Roact.createElement(Sound, {
-            
+            Playing = true;
         });
         ButtonHolder = Roact.createElement("Frame",{
             Size = UDim2.new(.275,0,.6,0);
