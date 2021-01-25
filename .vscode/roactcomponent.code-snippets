@@ -1,0 +1,12 @@
+{
+	"Roact Component": {
+		"prefix": ["roactcomponent"],
+		"body": ["local Roact = require(game.ReplicatedStorage.Libraries.Roact)\n\nlocal ${1:ComponentName} = Roact.Component:extend(\"${1:ComponentName}\")\n\nfunction ${1:ComponentName}:init()\n\nend\n\nfunction ${1:ComponentName}:render()\n\nend\n\nreturn ${1:ComponentName}"],
+		"description": "A Roact component."
+	},
+	"Roact Flipper Component": {
+		"prefix": ["roactflippercomponent"],
+		"body": ["local Roact = require(game.ReplicatedStorage.Libraries.Roact)\nlocal Flipper = require(game.ReplicatedStorage.Libraries.Flipper)\nlocal RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)\n\nlocal ${1:ComponentName} = Roact.Component:extend(\"${1:ComponentName}\")\n\nfunction ${1:ComponentName}:init()\n\tself.motor = Flipper.SingleMotor.new(0)\n\tself.motorBinding = RoactFlipper.getBinding(self.motor)\nend\n\nfunction ${1:ComponentName}:render()\n\nend\n\nreturn ${1:ComponentName}"],
+		"description": "A Roact component that uses Flipper, an animation library for Roblox."
+	},
+}
