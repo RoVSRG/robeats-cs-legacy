@@ -9,7 +9,7 @@ local PlayerProfile = Roact.Component:extend("PlayerProfile")
 local function noop() end
 
 function PlayerProfile:render()
-    PlayerProfile = Roact.createElement("Frame", {
+    return Roact.createElement("Frame", {
         Name = "Profile";
         Size = UDim2.fromScale(0.3, 0.15);
         Position = UDim2.fromScale(0.315, 0.02);
