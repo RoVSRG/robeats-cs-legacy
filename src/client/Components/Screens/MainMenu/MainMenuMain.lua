@@ -170,11 +170,10 @@ function MainMenuUI:render()
             Size = UDim2.fromScale(1, 0.0025);
         });
 
-        MusicPlayer = Roact.createElement(MusicBox)
-
-        --MusicPlayer = Roact.createElement(MusicBox,{
-        --     Text = "bobux man - bobux dance";
-        -- });
+        MusicPlayer = Roact.createElement(MusicBox,{
+            Size = UDim2.fromScale(0.35, 0.15);
+            Position = UDim2.fromScale(0.99, 0.02);
+        })
     });
     
 end
