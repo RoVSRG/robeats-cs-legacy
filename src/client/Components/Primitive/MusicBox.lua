@@ -11,6 +11,8 @@ function noop()
     
 end
 
+
+
 function MusicBox:getGradient()
     local gradient = Gradient:new()
 
@@ -57,7 +59,7 @@ function MusicBox:render()
             BackgroundColor3 = Color3.fromRGB(11,11,11);
             BackgroundTransparency = 1;
             Position = UDim2.fromScale(.5, .55);
-            Size = UDim2.fromScale(0.2, 0.2);
+            Size = UDim2.fromScale(0.3, 0.3);
             Image = "rbxassetid://51811789";
             ImageColor3 = Color3.fromRGB(255,255,255);
             ScaleType = Enum.ScaleType.Fit;

@@ -16,6 +16,7 @@ local PlayerProfile = require(game:GetService("ReplicatedStorage"):WaitForChild(
 local MusicBox = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["MusicBox"])
 
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+local Sound = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Sound"])
 
 function MainMenuUI:init()
     self:setState({
@@ -169,6 +170,11 @@ function MainMenuUI:render()
             Size = UDim2.fromScale(0.35, 0.15);
             Position = UDim2.fromScale(0.99, 0.02);
             songKey = self.state.selectedSongKey;
+        });
+        Outline = Roact.createElement("Frame", {
+            BorderSizePixel = 0;
+            Position = UDim2.fromScale(0,.98);
+            Size = UDim2.fromScale(1, 0.0025);
         });
     });
     
