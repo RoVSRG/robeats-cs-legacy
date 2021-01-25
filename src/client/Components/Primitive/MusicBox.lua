@@ -10,6 +10,8 @@ function noop()
     
 end
 
+
+
 function MusicBox:getGradient()
     local gradient = Gradient:new()
 
@@ -23,8 +25,8 @@ end
 function MusicBox:render()
     return Roact.createElement("Frame", {
         Name = "Profile";
-        Size = UDim2.fromScale(0.35, 0.15);
-        Position = UDim2.fromScale(0.99, 0.02);
+        Size = self.props.Size; --UDim2.fromScale(0.35, 0.15);
+        Position = self.props.Position; --UDim2.fromScale(0.99, 0.02);
         BackgroundColor3 = Color3.fromRGB(17,17,17);
         ZIndex = 1;
         AnchorPoint = Vector2.new(1,0);
