@@ -5,13 +5,13 @@ local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongData
 local Gradient = require(game.ReplicatedStorage.Shared.Utils.Gradient)
 local Sound = require(game:GetService("ReplicatedStorage"):WaitForChild("Client").Components.Primitive["Sound"])
 
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+
 local MusicBox = Roact.Component:extend("MusicBox")
 
-function noop()
-    
+function MusicBox:init()
+    self.soundRef = Roact.createRef()
 end
-
-
 
 function MusicBox:getGradient()
     local gradient = Gradient:new()
@@ -23,6 +23,14 @@ function MusicBox:getGradient()
     return gradient:number_sequence()
 end
 
+function MusicBox:didMount()
+    local sound = self.soundRef:getValue()
+    
+    self.con = SPUtil:bind_to_frame(function()
+        print(sound.PlaybackLoudness)
+    end)
+end
+
 function MusicBox:render()
     return Roact.createElement("Frame", {
         Name = "Profile";
@@ -32,6 +40,7 @@ function MusicBox:render()
         ZIndex = 1;
         AnchorPoint = Vector2.new(1,0);
         --time to win
+        --YES WE WILL WIN
     }, {
         Corner = Roact.createElement("UICorner",{
             CornerRadius = UDim.new(0,4);
@@ -86,7 +95,8 @@ function MusicBox:render()
         
         Sound = Roact.createElement(Sound, {
             Playing = true;
-            SoundId = SongDatabase:get_data_for_key(self.props.songKey).AudioAssetId
+            SoundId = SongDatabase:get_data_for_key(self.props.songKey).AudioAssetId;
+            [Roact.Ref] = self.ref;
         })
     });
 end
