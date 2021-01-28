@@ -174,9 +174,10 @@ function MainMenuUI:render()
 
         PlayerData = Roact.createElement(PlayerProfile);
 
-        MusicPlayer = Roact.createElement(MusicBox, {
+        MusicBox = Roact.createElement(MusicBox, {
             Size = UDim2.fromScale(0.35, 0.15);
             Position = UDim2.fromScale(0.99, 0.02);
+            AnchorPoint = Vector2.new(1, 0);
             songKey = self.state.selectedSongKey;
             switchSongKey = self.switchSongKey;
         });
