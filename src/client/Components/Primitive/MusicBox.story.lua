@@ -4,10 +4,13 @@ local Story = require(game.ReplicatedStorage.Shared.Utils.Story)
 
 local MusicBoxApp = Story:new()
 
+-- MusicBoxApp.mountTo = workspace
+
 function MusicBoxApp:render()
     return Roact.createElement(MusicBox, {
+        Position = UDim2.new(0, 0, 0, 0);
         Size = UDim2.fromScale(1, 1);
-        songKey = 1;
+        AnchorPoint = Vector2.new(0,0);
     })
 end
 
