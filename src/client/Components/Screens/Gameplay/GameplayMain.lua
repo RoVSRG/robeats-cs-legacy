@@ -73,6 +73,7 @@ function GameplayMain:render()
                 volume = settings.MusicVolume;
                 scrollSpeed = settings.NoteSpeed;
                 rate = self.props.data.songRate / 100;
+                FOV = settings.FOV;
                 Keybind1 = settings.Keybind1;
                 Keybind2 = settings.Keybind2;
                 Keybind3 = settings.Keybind3;

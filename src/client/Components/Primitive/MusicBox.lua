@@ -141,22 +141,18 @@ function MusicBox:render()
             end
         });
 
-        Forward = Roact.createElement(ImageButton,{
-            Name = "ProfileImage";
-            AnchorPoint = Vector2.new(0.5,0);
+        Forward = Roact.createElement(ImageButton, {
             AutomaticSize = Enum.AutomaticSize.None;
             BackgroundColor3 = Color3.fromRGB(11,11,11);
-            BackgroundTransparency = 1;
-            Position = UDim2.fromScale(.62, .55);
-            Size = UDim2.fromScale(0.1, 0.3);
-            Image = "rbxassetid://51811789";
-            ImageColor3 = Color3.fromRGB(255,255,255);
+            BackgroundTransparency = 0;
+            Position = UDim2.fromScale(.555, .55);
+            Size = UDim2.fromScale(0.3, 0.3);
+            Image = "rbxassetid://6323574638";
             ScaleType = Enum.ScaleType.Fit;
             SliceScale = 1;
             shrinkBy = 0.025;
-            onActivated = function()
-                self.switchSongKey(-1)
-            end
+            ImageColor3 = Color3.fromRGB(255,255,255);
+            ImageTransparency = 0;
         });
 
         SongCover = Roact.createElement("ImageLabel", {
@@ -176,22 +172,11 @@ function MusicBox:render()
             })
         });
         
-        Sound = Roact.createElement(Sound, {
-            Playing = self.state.isPlaying;
-            SoundId = SongDatabase:get_data_for_key(self.state.songKey).AudioAssetId;
-            [Roact.Ref] = self.soundRef;
-        });
-        -- IMPLEMENT THIS LATER WHEN I FEEL LIKE I WANT TO MAKE A GOOD TIMEPOSITION REPLACEMENT
-        -- PositionBar = Roact.createElement("Frame", {
-        --     Position = UDim2.fromScale(0, 1);
-        --     AnchorPoint = Vector2.new(0, 1);
-        --     Size = self.motorBinding:map(function(a)
-        --         local timePosition = a.position
-
-        --         return UDim2.fromScale(timePosition, 0.1)
-        --     end);
-        --     ZIndex = 4;
-        -- })
+        -- Sound = Roact.createElement(Sound, {
+        --     Playing = self.state.isPlaying;
+        --     SoundId = SongDatabase:get_data_for_key(self.state.songKey).AudioAssetId;
+        --     [Roact.Ref] = self.soundRef;
+        -- });
     });
 end
 
