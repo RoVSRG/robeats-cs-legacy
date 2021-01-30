@@ -20,7 +20,7 @@ function Engine:new(props)
     function self:cons()
         self.audio = Audio:new()
 
-        self.audio:set_volume((props.volume/100)/2 or 0.5)
+        self.audio:set_volume(((props.volume/100)/2) or 0.5)
         self.audio:set_rate(props.rate or 1)
 
         self.audio:parent(workspace)

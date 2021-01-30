@@ -6,24 +6,31 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local PlayerProfile = Roact.Component:extend("PlayerProfile")
 
+PlayerProfile.defaultProps = {
+    Size = UDim2.fromScale(1, 1);
+    BackgroundColor3 = Color3.fromRGB(17,17,17);
+    playerName = "testPlayer";
+    rank = 1;
+}
+
 local function noop() end
 
 function PlayerProfile:render()
     return Roact.createElement("Frame", {
         Name = "Profile";
-        Size = UDim2.fromScale(0.3, 0.15);
-        Position = UDim2.fromScale(0.315, 0.02);
-        BackgroundColor3 = Color3.fromRGB(17,17,17);
+        Size = self.props.Size;
+        Position = self.props.Position;
+        BackgroundColor3 = self.props.BackgroundColor3;
         ZIndex = 1;
-        AnchorPoint = Vector2.new(1,0);
+        AnchorPoint = self.props.AnchorPoint;
 
     }, {
-        Roact.createElement("TextLabel",{
-            Name = "Username";
-            Text = "OnlyTwentyCharacters";
+        Username = Roact.createElement("TextLabel",{
+            TextXAlignment = Enum.TextXAlignment.Left;
+            Text = self.props.playerName;
             TextColor3 = Color3.fromRGB(255,255,255);
             TextScaled = true;
-            Position = UDim2.fromScale(.31, .06);
+            Position = UDim2.fromScale(.3, .06);
             Size = UDim2.fromScale(.5,.25);
             AnchorPoint = Vector2.new(0,0);
             BackgroundTransparency = 1;
@@ -33,12 +40,11 @@ function PlayerProfile:render()
             TextStrokeTransparency = .5;
         });
 
-        Roact.createElement("UICorner",{
+        crnr = Roact.createElement("UICorner",{
             CornerRadius = UDim.new(0,4);
         });
 
-        Roact.createElement("ImageLabel", {
-            Name = "ProfileImage";
+        ProfileImage = Roact.createElement("ImageLabel", {
             AnchorPoint = Vector2.new(0, .5);
             AutomaticSize = Enum.AutomaticSize.None;
             BackgroundColor3 = Color3.fromRGB(11,11,11);
@@ -47,22 +53,21 @@ function PlayerProfile:render()
             Size = UDim2.fromScale(0.6, 0.9);
             Image = "rbxassetid://2944248331";
             ImageColor3 = Color3.fromRGB(255,255,255);
-            ScaleType = Enum.ScaleType.Crop;
+            --ScaleType = Enum.ScaleType.Crop;
             SliceScale = 1;
         },{
-            Roact.createElement("UIAspectRatioConstraint", {
-                AspectRatio = 1;
-                AspectType = Enum.AspectType.FitWithinMaxSize;
-                DominantAxis = Enum.DominantAxis.Width;
-            });
+            -- UIAspectRatioConstraint = Roact.createElement("UIAspectRatioConstraint", {
+            --     AspectRatio = 1;
+            --     AspectType = Enum.AspectType.FitWithinMaxSize;
+            --     DominantAxis = Enum.DominantAxis.Width;
+            -- });
 
-            Roact.createElement("UICorner",{
+            Cornr = Roact.createElement("UICorner",{
                 CornerRadius = UDim.new(0,4);
-            })
+            });
         });
 
-        Roact.createElement("TextLabel",{
-            Name = "Tier";
+        Tier = Roact.createElement("TextLabel",{
             AutomaticSize = Enum.AutomaticSize.None;
             BackgroundTransparency = 1;
             Position = UDim2.fromScale(0.24, 0.32);
@@ -76,8 +81,7 @@ function PlayerProfile:render()
             TextStrokeTransparency = 0.5;
         });
 
-        Roact.createElement("TextLabel", {
-            Name = "Rating";
+        Rank = Roact.createElement("TextLabel", {
             BackgroundTransparency = 1;
             Position = UDim2.fromScale(0.28, 0.495);
             Size = UDim2.fromScale(0.4, 0.2);

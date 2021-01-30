@@ -19,6 +19,7 @@ function Sound:render()
         Playing = self.props.Playing;
         Volume = self.props.Volume;
         TimePosition = self.props.TimePosition;
+        [Roact.Ref] = self.props[Roact.Ref];
     })
 end
 

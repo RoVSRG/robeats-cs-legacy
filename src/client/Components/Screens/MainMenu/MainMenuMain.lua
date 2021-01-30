@@ -164,11 +164,17 @@ function MainMenuUI:render()
             Font = Enum.Font.GothamBlack;
         });
 
-        PlayerData = Roact.createElement(PlayerProfile);
+        PlayerData = Roact.createElement(PlayerProfile, {
+            Size = UDim2.fromScale(0.3, 0.15);
+            Position = UDim2.fromScale(0.315, 0.02);
+            BackgroundColor3 = Color3.fromRGB(17,17,17);
+            AnchorPoint = Vector2.new(1, 0);
+        });
 
-        MusicPlayer = Roact.createElement(MusicBox, {
+        MusicBox = Roact.createElement(MusicBox, {
             Size = UDim2.fromScale(0.35, 0.15);
             Position = UDim2.fromScale(0.99, 0.02);
+            AnchorPoint = Vector2.new(1, 0);
             songKey = self.state.selectedSongKey;
         });
         Outline = Roact.createElement("Frame", {
@@ -176,11 +182,6 @@ function MainMenuUI:render()
             Position = UDim2.fromScale(0,.98);
             Size = UDim2.fromScale(1, 0.0025);
         });
-
-        MusicPlayer = Roact.createElement(MusicBox,{
-            Size = UDim2.fromScale(0.35, 0.15);
-            Position = UDim2.fromScale(0.99, 0.02);
-        })
     });
     
 end
