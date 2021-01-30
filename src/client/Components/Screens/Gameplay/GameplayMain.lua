@@ -70,7 +70,6 @@ function GameplayMain:render()
                 })
             end;
             settings = {
-                FOV = settings.FOV;
                 volume = settings.MusicVolume;
                 scrollSpeed = settings.NoteSpeed;
                 rate = self.props.data.songRate / 100;
