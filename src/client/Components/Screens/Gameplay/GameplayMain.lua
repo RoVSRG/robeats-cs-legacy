@@ -85,10 +85,10 @@ function GameplayMain:render()
                         XOffset = 0.1;
                         hitObjects = data.hitObjects;
                         keybinds = {
-                            Enum.KeyCode.R;
-                            Enum.KeyCode.T;
-                            Enum.KeyCode.KeypadSeven;
-                            Enum.KeyCode.KeypadEight;
+                            settings.Keybind1;
+                            settings.Keybind2;
+                            settings.Keybind3;
+                            settings.Keybind4;
                         }
                     });
                     TapButtons = ConditionalReturn(self.isMobile, (
