@@ -80,6 +80,7 @@ function MusicBox:render()
         AnchorPoint = self.props.AnchorPoint;
         --time to win
         --YES WE WILL WIN
+        --POG , let this be our little secret conversation
     }, {
         Corner = Roact.createElement("UICorner",{
             CornerRadius = UDim.new(0,4);
@@ -153,6 +154,9 @@ function MusicBox:render()
             shrinkBy = 0.025;
             ImageColor3 = Color3.fromRGB(255,255,255);
             ImageTransparency = 0;
+            onActivated = function()
+                self.switchSongKey(1)
+            end
         });
 
         SongCover = Roact.createElement("ImageLabel", {
@@ -172,11 +176,11 @@ function MusicBox:render()
             })
         });
         
-        -- Sound = Roact.createElement(Sound, {
-        --     Playing = self.state.isPlaying;
-        --     SoundId = SongDatabase:get_data_for_key(self.state.songKey).AudioAssetId;
-        --     [Roact.Ref] = self.soundRef;
-        -- });
+         Sound = Roact.createElement(Sound, {
+             Playing = self.state.isPlaying;
+             SoundId = SongDatabase:get_data_for_key(self.state.songKey).AudioAssetId;
+            [Roact.Ref] = self.soundRef;
+         });
     });
 end
 
