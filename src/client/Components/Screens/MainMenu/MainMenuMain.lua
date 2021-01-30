@@ -25,14 +25,6 @@ function MainMenuUI:init()
     self.goToScreen = function(path)
         self.props.history:push(path)
     end
-
-    self.switchSongKey = function(increment)
-        self:setState(function(state)
-            return {
-                selectedSongKey = state.selectedSongKey + increment
-            }
-        end)
-    end
 end
 
 function MainMenuUI:render()
@@ -172,14 +164,18 @@ function MainMenuUI:render()
             Font = Enum.Font.GothamBlack;
         });
 
-        PlayerData = Roact.createElement(PlayerProfile);
+        PlayerData = Roact.createElement(PlayerProfile, {
+            Size = UDim2.fromScale(0.3, 0.15);
+            Position = UDim2.fromScale(0.315, 0.02);
+            BackgroundColor3 = Color3.fromRGB(17,17,17);
+            AnchorPoint = Vector2.new(1, 0);
+        });
 
         MusicBox = Roact.createElement(MusicBox, {
             Size = UDim2.fromScale(0.35, 0.15);
             Position = UDim2.fromScale(0.99, 0.02);
             AnchorPoint = Vector2.new(1, 0);
             songKey = self.state.selectedSongKey;
-            switchSongKey = self.switchSongKey;
         });
         Outline = Roact.createElement("Frame", {
             BorderSizePixel = 0;
