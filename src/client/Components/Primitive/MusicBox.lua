@@ -67,6 +67,20 @@ function MusicBox:render()
             shrinkBy = 0.025;
         });
 
+        Forward = Roact.createElement(ImageButton, {
+            AutomaticSize = Enum.AutomaticSize.None;
+            BackgroundColor3 = Color3.fromRGB(11,11,11);
+            BackgroundTransparency = 0;
+            Position = UDim2.fromScale(.555, .55);
+            Size = UDim2.fromScale(0.3, 0.3);
+            Image = "rbxassetid://6323574638";
+            ScaleType = Enum.ScaleType.Fit;
+            SliceScale = 1;
+            shrinkBy = 0.025;
+            ImageColor3 = Color3.fromRGB(255,255,255);
+            ImageTransparency = 0;
+        });
+
         SongCover = Roact.createElement("ImageLabel", {
             AnchorPoint = Vector2.new(0, 0.5),
             BackgroundColor3 = Color3.fromRGB(15, 15, 15),
@@ -84,10 +98,10 @@ function MusicBox:render()
             })
         });
         
-        Sound = Roact.createElement(Sound, {
-            Playing = true;
-            SoundId = SongDatabase:get_data_for_key(self.props.songKey).AudioAssetId
-        })
+        -- Sound = Roact.createElement(Sound, {
+        --     Playing = true;
+        --     SoundId = SongDatabase:get_data_for_key(self.props.songKey).AudioAssetId
+        -- })
     });
 end
 

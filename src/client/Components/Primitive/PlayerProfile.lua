@@ -77,15 +77,15 @@ function PlayerProfile:render()
         });
 
         Roact.createElement("TextLabel", {
-            Name = "Rank";
+            Name = "Rating";
             BackgroundTransparency = 1;
-            Position = UDim2.fromScale(0.825,0.06);
-            Size = UDim2.fromScale(0.15, 0.25);
+            Position = UDim2.fromScale(0.28, 0.495);
+            Size = UDim2.fromScale(0.4, 0.2);
             Font = Enum.Font.GothamBold;
             LineHeight = 1;
             TextColor3 = Color3.fromRGB(255, 255, 255);
             TextScaled = true;
-            Text = "#1";
+            Text = "#1 [42.69]";
             TextStrokeColor3 = Color3.fromRGB(0, 0, 0);
             TextStrokeTransparency = 0.5;
         });
