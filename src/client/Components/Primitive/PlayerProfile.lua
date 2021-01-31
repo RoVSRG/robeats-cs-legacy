@@ -70,8 +70,8 @@ function PlayerProfile:render()
             Tier = Roact.createElement("TextLabel",{
                 AutomaticSize = Enum.AutomaticSize.None;
                 BackgroundTransparency = 1;
-                Position = UDim2.fromScale(1.1, 0.4);
-                Size = UDim2.fromScale(1.5,0.15);
+                Position = UDim2.fromScale(1.113, 0.4);
+                Size = UDim2.fromScale(1.5,0.14);
                 Font = Enum.Font.GothamSemibold;
                 LineHeight = 1;
                 Text = string.format("Tier: %s", self.props.tier);
@@ -84,8 +84,8 @@ function PlayerProfile:render()
             Rating = Roact.createElement("TextLabel",{
                 AutomaticSize = Enum.AutomaticSize.None;
                 BackgroundTransparency = 1;
-                Position = UDim2.fromScale(1.1, 0.6);
-                Size = UDim2.fromScale(1.77,0.15);
+                Position = UDim2.fromScale(1.113, 0.57);
+                Size = UDim2.fromScale(1.77,0.14);
                 Font = Enum.Font.GothamSemibold;
                 LineHeight = 1;
                 Text = string.format("Skill Rating: %0.2f", self.props.rating);
@@ -98,8 +98,8 @@ function PlayerProfile:render()
             TotalMapsPlayed = Roact.createElement("TextLabel",{
                 AutomaticSize = Enum.AutomaticSize.None;
                 BackgroundTransparency = 1;
-                Position = UDim2.fromScale(1.1, 0.8);
-                Size = UDim2.fromScale(1.77,0.15);
+                Position = UDim2.fromScale(1.113, 0.74);
+                Size = UDim2.fromScale(1.77,0.14);
                 Font = Enum.Font.GothamSemibold;
                 LineHeight = 1;
                 Text = string.format("Number of Maps Played: %d", self.props.totalMapsPlayed);
@@ -117,7 +117,7 @@ function PlayerProfile:render()
             Position = UDim2.fromScale(0.975, 0.975);
             AnchorPoint = Vector2.new(1, 1);
             Size = UDim2.fromScale(0.4, 0.567);
-            Font = Enum.Font.GothamBold;
+            Font = Enum.Font.Gotham;
             LineHeight = 1;
             TextColor3 = Color3.fromRGB(63, 62, 62);
             TextScaled = true;
