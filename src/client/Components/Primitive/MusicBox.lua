@@ -27,15 +27,28 @@ function MusicBox:init()
     })
     self.motorBinding = RoactFlipper.getBinding(self.motor)
 
+    -- store number of keys in a variable because it is too expensive to get the count
+    local numOfKeys = SongDatabase:number_of_keys()
+
     self:setState({
-        songKey = math.random(1, SongDatabase:number_of_keys());
+        songKey = 1; --math.random(1, SongDatabase:number_of_keys());
         isPlaying = true;
     })
 
     self.switchSongKey = function(increment)
         self:setState(function(state)
+            local newIndex = state.songKey + increment
+            if newIndex == 0 then
+                return {
+                    songKey = numOfKeys
+                }
+            elseif newIndex > numOfKeys then
+                return {
+                    songKey = 1
+                }
+            end
             return {
-                songKey = state.songKey + increment
+                songKey = newIndex
             }
         end)
     end
@@ -122,20 +135,21 @@ function MusicBox:render()
                 end)
             end
         });
-        
-        Back = Roact.createElement(ImageButton,{
-            Name = "ProfileImage";
-            AnchorPoint = Vector2.new(0.5,0);
+
+        Back = Roact.createElement(ImageButton, {
             AutomaticSize = Enum.AutomaticSize.None;
+            AnchorPoint = Vector2.new(0.5,0);
             BackgroundColor3 = Color3.fromRGB(11,11,11);
             BackgroundTransparency = 1;
-            Position = UDim2.fromScale(.38, .55);
-            Size = UDim2.fromScale(0.1, 0.3);
-            Image = "rbxassetid://51811789";
-            ImageColor3 = Color3.fromRGB(255,255,255);
+            Position = UDim2.fromScale(.35, .55);
+            Size = UDim2.fromScale(0.2, 0.3);
+            Rotation = 180;
+            Image = "rbxassetid://6323574622";
             ScaleType = Enum.ScaleType.Fit;
             SliceScale = 1;
             shrinkBy = 0.025;
+            ImageColor3 = Color3.fromRGB(55, 100, 185);
+            ImageTransparency = 0;
             onActivated = function()
                 self.switchSongKey(1)
             end
@@ -143,16 +157,20 @@ function MusicBox:render()
 
         Forward = Roact.createElement(ImageButton, {
             AutomaticSize = Enum.AutomaticSize.None;
+            AnchorPoint = Vector2.new(0.5,0);
             BackgroundColor3 = Color3.fromRGB(11,11,11);
-            BackgroundTransparency = 0;
-            Position = UDim2.fromScale(.555, .55);
-            Size = UDim2.fromScale(0.3, 0.3);
-            Image = "rbxassetid://6323574638";
+            BackgroundTransparency = 1;
+            Position = UDim2.fromScale(.65, .55);
+            Size = UDim2.fromScale(0.2, 0.3);
+            Image = "rbxassetid://6323574622";
             ScaleType = Enum.ScaleType.Fit;
             SliceScale = 1;
             shrinkBy = 0.025;
-            ImageColor3 = Color3.fromRGB(255,255,255);
+            ImageColor3 = Color3.fromRGB(55, 100, 185);
             ImageTransparency = 0;
+            onActivated = function()
+                self.switchSongKey(1)
+            end
         });
 
         SongCover = Roact.createElement("ImageLabel", {
@@ -172,11 +190,11 @@ function MusicBox:render()
             })
         });
         
-        -- Sound = Roact.createElement(Sound, {
-        --     Playing = self.state.isPlaying;
-        --     SoundId = SongDatabase:get_data_for_key(self.state.songKey).AudioAssetId;
-        --     [Roact.Ref] = self.soundRef;
-        -- });
+        Sound = Roact.createElement(Sound, {
+            Playing = self.state.isPlaying;
+            SoundId = SongDatabase:get_data_for_key(self.state.songKey).AudioAssetId;
+            [Roact.Ref] = self.soundRef;
+        });
     });
 end
 
