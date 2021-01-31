@@ -93,6 +93,7 @@ function MusicBox:render()
         AnchorPoint = self.props.AnchorPoint;
         --time to win
         --YES WE WILL WIN
+        --POG , let this be our little secret conversation
     }, {
         Corner = Roact.createElement("UICorner",{
             CornerRadius = UDim.new(0,4);
