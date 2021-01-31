@@ -57,6 +57,7 @@ function ImageButton:render()
         ScaleType = self.props.ScaleType;
         SliceScale = self.props.SliceScale;
         BackgroundTransparency = self.props.BackgroundTransparency;
+        Rotation = self.props.Rotation;
         BackgroundColor3 = self.motorBinding:map(function(a)
             local c = Color3.new(a.colorR, a.colorG, a.colorB);
             local db = self.props.darkenBy or 40
