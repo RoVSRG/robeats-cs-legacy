@@ -148,8 +148,8 @@ function MusicBox:render()
             ScaleType = Enum.ScaleType.Fit;
             SliceScale = 1;
             shrinkBy = 0.025;
-            ImageColor3 = Color3.fromRGB(55, 100, 185);
-            ImageTransparency = 0;
+            ImageColor3 = Color3.fromRGB(255, 255, 255);
+            ImageTransparency = 0.65;
             onActivated = function()
                 self.switchSongKey(1)
             end
@@ -166,8 +166,8 @@ function MusicBox:render()
             ScaleType = Enum.ScaleType.Fit;
             SliceScale = 1;
             shrinkBy = 0.025;
-            ImageColor3 = Color3.fromRGB(55, 100, 185);
-            ImageTransparency = 0;
+            ImageColor3 = Color3.fromRGB(255, 255, 255);
+            ImageTransparency = 0.65;
             onActivated = function()
                 self.switchSongKey(1)
             end
