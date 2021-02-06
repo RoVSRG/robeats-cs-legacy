@@ -5,6 +5,7 @@ local TableUtil = require(game.ReplicatedStorage.Shared.Utils.TableUtil)
 
 local TabLayout = require(game.ReplicatedStorage.Client.Components.Layout.TabLayout)
 
+local Button = require(game.ReplicatedStorage:WaitForChild("Client").Components.Primitive.Button)
 local MultiplayerRoomButton = require(script.Parent.MultiplayerRoomButton)
 
 function MultiplayerLobbyUI:init()
@@ -71,6 +72,8 @@ function MultiplayerLobbyUI:render()
 				})
 			}),
 		}),
+
+		--im still thinking on a better way to design this lol
 		TabContainer = Roact.createElement(TabLayout, {
 			AnchorPoint = Vector2.new(0.5, 0),
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -81,9 +84,13 @@ function MultiplayerLobbyUI:render()
 			buttons = {
 				{
 					Text = "Back";
+				};
+				{
+					Text = "Create Room";
+					
 				}
 			}
-		})
+		});
 	})
 end
 
