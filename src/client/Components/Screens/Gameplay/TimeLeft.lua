@@ -3,7 +3,7 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local TimeLeft = Roact.Component:extend("TimeLeft")
-
+--hey when will this be fix xd lol
 function TimeLeft:render()
     return Roact.createElement("TextLabel", {
         Name = "TimeLeftDisplay",
