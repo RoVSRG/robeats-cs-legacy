@@ -1,5 +1,5 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
 local ThreeDimensionalHitObject = require(game.ReplicatedStorage.Shared.Utils.ThreeDimensionalHitObject)
 
 local Note = Roact.Component:extend("Note")
@@ -11,18 +11,6 @@ function Note:init()
         90,
         180,
     }
-
-    self.threeDimensionalPlayfield = self.props.threeDimensionalPlayfield
-
-    self.noteInstance = ThreeDimensionalHitObject:new(EnvironmentSetup:get_element_protos_folder().SingleNoteAdornProto:Clone(), {
-        lane = self.props.lane;
-        playfield = self.threeDimensionalPlayfield;
-    })
-    self.noteInstance:setParent(workspace)
-end
-
-function Note:didUpdate()
-    self.noteInstance:setVisualForAlpha(self.props.alpha)
 end
 
 function Note:render()
@@ -43,10 +31,6 @@ function Note:render()
         })
         else return
     end
-end
-
-function Note:willUnmount()
-    self.noteInstance:destroy()
 end
 
 return Note

@@ -1,12 +1,12 @@
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
-local NoteTrack = require(game.ReplicatedStorage.Shared.Core.Engine.NoteTrack.NoteTrack)
-local GameSlot = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.GameSlot)
+local NoteTrack = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.NoteTrack.NoteTrack)
+local GameSlot = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.GameSlot)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
-local NoteResult = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.NoteResult)
-local GameTrack = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.GameTrack)
+local NoteResult = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.NoteResult)
+local GameTrack = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.GameTrack)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
-local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
-local HitParams = require(game.ReplicatedStorage.Shared.Core.Engine.HitParams)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local HitParams = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.HitParams)
 
 local NoteTrackSystem = {}
 

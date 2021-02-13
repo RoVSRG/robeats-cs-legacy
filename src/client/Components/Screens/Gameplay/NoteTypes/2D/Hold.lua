@@ -11,8 +11,6 @@ function Hold:init()
         90,
         180,
     }
-
-    self.threeDimensionalPlayfield = self.props.threeDimensionalPlayfield
 end
 
 function Hold:render()
@@ -23,7 +21,6 @@ function Hold:render()
             alpha = self.props.alpha;
             numberOfLanes = 4;
             upscroll = false;
-            threeDimensionalPlayfield = self.threeDimensionalPlayfield;
         });
         Body = Roact.createElement("Frame", {
             BackgroundColor3 = self.props.releasedEarly and Color3.fromRGB(63, 62, 62) or Color3.fromRGB(119, 117, 117);

@@ -1,6 +1,6 @@
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
-local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
 
 local TriggerButton = {}
 

@@ -35,7 +35,7 @@ function HitObject:new(props)
             return
         end
 
-        if self.currentAudioTime - self.pressTime > Judgement.TimingWindows[1].late then
+        if (self.currentAudioTime - self.pressTime > Judgement.TimingWindows[1].late) and not self.headPressed then
             self.releasedEarly = true
         end
 

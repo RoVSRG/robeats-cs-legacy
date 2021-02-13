@@ -4,7 +4,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local ScoreManager = {}
 
-function ScoreManager:new(_game)
+function ScoreManager.new(_game)
 	local self = {}
 	self.hit_deviance = {}
 	

@@ -1,10 +1,10 @@
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local MenuBase = require(game.ReplicatedStorage.Shared.Menus.System.MenuBase)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
-local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
-local GameSlot = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.GameSlot)
+local GameSlot = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.GameSlot)
 
 local SongStartMenu = require(game.ReplicatedStorage.Shared.Menus.SongStartMenu)
 

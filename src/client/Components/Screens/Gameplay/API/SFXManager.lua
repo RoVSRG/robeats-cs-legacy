@@ -32,7 +32,7 @@ SFXManager.SFX_ENDCHEER_1 = "rbxassetid://786602445"
 SFXManager.SFX_FEVERCHEER_1 = "rbxassetid://786602324"
 SFXManager.SFX_STARTCHEER_1 = "rbxassetid://786602174"
 
-function SFXManager:new()
+function SFXManager.new()
 	local self = {}
 
 	local sfxPooledParent = Instance.new("Folder")

@@ -1,5 +1,5 @@
 local MenuBase = require(game.ReplicatedStorage.Shared.Menus.System.MenuBase)
-local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
 
 local ConfirmationPopupMenu = {}
 

@@ -1,12 +1,12 @@
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
-local NoteBase = require(game.ReplicatedStorage.Shared.Core.Engine.NoteTypes.NoteBase)
-local NoteResult = require(game.ReplicatedStorage.Shared.Core.Engine.Enums.NoteResult)
-local SFXManager = require(game.ReplicatedStorage.Shared.Core.Engine.SFXManager)
-local EnvironmentSetup = require(game.ReplicatedStorage.Shared.Core.Engine.EnvironmentSetup)
-local HitParams = require(game.ReplicatedStorage.Shared.Core.Engine.HitParams)
-local HoldingNoteEffect = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.HoldingNoteEffect)
-local TriggerNoteEffect = require(game.ReplicatedStorage.Shared.Core.Engine.Effects.TriggerNoteEffect)
+local NoteBase = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.NoteTypes.NoteBase)
+local NoteResult = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.NoteResult)
+local SFXManager = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.SFXManager)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local HitParams = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.HitParams)
+local HoldingNoteEffect = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Effects.HoldingNoteEffect)
+local TriggerNoteEffect = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Effects.TriggerNoteEffect)
 
 local SingleNote = {}
 SingleNote.Type = "SingleNote"

@@ -187,7 +187,7 @@ function SPUtil:find_angle(point, center)
 end
 
 function SPUtil:button(_instance, _expand_size, _local_services, _callback)
-	local SFXManager = require(game.ReplicatedStorage.Shared.Core.Engine.SFXManager)
+	local SFXManager = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.SFXManager)
 	local original_size = _instance.Size
 	_expand_size = _expand_size or UDim2.new(0, 0, 0, 0)
 

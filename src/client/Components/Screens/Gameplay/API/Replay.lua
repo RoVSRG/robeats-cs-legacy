@@ -64,7 +64,7 @@ function Replay.perfectReplay(songkey, rate)
     return replay
 end
 
-function Replay.humanlikeReplay(songkey, rate)
+function Replay.humanlikeReplay(songkey, rate) -- currently not all THAT humanlike, but you get the gist
     local replay = Replay:new()
 
     local hitObjects = SongDatabase:get_hit_objects_for_key(songkey, rate)

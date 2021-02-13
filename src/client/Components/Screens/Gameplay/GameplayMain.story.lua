@@ -9,6 +9,18 @@ local GameplayApp = Story:new()
 function GameplayApp:render()
     return Roact.createElement(GameplayMain, {
         selectedSongKey = 89;
+        settings = {
+            volume = 100;
+            scrollSpeed = 29;
+            FOV = 70;
+            Keybind1 = Enum.KeyCode.R;
+            Keybind2 = Enum.KeyCode.T;
+            Keybind3 = Enum.KeyCode.KeypadSeven;
+            Keybind4 = Enum.KeyCode.KeypadEight;
+        };
+        data = {
+            songRate = 1;
+        }
     })
 end
 

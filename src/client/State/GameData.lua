@@ -1,6 +1,6 @@
 return {
     currentScreen = "SongSelect";
-    selectedSongKey = 1;
+    selectedSongKey = 26;
     songRate = 100;
     stats = {
         accuracy = 0;

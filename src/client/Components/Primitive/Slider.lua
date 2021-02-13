@@ -2,9 +2,15 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
+local Gradient= require(game.ReplicatedStorage.Shared.Utils.Gradient)
+
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
 local Slider = Roact.Component:extend("Slider")
+
+Slider.defaultProps = {
+    sliderColor3 = Color3.fromRGB(255, 255, 255);
+}
 
 local function noop() end
 
@@ -21,6 +27,16 @@ function Slider:init()
     })
 
     self.onDrag = self.props.onDrag or noop
+end
+
+function Slider:getGradient()
+    local gradient = Gradient:new()
+
+    for i = 0, 1, 0.1 do
+        gradient:add_number_keypoint(i, 1-i)
+    end
+
+    return gradient:number_sequence()
 end
 
 function Slider:didUpdate(prevProps)
@@ -54,11 +70,16 @@ function Slider:render()
             Corner = Roact.createElement("UICorner", {
                 CornerRadius = UDim.new(0, 180);
             });
+            Gradient = Roact.createElement("UIGradient", {
+                Transparency = self:getGradient()
+            })
         });
         SliderDragger = Roact.createElement("ImageButton", {
             BackgroundTransparency = 1;
             Image = "rbxassetid://232918622";
-            ImageColor3 = self.props.sliderColor3;
+            ImageColor3 = self.motorBinding:map(function(a)
+                return self.props.sliderColor3:Lerp(Color3.fromRGB(0,0,0), 1-(a/100))
+            end);
             Position = self.motorBinding:map(function(a)
                 return UDim2.new(a/100, 0, 0.5, 0);
             end);

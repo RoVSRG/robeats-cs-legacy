@@ -1,6 +1,6 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local Engine = require(game.ReplicatedStorage.Shared.Core.Engine)
+local Engine = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local EngineHOC = Roact.Component:extend("EngineHOC")
