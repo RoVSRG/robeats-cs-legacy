@@ -1,9 +1,9 @@
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
-local TriggerButton = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.NoteTrack.TriggerButton)
-local GameSlot = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.GameSlot)
-local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
-local GameTrack = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.GameTrack)
+local TriggerButton = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.NoteTrack.TriggerButton)
+local GameSlot = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.Enums.GameSlot)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.EnvironmentSetup)
+local GameTrack = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.Enums.GameTrack)
 local AssertType = require(game.ReplicatedStorage.Shared.Utils.AssertType)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 

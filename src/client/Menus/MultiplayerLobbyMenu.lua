@@ -1,11 +1,11 @@
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local MenuBase = require(game.ReplicatedStorage.Shared.Menus.System.MenuBase)
-local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.EnvironmentSetup)
 local RBXScriptSignalManager = require(game.ReplicatedStorage.Shared.Utils.RBXScriptSignalManager)
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
-local MultiplayerClient = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.MultiplayerClient)
+local MultiplayerClient = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.MultiplayerClient)
 
 local Network = require(game.ReplicatedStorage.Libraries.Network)
 

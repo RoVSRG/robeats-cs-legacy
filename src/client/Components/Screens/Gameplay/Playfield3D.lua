@@ -1,6 +1,6 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
-local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.EnvironmentSetup)
 
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 

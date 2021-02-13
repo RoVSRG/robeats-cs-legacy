@@ -1,9 +1,9 @@
-local EffectSystem = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Effects.EffectSystem)
+local EffectSystem = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.Effects.EffectSystem)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local CurveUtil = require(game.ReplicatedStorage.Shared.Utils.CurveUtil)
-local NoteResult = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.Enums.NoteResult)
+local NoteResult = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.Enums.NoteResult)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
-local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.EnvironmentSetup)
 
 local NoteResultPopupEffect = {}
 NoteResultPopupEffect.HitColor = {

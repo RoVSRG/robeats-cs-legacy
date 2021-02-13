@@ -1,5 +1,5 @@
 local MenuBase = require(game.ReplicatedStorage.Shared.Menus.System.MenuBase)
-local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.EnvironmentSetup)
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)

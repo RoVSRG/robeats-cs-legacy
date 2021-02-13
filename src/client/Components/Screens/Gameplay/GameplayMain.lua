@@ -1,8 +1,26 @@
+--[[
+    Typing out my thoughts here so I can muse over the best way to implement this...
+
+    I could try to handle the notepool straight in this file, along with all input, but I feel that that would get too bulky.
+    What I want to do is have a non-OOP API (to reduce unnecessary bloat) that all have static functions to determine what to do with the pool.
+
+    Like for instance, I have:
+        self.notePool
+        
+    I can pass this pool table into a static method to determine "ok what should this table look like after this operation" and get a new table back representing
+    the new pool of notes. I can do this with input, too!
+    
+    Let me see how this works... (4:06PM, 2/13/21)
+]]
+
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local API = require(script.Parent.API)
+
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+
 local Score = require(script.Parent.Score)
 local Accuracy = require(script.Parent.Accuracy)
 local TimeLeft = require(script.Parent.TimeLeft)
@@ -52,6 +70,11 @@ function GameplayMain:init()
             most_recent = 0;
         };
     })
+
+    self.services = {
+        notePool = API.NotePool.new();
+        scoreManager = API.Score.new();
+    }
 
     self.everyFrame = SPUtil:bind_to_frame(function()
         

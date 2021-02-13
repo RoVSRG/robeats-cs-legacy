@@ -2,9 +2,9 @@ local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 local Bindable = require(game.ReplicatedStorage.Libraries.Bindable)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
-local ScoreManager = {}
+local Score = {}
 
-function ScoreManager.new(_game)
+function Score.new()
 	local self = {}
 	self.hit_deviance = {}
 	
@@ -80,7 +80,7 @@ function ScoreManager.new(_game)
 	function self:getHitDeviance() return self.hit_deviance end
 	
 	function self:calculateTotalScore(spread)
-		local totalnotes =_game._audio_manager:get_note_count()
+		local totalnotes = 1 --TODO: FIX
 		local marv = 0
 		for total = 1, spread[1] do
 			marv = marv + self:resultToPointTotal(5,totalnotes)
@@ -208,4 +208,4 @@ function ScoreManager.new(_game)
 	return self
 end
 
-return ScoreManager
+return Score

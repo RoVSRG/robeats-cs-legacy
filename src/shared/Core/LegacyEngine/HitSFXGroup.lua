@@ -1,6 +1,6 @@
 local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local SPDict = require(game.ReplicatedStorage.Shared.Utils.SPDict)
-local SFXManager = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.SFXManager)
+local SFXManager = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.SFXManager)
 local DebugOut = require(game.ReplicatedStorage.Shared.Utils.DebugOut)
 
 local HitSFXGroup = {}

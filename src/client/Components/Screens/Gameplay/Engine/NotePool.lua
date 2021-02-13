@@ -5,22 +5,19 @@ local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 
 local HitObject = require(script.Parent.HitObject)
 
-local HitObjectPool = {}
+local NotePool = {}
 
-function HitObjectPool:new(props)
+function NotePool.new(props)
     local self = {}
     self.hitData = SongDatabase:get_hit_objects_for_key(props.key, props.rate)
     self.index = 1
     self.currentAudioTime = -5000
     self.scrollSpeed = props.scrollSpeed
 	self.scoreManager = props.scoreManager
-    self.hitsound = props.hitsound
     self.hitObjects = SPList:new()
-    self.replayIndex = 1
 
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
-        self.hitsound:update()
         self:checkNewNotes()
         self.trackSystem:update(self.currentAudioTime)
         self:handleReplay()
@@ -208,4 +205,4 @@ function HitObjectPool:new(props)
     return self
 end
 
-return HitObjectPool
+return NotePool

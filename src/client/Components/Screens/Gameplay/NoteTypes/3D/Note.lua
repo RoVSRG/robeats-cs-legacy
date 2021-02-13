@@ -1,5 +1,5 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.API.EnvironmentSetup)
+local EnvironmentSetup = require(game.ReplicatedStorage.Client.Components.Screens.Gameplay.Engine.EnvironmentSetup)
 local ThreeDimensionalDefaults = require(game.ReplicatedStorage.Shared.Core.Data.ThreeDimensionalDefaults)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
