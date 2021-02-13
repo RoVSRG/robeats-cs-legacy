@@ -84,19 +84,6 @@ function MultiplayerRoomButton:render()
             TextWrapped = true,
             TextXAlignment = Enum.TextXAlignment.Left,
         }),
-        MultiPlayerImages = Roact.createElement("Frame", {
-            Name = "PlayerHeadShots";
-            BackgroundColor3 = Color3.fromRGB(255,255,255);
-            BackgroundTransparency = 0;
-            Position = UDim2.new(.515,0,.595,0);
-            Size = UDim2.new(.305, 0, .355 ,0);
-        }, {
-            Roact.createElement("UIListLayout", {
-                Padding = UDim.new(0.015,0);
-                SortOrder = Enum.SortOrder.LayoutOrder;
-                FillDirection = Enum.FillDirection.Horizontal;
-            });
-        });
         SongDisplay = Roact.createElement("TextLabel", {
             BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 1,

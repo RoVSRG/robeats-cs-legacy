@@ -159,7 +159,7 @@ function MusicBox:render()
         Forward = Roact.createElement(ImageButton, {
             AutomaticSize = Enum.AutomaticSize.None;
             AnchorPoint = Vector2.new(0.5,0);
-            BackgroundColor3 = Color3.fromRGB(11,11,11);
+            BackgroundColor3 = Color3.fromRGB(255, 255, 255);
             BackgroundTransparency = 1;
             Position = UDim2.fromScale(.65, .55);
             Size = UDim2.fromScale(0.2, 0.3);

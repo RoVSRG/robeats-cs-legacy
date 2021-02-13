@@ -10,6 +10,7 @@ local ScrollingFrame = require(game.ReplicatedStorage.Client.Components.Primitiv
 local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 
 -- LOL SEARCHING GO BYE BYE, PLEASE FIX
+-- RIP SEARCHING
 
 --[[
     startIndex = floor(scrollPosition / elementHeight)
