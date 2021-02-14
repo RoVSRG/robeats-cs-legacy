@@ -1,23 +1,8 @@
---[[
-    Typing out my thoughts here so I can muse over the best way to implement this...
-
-    I could try to handle the notepool straight in this file, along with all input, but I feel that that would get too bulky.
-    What I want to do is have a non-OOP API (to reduce unnecessary bloat) that all have static functions to determine what to do with the pool.
-
-    Like for instance, I have:
-        self.notePool
-        
-    I can pass this pool table into a static method to determine "ok what should this table look like after this operation" and get a new table back representing
-    the new pool of notes. I can do this with input, too!
-    
-    Let me see how this works... (4:06PM, 2/13/21)
-]]
-
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
-local API = require(script.Parent.API)
+local Engine = require(script.Parent.Engine)
 
 local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
@@ -34,6 +19,8 @@ local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
+
+local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local GameplayMain = Roact.Component:extend("GameplayMain")
 
@@ -55,6 +42,19 @@ function GameplayMain:init()
     self.doStats = self.props.doStats
     self.doHitDeviance = self.props.doHitDeviance
 
+    self.keybinds = {
+        Enum.KeyCode.V;
+        Enum.KeyCode.B;
+        Enum.KeyCode.KeypadOne;
+        Enum.KeyCode.KeypadTwo;
+    }
+
+    self.currentAudioTime = 0
+
+    self.scoreManager = Engine.Score.new({
+        songKey = self.props.selectedSongKey;
+    });
+
     self:setState({
         stats = {
 			score = 0;
@@ -69,15 +69,56 @@ function GameplayMain:init()
             max_combo = 0;
             most_recent = 0;
         };
+        hitObjects = {};
+    })
+    
+    local function onNoteJudged(judgement, timeLeft)
+        print(judgement)
+    end
+
+    self.notePool = Engine.NotePool.new({
+        scrollSpeed = self.props.settings.scrollSpeed;
+        onNoteJudged = onNoteJudged;
+        songKey = self.props.selectedSongKey;
     })
 
-    self.services = {
-        notePool = API.NotePool.new();
-        scoreManager = API.Score.new();
-    }
+    self.onPress = function(track)
+        self.notePool:pressAgainst(track)
+    end
 
-    self.everyFrame = SPUtil:bind_to_frame(function()
-        
+    self.onRelease = function(track)
+        self.notePool:releaseAgainst(track)
+    end
+    
+    self.onPressCon = SPUtil:bind_to_key(Enum.KeyCode, function(keyCode)
+        local track
+
+        for i, v in ipairs(self.keybinds) do
+            if keyCode == v then track = i break end
+        end
+
+        if not track then return end
+        self.onPress(track)
+    end)
+
+    self.onReleaseCon = SPUtil:bind_to_key_release(Enum.KeyCode, function(keyCode)
+        local track
+
+        for i, v in ipairs(self.keybinds) do
+            if keyCode == v then track = i break end
+        end
+
+        if not track then return end
+        self.onRelease(track)
+    end)
+
+    self.everyFrame = SPUtil:bind_to_frame(function(dt)
+        self.currentAudioTime += dt
+        self.notePool:update(self.currentAudioTime*1000)
+
+        self:setState({
+            hitObjects = self.notePool:getSerialized()
+        })
     end)
 
     self.isMobile = SPUtil:is_mobile()
@@ -150,14 +191,16 @@ function GameplayMain:render()
                 CornerRadius = UDim.new(0, 4),
             })
         });
-        Judgement = Roact.createElement(Judgement, {
-            judgement = self.state.stats.most_recent;
-        })
+       Playfield = Roact.createElement(Playfield2D, {
+           hitObjects = self.state.hitObjects;
+       })
     });
 end
 
 function GameplayMain:willUnmount()
     self.everyFrame:Disconnect()
+    self.onPressCon:Disconnect()
+    self.onReleaseCon:Disconnect()
 end
 
 return GameplayMain

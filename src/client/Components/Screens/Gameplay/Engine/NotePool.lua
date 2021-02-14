@@ -4,22 +4,35 @@ local SPList = require(game.ReplicatedStorage.Shared.Utils.SPList)
 local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 
 local HitObject = require(script.Parent.HitObject)
+local ScrollSpeed = require(script.Parent.ScrollSpeed)
+
+local function noop() warn("onNoteJudged not implemented!") end
 
 local NotePool = {}
 
 function NotePool.new(props)
+    props = {
+        scrollSpeed = props.scrollSpeed or 0;
+        onNoteJudged = props.onNoteJudged or noop;
+        songKey = props.songKey;
+        rate = props.rate;
+    }
+
+    assert(props.songKey ~= nil, "Must pass a song key!")
+
     local self = {}
-    self.hitData = SongDatabase:get_hit_objects_for_key(props.key, props.rate)
+
+    self.hitData = SongDatabase:get_hit_objects_for_key(props.songKey, props.rate)
     self.index = 1
     self.currentAudioTime = -5000
     self.scrollSpeed = props.scrollSpeed
-	self.scoreManager = props.scoreManager
     self.hitObjects = SPList:new()
 
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
         self:checkNewNotes()
-        self.trackSystem:update(self.currentAudioTime)
+        self:cleanUpRemovingNotes()
+        self:updateNotes()
         self:handleReplay()
     end
 
@@ -85,19 +98,12 @@ function NotePool.new(props)
         end
     end
 
-    function self:update(currentAudioTime)
-        self.currentAudioTime = currentAudioTime
-
-        self:cleanUpRemovingNotes()
-        self:updateNotes()
-    end
-
     function self:cleanUpRemovingNotes()
         for i = 1, self.hitObjects:count() do
             local hitObject = self.hitObjects:get(i)
             if hitObject and hitObject:shouldRemove() then
                 local judgement = hitObject:currentPressJudgement().judgement
-                self.scoreManager:registerHit(judgement)
+                props.onNoteJudged(judgement)
                 self.hitObjects:remove_at(i)
             end
         end
@@ -132,9 +138,8 @@ function NotePool.new(props)
         assert(candidate ~= nil, "You must pass a NoteCandidate!")
         local judgement = candidate:currentPressJudgement().judgement
         if judgement ~= 0 then
-            self.scoreManager:registerHit(judgement)
+            props.onNoteJudged(judgement)
             self.hitObjects:remove_at(1)
-            self.hitsound:playHitsound(1)
         end
     end
     
@@ -144,8 +149,7 @@ function NotePool.new(props)
         if not candidate.headPressed then
             if judgement ~= 0 then
                 candidate.headPressed = true
-                self.scoreManager:registerHit(judgement)
-                self.hitsound:playHitsound(1)
+                props.onNoteJudged(judgement)
             end
         else
             --if release and next hit object is a note then lol
@@ -154,14 +158,13 @@ function NotePool.new(props)
                 local nextObjectJudgement = nextObject:currentPressJudgement().judgement
                 if nextObjectJudgement ~= 0 then
                     self.hitObjects:remove_at(1)
-                    self.scoreManager:registerHit(0)
+                    props.onNoteJudged(0)
                     if nextObject.type == 1 then
                         self.hitObjects:remove_at(1)
                     else
                         nextObject.headPressed = true
                     end
-                    self.scoreManager:registerHit(nextObjectJudgement)
-                    self.hitsound:playHitsound(1)
+                    props.onNoteJudged(nextObjectJudgement)
                 end
             end
         end
@@ -171,19 +174,19 @@ function NotePool.new(props)
         assert(candidate ~= nil, "You must pass a NoteCandidate!")
         local judgement = candidate:currentReleaseJudgement().judgement
         if judgement ~= 0 then
-            self.scoreManager:registerHit(judgement)
+            props.onNoteJudged(judgement)
             self.hitObjects:remove_at(1)
             self.hitsound:playHitsound(1)
         else
             if (not candidate.releasedEarly) and candidate.headPressed then
                 candidate.releasedEarly = true
-                self.scoreManager:registerHit(judgement)
+                props.onNoteJudged(judgement)
             end
         end
     end
 
-    function self:pressAgainst()
-        local candidate = self:getCandidate()
+    function self:pressAgainst(track)
+        local candidate = self:getCandidate(track)
         if candidate then
             if candidate.type == 1 then
                 self:pressAgainstSingleNote(candidate)
@@ -193,8 +196,8 @@ function NotePool.new(props)
         end 
     end
 
-    function self:releaseAgainst()
-        local candidate = self:getCandidate()
+    function self:releaseAgainst(track)
+        local candidate = self:getCandidate(track)
         if candidate then
             if candidate.type == 2 then
                 self:releaseAgainstHoldNote(candidate)

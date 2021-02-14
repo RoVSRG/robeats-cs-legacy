@@ -2,9 +2,6 @@ local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
-local EnvironmentSetup = require(script.Parent.API.EnvironmentSetup)
-local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
-
 local Receptor = require(script.Parent.Receptor)
 
 local Note = require(script.Parent.NoteTypes["2D"].Note)
@@ -20,31 +17,28 @@ end
 function Playfield2D:render()
     local hitObjs = {}
 
-    for _, track in ipairs(self.props.hitObjects) do
-        for k = 1, #track do
-            local itrHitObj = track[k]
-            if itrHitObj.type == 1 then
-                hitObjs[itrHitObj.poolId] = Roact.createElement(Note, {
-                    alpha = itrHitObj.pressAlpha;
-                    numberOfLanes = 4;
-                    lane = itrHitObj.lane;
-                    Image = "rbxassetid://5571834044";
-                    rotateArrow = true;
-                    playfield = self.playfield3D;
-                    poolId = itrHitObj.poolId;
-                })
-            elseif itrHitObj.type == 2 then
-                hitObjs[itrHitObj.poolId] = Roact.createElement(Hold, {
-                    alpha = itrHitObj.headPressed and 1 or itrHitObj.pressAlpha;
-                    headPressed = itrHitObj.headPressed;
-                    releaseAlpha = itrHitObj.releaseAlpha;
-                    lane = itrHitObj.lane;
-                    releasedEarly = itrHitObj.releasedEarly;
-                    Image = "rbxassetid://5571834044";
-                    playfield = self.playfield3D;
-                    poolId = itrHitObj.poolId;
-                })
-            end
+    for _, itrHitObj in ipairs(self.props.hitObjects) do
+        if itrHitObj.type == 1 then
+            hitObjs[itrHitObj.poolId] = Roact.createElement(Note, {
+                alpha = itrHitObj.pressAlpha;
+                numberOfLanes = 4;
+                lane = itrHitObj.lane;
+                Image = "rbxassetid://5571834044";
+                rotateArrow = true;
+                playfield = self.playfield3D;
+                poolId = itrHitObj.poolId;
+            })
+        elseif itrHitObj.type == 2 then
+            hitObjs[itrHitObj.poolId] = Roact.createElement(Hold, {
+                alpha = itrHitObj.headPressed and 1 or itrHitObj.pressAlpha;
+                headPressed = itrHitObj.headPressed;
+                releaseAlpha = itrHitObj.releaseAlpha;
+                lane = itrHitObj.lane;
+                releasedEarly = itrHitObj.releasedEarly;
+                Image = "rbxassetid://5571834044";
+                playfield = self.playfield3D;
+                poolId = itrHitObj.poolId;
+            })
         end
     end
 

@@ -2,29 +2,40 @@ local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 local Bindable = require(game.ReplicatedStorage.Libraries.Bindable)
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+
 local Score = {}
 
-function Score.new()
+function Score.new(props)
+	assert(props ~= nil, "You must pass a props table")
+	assert(props.songKey ~= nil, "You must pass a song key!")
 	local self = {}
 	self.hit_deviance = {}
 	
 	local chain = 0
 	function self:getChain() return chain end
 	
-	self.bonus = 100
-	self.score = 0
-	self.chain = 0
-
-	self.mostRecentJudgement = 0
+	local bonus = 100
 	
-	local marvCount = 0
-	local perfectCount = 0
-	local greatCount = 0
-	local goodCount = 0
-	local badCount = 0
-	local missCount = 0
-	local maxChain = 0
-	local totalCount = 0
+	self.inGameData = {
+		chain = 0;
+	}
+
+	self.data = {
+		marvelouses = 0;
+		perfects = 0;
+		greats = 0;
+		goods = 0;
+		bads = 0;
+		misses = 0;
+		maxChain = 0;
+		score = 0;
+	}
+
+	local function getTotalCount()
+		return self.data.marvelouses + self.data.perfects +  self.data.greats + self.data.goods + self.data.bads + self.data.misses
+	end
+
 	local maxscore = 1000000
 
 	local hit_color = {
@@ -36,13 +47,15 @@ function Score.new()
 		[5] = Color3.fromRGB(255, 255, 255);
 	}
 
-	function self:getEndRecords() return  marvCount, perfectCount, greatCount, goodCount, badCount, missCount, maxChain, self.score end
+	local song_length = SongDatabase:get_song_length_for_key(props.songKey)
+	local note_count, hold_count = SongDatabase:get_note_metrics_for_key(props.songKey)
+
 	function self:getAccuracy()
-		local totalCount = marvCount + perfectCount +  greatCount + goodCount + badCount + missCount
+		local totalCount = getTotalCount()
 		if totalCount == 0 then 
 			return 0
 		else
-			return 100*( ( marvCount + perfectCount + (greatCount*0.66) + (goodCount*0.33) + (badCount*0.166) ) / totalCount)
+			return 100*( ( self.data.marvelouses + self.data.perfects + (self.data.greats*0.66) + (self.data.goods*0.33) + (self.data.bads*0.166) ) / totalCount)
 		end
 	end
 	
@@ -56,7 +69,7 @@ function Score.new()
 	end
 	
 	function self:getScore()
-		local spread = {marvCount, perfectCount, greatCount, goodCount, badCount}
+		local spread = {self.data.marvelouses, self.data.perfects, self.data.greats, self.data.goods, self.data.bads}
 		return self:calculateTotalScore(spread)
 	end
 	
@@ -66,7 +79,6 @@ function Score.new()
 	end
 
 	function self:addHitToDeviance(hit_time_ms, time_to_end, note_result)
-		local song_length = _game._audio_manager:get_song_length_ms()
 		local to_add = {
 			x = (hit_time_ms-time_to_end)/song_length,
 			y = NumberUtil.InverseLerp(-360, 360, time_to_end),
@@ -80,46 +92,47 @@ function Score.new()
 	function self:getHitDeviance() return self.hit_deviance end
 	
 	function self:calculateTotalScore(spread)
-		local totalnotes = 1 --TODO: FIX
+		local totalnotes = note_count + (hold_count*2) -- multiply the number of hold objects by 2 to get the total number of possible judgements lol
 		local marv = 0
-		for total = 1, spread[1] do
+		for tota = 1, spread[1] do
 			marv = marv + self:resultToPointTotal(5,totalnotes)
 		end
 		local perf = 0
-		for total = 1, spread[2] do
+		for tota = 1, spread[2] do
 			perf = perf + self:resultToPointTotal(4,totalnotes)
 		end
 		local great = 0
-		for total = 1, spread[3] do
+		for tota = 1, spread[3] do
 			great = great + self:resultToPointTotal(3,totalnotes)
 		end
 		local good = 0
-		for total = 1, spread[4] do
+		for tota = 1, spread[4] do
 			good = good + self:resultToPointTotal(2,totalnotes)
 		end
 		local bad = 0
-		for total = 1, spread[5] do
+		for tota = 1, spread[5] do
 			bad = bad + self:resultToPointTotal(1,totalnotes)
 		end
 		return marv + perf + great + good + bad
 	end
 	
 	function self:calculateNoteScore(totalnotes,hitvalue,hitbonusvalue,hitbonus,hitpunishment)
-		local prebonus = self.bonus + hitbonus - hitpunishment
+		local prebonus = bonus + hitbonus - hitpunishment
 		if prebonus>100 then
-			self.bonus = 100
+			bonus = 100
 		elseif prebonus<0 then
-			self.bonus = 0
+			bonus = 0
 		else
-			self.bonus = prebonus
+			bonus = prebonus
 		end
 		local basescore = (maxscore * 0.5 / totalnotes) * (hitvalue / 320)
-		local bonusscore = (maxscore * 0.5 / totalnotes) * (hitbonusvalue * math.sqrt(self.bonus) / 320)
+		local bonusscore = (maxscore * 0.5 / totalnotes) * (hitbonusvalue * math.sqrt(bonus) / 320)
 		local score = basescore + bonusscore
 		return score
 	end
 
 	function self:resultToPointTotal(note_result,totalnotes)
+		local totalCount = getTotalCount()
 		if note_result == 5 then
 			return self:calculateNoteScore(totalnotes,320,32,2,0)
 		elseif note_result == 4 then
@@ -144,66 +157,34 @@ function Score.new()
 	function self:registerHit(note_result)
 		SPUtil:spawn(function()
 			local _add_to_devaince = true
-			
-			--Incregertment stats
-			if note_result == 5 then
-				chain = chain + 1
-				marvCount = marvCount + 1
-			elseif note_result == 4 then
-				chain = chain + 1
-				perfectCount = perfectCount + 1
-			elseif note_result == 3 then
-				chain = chain + 1
-				greatCount =  greatCount + 1
-			elseif note_result == 2 then
-				chain = chain + 1
-				goodCount = goodCount + 1
-			elseif note_result == 1 then
-				badCount = badCount + 1
-			else
-				chain = 0
-				missCount = missCount + 1
-			end
 
-			-- if _add_to_devaince then
-			-- 	self:addHitToDeviance(params.HitTime, params.TimeToEnd, note_result)
-			-- end
+			if note_result == 5 then
+				self.inGameData.chain = self.inGameData.chain + 1
+				self.data.marvelouses = self.data.marvelouses + 1
+			elseif note_result == 4 then
+				self.inGameData.chain = self.inGameData.chain + 1
+				self.data.perfects = self.data.perfects + 1
+			elseif note_result == 3 then
+				self.inGameData.chain = self.inGameData.chain + 1
+				self.data.greats =  self.data.greats + 1
+			elseif note_result == 2 then
+				self.inGameData.chain = self.inGameData.chain + 1
+				self.data.goods = self.data.goods + 1
+			elseif note_result == 1 then
+				self.data.bads = self.data.bads + 1
+			else
+				self.inGameData.chain = 0
+				self.data.misses = self.data.misses + 1
+			end
 			
 			local totalnotes = 500
-			self.score = self.score + self:resultToPointTotal(note_result,totalnotes)
+			self.data = self.data + self:resultToPointTotal(note_result,totalnotes)
 			
-			maxChain = math.max(chain,maxChain)
+			self.data.maxChain = math.max(self.inGameData.chain, self.data.maxChain)
 
 			self.mostRecentJudgement = note_result
-			self.stats:change(self:getStatTable())
 		end)
 	end
-
-	function self:getStatTable()
-		local marv_count, perf_count, great_count, good_count, bad_count, miss_count, max_combo, score = self:getEndRecords()
-		local combo = self:getChain()
-		local accuracy = self:getAccuracy()
-
-		return {
-			score = score;
-			marvelouses = marv_count;
-			perfects = perf_count;
-			greats = great_count;
-			goods = good_count;
-			bads = bad_count;
-			misses = miss_count;
-			combo = combo;
-			accuracy = accuracy;
-			max_combo = max_combo;
-			most_recent = self.mostRecentJudgement;
-		}
-	end
-
-	function self:update(dt_scale)
-		_frame_has_played_sfx = false
-	end
-
-	self.stats = Bindable:new(self:getStatTable())
 
 	return self
 end
