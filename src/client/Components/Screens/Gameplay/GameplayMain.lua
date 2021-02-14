@@ -13,7 +13,7 @@ local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.R
 local Combo = require(script.Parent.Combo)
 local Playfield2D = require(script.Parent.Playfield2D)
 -- local Playfield3D = require(script.Parent.Playfield3D)
--- local Judgement = require(script.Parent.Judgement)
+local Judgement = require(script.Parent.Judgement)
 -- local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 -- local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
@@ -41,10 +41,10 @@ function GameplayMain:init()
     self.doHitDeviance = self.props.doHitDeviance
 
     self.keybinds = {
-        Enum.KeyCode.V;
-        Enum.KeyCode.B;
-        Enum.KeyCode.KeypadOne;
-        Enum.KeyCode.KeypadTwo;
+        self.props.settings.Keybind1;
+        self.props.settings.Keybind2;
+        self.props.settings.Keybind3;
+        self.props.settings.Keybind4;
     }
 
     self.currentAudioTime = 0
@@ -68,20 +68,22 @@ function GameplayMain:init()
             most_recent = 0;
         };
         hitObjects = {};
+        mostRecentJudgement = 0;
     })
     
     local function onNoteJudged(judgement, timeLeft)
-        -- print(judgement)
+        self:setState({
+            mostRecentJudgement = judgement;
+        })
     end
 
     self.notePool = Engine.NotePool.new({
-        scrollSpeed = self.props.settings.scrollSpeed;
+        scrollSpeed = self.props.settings.NoteSpeed;
         onNoteJudged = onNoteJudged;
         songKey = self.props.selectedSongKey;
     })
 
     self.onPress = function(track)
-        print(track)
         self.notePool:pressAgainst(track)
     end
 
@@ -192,6 +194,10 @@ function GameplayMain:render()
         });
        Playfield = Roact.createElement(Playfield2D, {
            hitObjects = self.state.hitObjects;
+       });
+       Judgement = Roact.createElement(Judgement, {
+           judgement = self.state.mostRecentJudgement;
+           ZIndex = 14;
        })
     });
 end

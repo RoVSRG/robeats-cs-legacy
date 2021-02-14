@@ -202,7 +202,6 @@ function NotePool.new(props)
         local candidate = self:getCandidate(lane)
         if candidate then
             if candidate.type == 1 then
-                print(candidate.lane, "<< lol")
                 self:pressAgainstSingleNote(candidate)
             elseif candidate.type == 2 then
                 self:pressAgainstHoldNote(candidate)

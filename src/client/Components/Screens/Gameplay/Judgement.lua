@@ -43,6 +43,7 @@ function Judgement:render()
         Font = Enum.Font.GothamBold;
         BackgroundTransparency = 1;
         AnchorPoint = Vector2.new(0.5, 0.5);
+        ZIndex = self.props.ZIndex;
     }, {
         UITextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
             MinTextSize = 14;

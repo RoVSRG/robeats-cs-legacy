@@ -32,6 +32,8 @@ function Score.new(props)
 		score = 0;
 	}
 
+	self.mostRecentJudgement = 0
+
 	local function getTotalCount()
 		return self.data.marvelouses + self.data.perfects +  self.data.greats + self.data.goods + self.data.bads + self.data.misses
 	end
