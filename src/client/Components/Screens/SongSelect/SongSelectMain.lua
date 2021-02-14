@@ -229,17 +229,7 @@ function SongSelectUI:render()
                     OnActivated = function()
                         self.props.history:push("/settings")
                     end
-                },
-
-                {
-                    Text = "Multiplayer",
-                    OnActivated = noop
-                    --[[if
-                    OnActivated = function()
-                        self.props.history:push("/multiplayer")
-                    end
-                    ]]
-                },
+                }
             }
         })
     })
