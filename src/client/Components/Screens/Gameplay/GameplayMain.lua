@@ -4,7 +4,7 @@ local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local Engine = require(script.Parent.Engine)
 
-local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+-- local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 local Score = require(script.Parent.Score)
 local Accuracy = require(script.Parent.Accuracy)
@@ -12,13 +12,11 @@ local TimeLeft = require(script.Parent.TimeLeft)
 local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.Results.SpreadDisplay)
 local Combo = require(script.Parent.Combo)
 local Playfield2D = require(script.Parent.Playfield2D)
-local Playfield3D = require(script.Parent.Playfield3D)
-local Judgement = require(script.Parent.Judgement)
-local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
-
-local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
+-- local Playfield3D = require(script.Parent.Playfield3D)
+-- local Judgement = require(script.Parent.Judgement)
+-- local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
-local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
+-- local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
@@ -73,7 +71,7 @@ function GameplayMain:init()
     })
     
     local function onNoteJudged(judgement, timeLeft)
-        print(judgement)
+        -- print(judgement)
     end
 
     self.notePool = Engine.NotePool.new({
@@ -83,6 +81,7 @@ function GameplayMain:init()
     })
 
     self.onPress = function(track)
+        print(track)
         self.notePool:pressAgainst(track)
     end
 

@@ -8,7 +8,7 @@ local GameplayApp = Story:new()
 
 function GameplayApp:render()
     return Roact.createElement(GameplayMain, {
-        selectedSongKey = 89;
+        selectedSongKey = 1;
         settings = {
             volume = 100;
             scrollSpeed = 29;

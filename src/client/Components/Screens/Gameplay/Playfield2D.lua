@@ -9,6 +9,10 @@ local Hold = require(script.Parent.NoteTypes["2D"].Hold)
 
 local Playfield2D = Roact.Component:extend("Playfield2D")
 
+Playfield2D.defaultProps = {
+    XOffset = 0.2;
+}
+
 function Playfield2D:init()
     self.motor = Flipper.SingleMotor.new(0)
     self.motorBinding = RoactFlipper.getBinding(self.motor)
@@ -52,7 +56,7 @@ function Playfield2D:render()
     }, {
         Receptors = Roact.createElement("Frame", {
             Size = UDim2.new(1, 0, 0.2, 0);
-            Position = UDim2.new(0, 0, 1-(self.props.XOffset or self.DEFAULT_X_OFFSET), 0);
+            Position = UDim2.new(0, 0, 1-self.props.XOffset, 0);
             AnchorPoint = Vector2.new(0, 1);
             BackgroundTransparency = self.props.receptorBackgroundTransparency or 1;
         }, {

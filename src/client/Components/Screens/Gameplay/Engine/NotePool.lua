@@ -25,15 +25,25 @@ function NotePool.new(props)
     self.hitData = SongDatabase:get_hit_objects_for_key(props.songKey, props.rate)
     self.index = 1
     self.currentAudioTime = -5000
-    self.scrollSpeed = props.scrollSpeed
+    self.scrollSpeed = ScrollSpeed(props.scrollSpeed)
     self.hitObjects = SPList:new()
+
+    function self:removeNoteWithId(id)
+        for i = 1, self.hitObjects:count() do
+            if self.hitObjects:get(i).poolId == id then
+                self.hitObjects:remove_at(i)
+                return
+            end
+        end
+    end
 
     function self:update(currentAudioTime)
         self.currentAudioTime = currentAudioTime
-        self:checkNewNotes()
+
         self:cleanUpRemovingNotes()
+        self:checkNewNotes()
         self:updateNotes()
-        self:handleReplay()
+        --self:handleReplay()
     end
 
     function self:checkNewNotes()
@@ -84,18 +94,22 @@ function NotePool.new(props)
         self.hitObjects:push_back(HitObject:new(props))
     end
 
-    function self:getCandidate(track)
+    function self:getCandidate(lane)
         local hitObjects = Llama.List.copy(self.hitObjects._table)
 
-        table.sort(hitObjects, function(a, b)
+        local hitObjectsLane = {}
+        
+        for _, hitObject in ipairs(hitObjects) do
+            if hitObject.lane == lane then
+                table.insert(hitObjectsLane, #hitObjectsLane+1, hitObject)
+            end
+        end
+
+        table.sort(hitObjectsLane, function(a, b)
             return a.pressTime < b.pressTime
         end)
 
-        for _, hitObject in ipairs(hitObjects) do
-            if hitObject.track == track then
-                return hitObject
-            end
-        end
+        return hitObjectsLane[1]
     end
 
     function self:cleanUpRemovingNotes()
@@ -139,7 +153,7 @@ function NotePool.new(props)
         local judgement = candidate:currentPressJudgement().judgement
         if judgement ~= 0 then
             props.onNoteJudged(judgement)
-            self.hitObjects:remove_at(1)
+            self:removeNoteWithId(candidate.poolId)
         end
     end
     
@@ -157,10 +171,10 @@ function NotePool.new(props)
             if nextObject then
                 local nextObjectJudgement = nextObject:currentPressJudgement().judgement
                 if nextObjectJudgement ~= 0 then
-                    self.hitObjects:remove_at(1)
+                    self:removeNoteWithId(candidate.poolId)
                     props.onNoteJudged(0)
                     if nextObject.type == 1 then
-                        self.hitObjects:remove_at(1)
+                        self:removeNoteWithId(candidate.poolId)
                     else
                         nextObject.headPressed = true
                     end
@@ -175,8 +189,7 @@ function NotePool.new(props)
         local judgement = candidate:currentReleaseJudgement().judgement
         if judgement ~= 0 then
             props.onNoteJudged(judgement)
-            self.hitObjects:remove_at(1)
-            self.hitsound:playHitsound(1)
+            self:removeNoteWithId(candidate.poolId)
         else
             if (not candidate.releasedEarly) and candidate.headPressed then
                 candidate.releasedEarly = true
@@ -185,10 +198,11 @@ function NotePool.new(props)
         end
     end
 
-    function self:pressAgainst(track)
-        local candidate = self:getCandidate(track)
+    function self:pressAgainst(lane)
+        local candidate = self:getCandidate(lane)
         if candidate then
             if candidate.type == 1 then
+                print(candidate.lane, "<< lol")
                 self:pressAgainstSingleNote(candidate)
             elseif candidate.type == 2 then
                 self:pressAgainstHoldNote(candidate)
@@ -196,8 +210,8 @@ function NotePool.new(props)
         end 
     end
 
-    function self:releaseAgainst(track)
-        local candidate = self:getCandidate(track)
+    function self:releaseAgainst(lane)
+        local candidate = self:getCandidate(lane)
         if candidate then
             if candidate.type == 2 then
                 self:releaseAgainstHoldNote(candidate)
