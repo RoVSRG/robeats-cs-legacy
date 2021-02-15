@@ -1,4 +1,4 @@
-local Roact = require(gaame.ReplicatedStorage.Libraries.Roact)
+local Roact = require(game.ReplicatedStorage.Libraries.Roact)
 
 local Note2D = require(script.Parent.NoteTypes["2D"].Note)
 local Note3D = require(script.Parent.NoteTypes["3D"].Note)
