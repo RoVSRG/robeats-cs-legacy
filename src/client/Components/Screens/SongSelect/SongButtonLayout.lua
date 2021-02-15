@@ -18,9 +18,10 @@ local SongButtonLayout = Roact.Component:extend("SongButtonLayout")
 ]]
 
 function SongButtonLayout:init()
+    self._songbuttons = {}
+    self._list_layout_ref = Roact.createRef()
     self:setState({
         search = "";
-        numberFound = 0
     })
     self.on_button_click = self.props.on_button_click
 
