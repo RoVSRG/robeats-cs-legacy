@@ -22,6 +22,7 @@ function SongButtonLayout:init()
     self._list_layout_ref = Roact.createRef()
     self:setState({
         search = "";
+        numberFound =  0;
     })
     self.on_button_click = self.props.on_button_click
 
@@ -47,6 +48,24 @@ function SongButtonLayout:search(search, _songkey)
 
     return found == #search
 end
+
+-- function SongButtonLayout:renderableButtons()
+--     local _buttons = {}
+    
+--     for key_itr, itr_data in pairs(self.props.songs) do
+--         _buttons["SongKey"..key_itr] = Roact.createElement(SongButton, {
+--             song_key = key_itr or 1,
+--             artist = itr_data.AudioArtist,
+--             title = itr_data.AudioFilename,
+--             difficulty = itr_data.AudioDifficulty,
+--             image = itr_data.AudioCoverImageAssetId,
+--             on_click = self.on_button_click,
+--             visible = SongButtonLayout:search(self.state.search, key_itr)
+--         })
+--     end
+
+--     return _buttons
+-- end
 
 function SongButtonLayout:render()
     return Roact.createElement("Frame", {
