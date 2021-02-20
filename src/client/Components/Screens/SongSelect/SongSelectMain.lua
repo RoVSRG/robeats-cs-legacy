@@ -13,8 +13,6 @@ local TweenService = game:GetService("TweenService")
 
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 
-local PreviewController = require(game.ReplicatedStorage.Client.Controllers.PreviewController)
-
 local Promise = require(game.ReplicatedStorage.Libraries.Promise)
 
 local SongButtonLayout = require(game.ReplicatedStorage.Client.Components.Screens.SongSelect.SongButtonLayout)

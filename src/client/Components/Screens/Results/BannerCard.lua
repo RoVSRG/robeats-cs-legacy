@@ -50,7 +50,7 @@ end
 function BannerCard:render()
     return Roact.createElement("ImageLabel", {
         Position = self.props.Position;
-        BackgroundColor3 = Color3.fromRGB(15, 15, 15);
+        BackgroundColor3 = Color3.fromRGB(80, 76, 76);
         BorderSizePixel = 0;
         Size = self.props.Size or UDim2.new(1,0,1,0);
         ScaleType = Enum.ScaleType.Crop;
@@ -138,7 +138,7 @@ function BannerCard:render()
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
             Position = self.motorBinding:map(function(a)
-                return UDim2.new(0.1, 0, 0.25, 0):Lerp(UDim2.new(0.01, 0, 0.25, 0), a.textArtist)
+                return UDim2.new(0.1, 0, 0.3, 0):Lerp(UDim2.new(0.01, 0, 0.3, 0), a.textArtist)
             end);
             TextTransparency = self.motorBinding:map(function(a)
                 return 1-a.textArtist

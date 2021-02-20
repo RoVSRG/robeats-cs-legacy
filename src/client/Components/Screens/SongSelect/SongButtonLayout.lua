@@ -22,30 +22,32 @@ function SongButtonLayout:init()
     self._list_layout_ref = Roact.createRef()
     self:setState({
         search = "";
+        found = {};
     })
     self.on_button_click = self.props.on_button_click
 
     self.on_search_changed = function(o)
         self:setState({
             search = o.Text;
-        })     
+        })
+        self:makeSearch(o.Text) 
     end
 end
 
-function SongButtonLayout:search(search, _songkey)
-    search = search or ""
-    search = string.split(search, " ")
+function SongButtonLayout:makeSearch(search)
+    local time = tick()
+    spawn(function()
+        SongDatabase:search(search):andThen(function(found)
+            self:setState({
+                found = found
+            })
+        end)
 
-    local _to_search = SongDatabase:get_searchable_string_for_key(_songkey)
-    local found = 0
-    for i = 1, #search do
-        local search_term = search[i]
-        if string.find(_to_search:lower(), search_term:lower()) ~= nil then
-            found = found + 1
-        end
-    end
-
-    return found == #search
+        -- SongDatabase:lol():andThen(function(value)
+        --     print(value)
+        -- end)
+        print(tick()-time)
+    end)
 end
 
 function SongButtonLayout:render()
@@ -72,18 +74,16 @@ function SongButtonLayout:render()
             numberOfItems = SongDatabase:number_of_keys();
             getElementForIndex = function(i)
                 local itr_data = SongDatabase:get_data_for_key(i)
-                if self:search(self.state.search, i) then
-                    return Roact.createElement(SongButton, {
-                        song_key = i or 1,
-                        artist = itr_data.AudioArtist,
-                        title = itr_data.AudioFilename,
-                        difficulty = itr_data.AudioDifficulty,
-                        image = itr_data.AudioCoverImageAssetId,
-                        on_click = self.on_button_click,
-                        index = i,
-                        LayoutOrder = i
-                    })
-                end
+                return Roact.createElement(SongButton, {
+                    song_key = i or 1,
+                    artist = itr_data.AudioArtist,
+                    title = itr_data.AudioFilename,
+                    difficulty = itr_data.AudioDifficulty,
+                    image = itr_data.AudioCoverImageAssetId,
+                    on_click = self.on_button_click,
+                    index = i,
+                    LayoutOrder = i
+                })
             end,
         }),
         SearchBar = Roact.createElement("Frame", {

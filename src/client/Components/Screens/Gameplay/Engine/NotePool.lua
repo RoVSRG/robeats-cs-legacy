@@ -206,7 +206,7 @@ function NotePool.new(props)
             elseif candidate.type == 2 then
                 self:pressAgainstHoldNote(candidate)
             end
-        end 
+        end
     end
 
     function self:releaseAgainst(lane)

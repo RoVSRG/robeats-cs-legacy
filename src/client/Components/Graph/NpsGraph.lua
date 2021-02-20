@@ -9,6 +9,31 @@ local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local NpsGraph = Roact.Component:extend("NpsGraph")
 
+function NpsGraph:getPointColor(nps)
+    local x = 0
+    if nps < 7 then
+        x = nps/7
+        return Color3.new(0.1 + x * 0.1, 0.1 + x * 0.1, 0.8 + x * 0.2)
+    elseif nps < 14 then
+        x = (nps - 7)/7
+        return Color3.new(0.2 + 0.4 * x, 0.2 + 0.2 * x, 1.0)
+    elseif nps < 21 then
+        x = (nps - 14)/7
+        return Color3.new(0.6 + 0.4 * x, 0.4 - 0.2 * x, 1.0 - 0.3 * x)
+    elseif nps < 28 then
+        x = (nps - 21)/7
+        return Color3.new(1.0, 0.2 + 0.2 * x, 0.7 - 0.5 * x)
+    elseif nps < 35 then
+        x = (nps - 28)/7
+        return Color3.new(1.0, 0.4 - 0.3 * x, 0.2 - 0.15 * x)
+    elseif nps < 42 then
+        x = (nps - 35)/7
+        return Color3.new(1.0- 0.3 * x, 0.1 - x * 0.1, 0.05 - 0.05 * x)
+    else
+        return Color3.new(0.7, 0.0, 0.0)
+    end
+end
+
 function NpsGraph:init()
     self.motor = Flipper.SingleMotor.new(0);
     self.motorBinding = RoactFlipper.getBinding(self.motor)
@@ -47,13 +72,12 @@ function NpsGraph:render()
     end
 
     for i, nps in pairs(nps_graph) do
-        local _h = 242*(SPUtil:tra(math.clamp(nps/38, 0, 1)))
         elements[i] = Roact.createElement("Frame", {
             Size = UDim2.new(1/#nps_graph, 0, nps/(max_nps+5));
             BackgroundTransparency = self.motorBinding:map(function(a)
                 return 1 - NumberUtil.Lerp(1-(i/#nps_graph), 1, a)
             end);
-            BackgroundColor3 = Color3.fromHSV(_h/360, 0.88, 1);
+            BackgroundColor3 = self:getPointColor(nps);
             BorderSizePixel = 0;
             ZIndex = 1;
             Position = self.motorBinding:map(function(a)

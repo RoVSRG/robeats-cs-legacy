@@ -43,11 +43,11 @@ function ResultsScreenMain:render()
 		Size = UDim2.new(1, 0, 1, 0);
 	}, {
 		HitGraph = Roact.createElement(DotGraph, {
-			AnchorPoint = Vector2.new(1, 1),
+			AnchorPoint = Vector2.new(0, 1),
 			BackgroundColor3 = Color3.fromRGB(25, 25, 25),
 			BorderSizePixel = 0,
-			Position = UDim2.new(0.99, 0, 0.98, 0),
-			Size = UDim2.new(0.485, 0, 0.5, 0),
+			Position = UDim2.new(0.05,0,0.9,0),
+			Size = UDim2.new(0.4,0,0.35,0),
 			bounds = {
 				min = {
 					y = -350;
@@ -62,9 +62,9 @@ function ResultsScreenMain:render()
 			points = self.props.stats.hit_deviance;
 		}),
 		SpreadDisplay = Roact.createElement(SpreadDisplay, {
-			AnchorPoint = Vector2.new(0,1),
-			Position = UDim2.new(0.01,0,0.98,0),
-			Size = UDim2.new(0.485,0,0.5,0),
+			AnchorPoint = Vector2.new(1,1),
+			Position = UDim2.new(0.95,0,0.9,0),
+			Size = UDim2.new(0.4,0,0.35,0),
 			marvelouses = stats.marvelouses,
 			perfects = stats.perfects,
 			greats = stats.greats,

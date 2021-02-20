@@ -19,7 +19,7 @@ function GameplayApp:render()
             Keybind4 = Enum.KeyCode.KeypadEight;
         };
         data = {
-            songRate = 1;
+            songRate = 100;
         }
     })
 end

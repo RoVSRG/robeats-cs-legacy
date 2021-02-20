@@ -12,6 +12,26 @@ function PlayfieldApp:render()
             pressAlpha = 0.7;
             lane = 4;
             releaseAlpha = 0;
+            poolId = 1;
+        };
+        {
+            type = 1;
+            pressAlpha = 0.7;
+            lane = 1;
+            releaseAlpha = 0;
+            poolId = 2;
+        };
+        {
+            type = 1;
+            pressAlpha = 0.7;
+            lane = 2;
+            poolId = 3;
+        };
+        {
+            type = 1;
+            pressAlpha = 0.7;
+            lane = 3;
+            poolId = 4;
         };
     }
     return Roact.createElement(Playfield, {

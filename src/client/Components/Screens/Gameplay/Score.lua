@@ -31,12 +31,12 @@ function Score:render()
         end);
         TextColor3 = Color3.fromRGB(255, 255, 255),
         TextScaled = true,
-        TextSize = 26,
+        TextSize = 40,
         TextWrapped = true,
         TextXAlignment = Enum.TextXAlignment.Right,
     }, {
         Roact.createElement("UITextSizeConstraint", {
-            MaxTextSize = 32,
+            MaxTextSize = 50,
             MinTextSize = 20,
         })
     })

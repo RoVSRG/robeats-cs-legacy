@@ -6,6 +6,11 @@ local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
 local Button = Roact.Component:extend("Button")
 
+Button.defaultProps = {
+    backgroundTransparency = 0;
+    transparencyBy = 1;
+}
+
 local function noop() end
 
 function Button:init()
@@ -50,7 +55,9 @@ function Button:render()
         Font = Enum.Font.GothamSemibold;
         Text = self.props.Text;
         TextSize = self.props.TextSize;
-        BackgroundTransparency = self.props.BackgroundTransparency;
+        BackgroundTransparency = self.motorBinding:map(function(a)
+            return self.props.backgroundTransparency + (self.props.transparencyBy*a.tap)
+        end);
         BackgroundColor3 = self.motorBinding:map(function(a)
             local c = Color3.new(a.colorR, a.colorG, a.colorB);
             local db = self.props.darkenBy or 40

@@ -16,10 +16,6 @@ function Score.new(props)
 	function self:getChain() return chain end
 	
 	local bonus = 100
-	
-	self.inGameData = {
-		chain = 0;
-	}
 
 	self.data = {
 		marvelouses = 0;
@@ -30,9 +26,9 @@ function Score.new(props)
 		misses = 0;
 		maxChain = 0;
 		score = 0;
+		chain = 0;
+		accuracy = 0;
 	}
-
-	self.mostRecentJudgement = 0
 
 	local function getTotalCount()
 		return self.data.marvelouses + self.data.perfects +  self.data.greats + self.data.goods + self.data.bads + self.data.misses
@@ -80,12 +76,12 @@ function Score.new(props)
 		return self:calculateTotalScore(spread)
 	end
 
-	function self:addHitToDeviance(hit_time_ms, time_to_end, note_result)
+	function self:addHitToDeviance(hit_time_ms, time_to_end, noteResult)
 		local to_add = {
 			x = (hit_time_ms-time_to_end)/song_length,
 			y = NumberUtil.InverseLerp(-360, 360, time_to_end),
-			result = note_result;
-			color = hit_color[note_result];
+			result = noteResult;
+			color = hit_color[noteResult];
 		}
 
 		self.hit_deviance[#self.hit_deviance+1] = to_add
@@ -133,17 +129,17 @@ function Score.new(props)
 		return score
 	end
 
-	function self:resultToPointTotal(note_result,totalnotes)
+	function self:resultToPointTotal(noteResult,totalnotes)
 		local totalCount = getTotalCount()
-		if note_result == 5 then
+		if noteResult == 5 then
 			return self:calculateNoteScore(totalnotes,320,32,2,0)
-		elseif note_result == 4 then
+		elseif noteResult == 4 then
 			return self:calculateNoteScore(totalnotes,300,32,1,0)
-		elseif note_result == 3 then
+		elseif noteResult == 3 then
 			return self:calculateNoteScore(totalnotes,200,16,0,8)
-		elseif note_result == 2 then
+		elseif noteResult == 2 then
 			return self:calculateNoteScore(totalnotes,100,8,0,24)
-		elseif note_result == 1 then
+		elseif noteResult == 1 then
 			return self:calculateNoteScore(totalnotes,50,4,0,44)
 		else
 			if totalCount > 0 then
@@ -156,36 +152,33 @@ function Score.new(props)
 
 	local _frame_has_played_sfx = false
 
-	function self:registerHit(note_result)
-		SPUtil:spawn(function()
-			local _add_to_devaince = true
+	function self:registerHit(noteResult)
+		local _add_to_devaince = true
 
-			if note_result == 5 then
-				self.inGameData.chain = self.inGameData.chain + 1
-				self.data.marvelouses = self.data.marvelouses + 1
-			elseif note_result == 4 then
-				self.inGameData.chain = self.inGameData.chain + 1
-				self.data.perfects = self.data.perfects + 1
-			elseif note_result == 3 then
-				self.inGameData.chain = self.inGameData.chain + 1
-				self.data.greats =  self.data.greats + 1
-			elseif note_result == 2 then
-				self.inGameData.chain = self.inGameData.chain + 1
-				self.data.goods = self.data.goods + 1
-			elseif note_result == 1 then
-				self.data.bads = self.data.bads + 1
-			else
-				self.inGameData.chain = 0
-				self.data.misses = self.data.misses + 1
-			end
-			
-			local totalnotes = 500
-			self.data = self.data + self:resultToPointTotal(note_result,totalnotes)
-			
-			self.data.maxChain = math.max(self.inGameData.chain, self.data.maxChain)
-
-			self.mostRecentJudgement = note_result
-		end)
+		if noteResult == 5 then
+			self.data.chain = self.data.chain + 1
+			self.data.marvelouses = self.data.marvelouses + 1
+		elseif noteResult == 4 then
+			self.data.chain = self.data.chain + 1
+			self.data.perfects = self.data.perfects + 1
+		elseif noteResult == 3 then
+			self.data.chain = self.data.chain + 1
+			self.data.greats =  self.data.greats + 1
+		elseif noteResult == 2 then
+			self.data.chain = self.data.chain + 1
+			self.data.goods = self.data.goods + 1
+		elseif noteResult == 1 then
+			self.data.bads = self.data.bads + 1
+		else
+			self.data.chain = 0
+			self.data.misses = self.data.misses + 1
+		end
+		
+		local totalnotes = 500 --ok someoENee fix this lol
+		self.data.score = self.data.score + self:resultToPointTotal(noteResult,totalnotes)
+		self.data.accuracy = self:getAccuracy()
+		self.data.maxChain = math.max(self.data.chain, self.data.maxChain)
+		return self.data
 	end
 
 	return self

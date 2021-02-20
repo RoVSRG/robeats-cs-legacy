@@ -16,7 +16,7 @@ end
 function Hold:render()
     return Roact.createFragment({
         Press = Roact.createElement(Note, {
-            Image = "rbxassetid://5571834044";
+            Image = self.props.Image;
             lane = self.props.lane;
             alpha = self.props.alpha;
             numberOfLanes = 4;

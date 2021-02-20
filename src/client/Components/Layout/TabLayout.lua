@@ -6,7 +6,7 @@ local TabLayout = Roact.Component:extend("TabLayout")
 
 function TabLayout:render()
     local _buttons = {}
-    local num = self.props.totalButtons and self.props.totalButtons or math.max(5, #self.props.buttons)
+    local num = self.props.totalButtons and self.props.totalButtons or math.max(9, #self.props.buttons)
     for i, v in pairs(self.props.buttons) do
         _buttons[i] = Roact.createElement(Button, {
             Size = UDim2.new((1/num)*(1-(num*0.01)),0,0.8,0);
@@ -15,14 +15,16 @@ function TabLayout:render()
             TextColor3 = Color3.fromRGB(255, 255, 255);
             Font = Enum.Font.GothamBold;
             BackgroundColor3 = v.Color or Color3.fromRGB(40,40,40);
-            shrinkBy = -0.02;
+            backgroundTransparency = 1;
+            shrinkBy = 0;
             darkenBy = 20;
+            transparencyBy = -1;
             onActivated = v.OnActivated;
             onPress = v.onPress;
             onRelease = v.onRelease;
         }, {
             TextSizeConstraint = Roact.createElement("UITextSizeConstraint", {
-                MaxTextSize = 20;
+                MaxTextSize = 16;
                 MinTextSize = 12;
             })
         })

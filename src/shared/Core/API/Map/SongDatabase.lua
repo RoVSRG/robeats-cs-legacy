@@ -176,6 +176,37 @@ function SongDatabase:new()
 			data.AudioDifficulty
 		)
 	end
+
+	function self:search(search)
+		assert(search ~= nil, "Search must not be nil")
+		return Promise.new(function(resolve)
+			local foundKeys = {}
+			for i = 1, self:number_of_keys() do
+				local searchableString = self:get_searchable_string_for_key(i)
+				local splSearch = string.split(search, " ")
+
+				local found = 0
+				for itr = 1, #splSearch do
+					local search_term = splSearch[itr]
+					if string.find(searchableString:lower(), search_term:lower()) ~= nil then
+						found = found + 1
+					end
+				end
+
+				if found == #search then
+					table.insert(foundKeys, i)
+				end
+			end
+			resolve(foundKeys)
+		end)
+	end
+
+	function self:lol()
+		return Promise.new(function(resolve)
+			wait(2)
+			resolve("XD")
+		end)
+	end
 	
 	function self:number_of_keys() return #SongMapList end
 	function self:invalid_songkey() return -1 end

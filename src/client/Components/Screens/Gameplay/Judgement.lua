@@ -9,9 +9,6 @@ local function judgement(name, color)
 end
 
 function Judgement:init()
-    self.motor = Flipper.SingleMotor.new(0)
-    self.motorBinding = RoactFlipper.getBinding(self.motor)
-
     self.judgements = {
         [0] = judgement("Miss!", Color3.fromRGB(255, 0, 0));
         [1] = judgement("Bad", Color3.fromRGB(121, 35, 219));
@@ -22,21 +19,14 @@ function Judgement:init()
     }
 end
 
-function Judgement:didUpdate()
-    self.motor:setGoal(Flipper.Instant.new(0))
-    self.motor:step(0)
-    self.motor:setGoal(Flipper.Spring.new(1, {
-        frequency = 10;
-        dampingRatio = 2.5;
-    }))
+function Judgement:shouldUpdate(previousProps)
+    return self.props.judgement ~= previousProps.judgement
 end
 
 function Judgement:render()
     return Roact.createElement("TextLabel", {
         Size = UDim2.new(0.4, 0, 0.15, 0);
-        Position = self.motorBinding:map(function(a)
-            return UDim2.new(0.5, 0, 0.59, a*20)
-        end);
+        Position = UDim2.new(0.5, 0, 0.59, 20);
         Text = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].name;
         TextColor3 = self.judgements[self.props.judgement] and self.judgements[self.props.judgement].color;
         TextScaled = true;

@@ -1,22 +1,25 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
+local Llama = require(game.ReplicatedStorage.Libraries.Llama)
 local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
 local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local Engine = require(script.Parent.Engine)
 
--- local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
+local SongDatabase = require(game.ReplicatedStorage.Shared.Core.API.Map.SongDatabase)
 
 local Score = require(script.Parent.Score)
 local Accuracy = require(script.Parent.Accuracy)
 local TimeLeft = require(script.Parent.TimeLeft)
 local SpreadDisplay = require(game.ReplicatedStorage.Client.Components.Screens.Results.SpreadDisplay)
 local Combo = require(script.Parent.Combo)
-local Playfield2D = require(script.Parent.Playfield2D)
+local Playfield = require(script.Parent.Playfield)
 -- local Playfield3D = require(script.Parent.Playfield3D)
 local Judgement = require(script.Parent.Judgement)
 -- local TabLayout = require(script.Parent.Parent.Parent.Layout.TabLayout)
 local NumberUtil = require(game.ReplicatedStorage.Shared.Utils.NumberUtil)
 -- local ConditionalReturn = require(game.ReplicatedStorage.Shared.Utils.ConditionalReturn)
+
+local Audio = require(game.ReplicatedStorage.Shared.Core.API.Audio)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.Utils.SPUtil)
 
@@ -32,24 +35,31 @@ end
 function GameplayMain:init()
 	self.motor = Flipper.SingleMotor.new(0)
     self.motorBinding = RoactFlipper.getBinding(self.motor)
-
+    
     self.backOut = function()
         self.props.history:push("/results")
     end
-
+    
     self.doStats = self.props.doStats
     self.doHitDeviance = self.props.doHitDeviance
-
+    
     self.keybinds = {
         self.props.settings.Keybind1;
         self.props.settings.Keybind2;
         self.props.settings.Keybind3;
         self.props.settings.Keybind4;
     }
+    
+    self.audioChannel = Audio.channel("gameplay")
 
-    self.currentAudioTime = 0
+    self.audioChannel.SoundId = SongDatabase:get_data_for_key(self.props.selectedSongKey).AudioAssetId
 
-    self.scoreManager = Engine.Score.new({
+    local offset = SongDatabase:get_data_for_key(self.props.selectedSongKey).AudioOffset
+
+    self.currentAudioTime = -5
+    self.timeLength = SongDatabase:get_song_length_for_key(self.props.selectedSongKey)
+
+    self.score = Engine.Score.new({
         songKey = self.props.selectedSongKey;
     });
 
@@ -64,23 +74,28 @@ function GameplayMain:init()
 			misses = 0;
 			combo = 0;
 			accuracy = 0;
-            max_combo = 0;
-            most_recent = 0;
+            maxCombo = 0;
         };
         hitObjects = {};
+        timeLeft = 0;
         mostRecentJudgement = 0;
     })
     
     local function onNoteJudged(judgement, timeLeft)
-        self:setState({
-            mostRecentJudgement = judgement;
-        })
+        local scoreData = self.score:registerHit(judgement)
+        self:setState(function(state)
+            return {
+                stats = Llama.Dictionary.join(state.stats, scoreData);
+                mostRecentJudgement = judgement
+            }
+        end)
     end
 
     self.notePool = Engine.NotePool.new({
         scrollSpeed = self.props.settings.NoteSpeed;
         onNoteJudged = onNoteJudged;
         songKey = self.props.selectedSongKey;
+        rate = self.props.data.songRate / 100;
     })
 
     self.onPress = function(track)
@@ -117,8 +132,13 @@ function GameplayMain:init()
         self.currentAudioTime += dt
         self.notePool:update(self.currentAudioTime*1000)
 
+        if self.currentAudioTime > (offset or 0) and not self.audioChannel.IsPlaying then
+            self.audioChannel:Play()
+        end
+
         self:setState({
-            hitObjects = self.notePool:getSerialized()
+            hitObjects = self.notePool:getSerialized();
+            timeLeft = self.timeLength - (self.currentAudioTime * 1000)
         })
     end)
 
@@ -137,7 +157,7 @@ function GameplayMain:render()
             Position = self.motorBinding:map(function(a)
                 return UDim2.new(0.98*(2-a),0,0.02,0);
             end);
-            Size = UDim2.new(0.25,0,0.08,0);
+            Size = UDim2.new(0.3,0,0.09,0);
             score = self.state.stats.score
         });
         Accuracy = Roact.createElement(Accuracy, {
@@ -152,7 +172,7 @@ function GameplayMain:render()
                 return UDim2.new(0.98*(2-a),0,0.9,0);
             end);
             Size = UDim2.new(0.2,0,0.1,0);
-            time_left = self.state.stats.time_left;
+            time_left = self.state.timeLeft;
         });
         Combo = Roact.createElement(Combo, {
             Position = self.motorBinding:map(function(a)
@@ -163,10 +183,10 @@ function GameplayMain:render()
         });
         SpreadDisplay = Roact.createElement(SpreadDisplay, {
             Position = self.motorBinding:map(function(a)
-                return UDim2.new(0.98*(2-a),0,0.2,0);
+                return UDim2.new(0.02*a,0,0.2,0);
             end);
             Size = UDim2.new(0.127,0,0.3,0);
-            AnchorPoint = Vector2.new(1,0);
+            AnchorPoint = Vector2.new(0,0);
             marvelouses = self.state.stats.marvelouses;
             perfects = self.state.stats.perfects;
             greats = self.state.stats.greats;
@@ -192,7 +212,7 @@ function GameplayMain:render()
                 CornerRadius = UDim.new(0, 4),
             })
         });
-       Playfield = Roact.createElement(Playfield2D, {
+       Playfield = Roact.createElement(Playfield, {
            hitObjects = self.state.hitObjects;
        });
        Judgement = Roact.createElement(Judgement, {
@@ -203,6 +223,8 @@ function GameplayMain:render()
 end
 
 function GameplayMain:willUnmount()
+    self.audioChannel:Stop()
+
     self.everyFrame:Disconnect()
     self.onPressCon:Disconnect()
     self.onReleaseCon:Disconnect()

@@ -1,24 +1,28 @@
 local Roact = require(game.ReplicatedStorage.Libraries.Roact)
-local Flipper = require(game.ReplicatedStorage.Libraries.Flipper)
-local RoactFlipper = require(game.ReplicatedStorage.Libraries.RoactFlipper)
 
 local Receptor = require(script.Parent.Receptor)
+
+local PlayfieldMode = require(script.Parent.PlayfieldMode)
 
 local Note = require(script.Parent.NoteTypes["2D"].Note)
 local Hold = require(script.Parent.NoteTypes["2D"].Hold)
 
-local Playfield2D = Roact.Component:extend("Playfield2D")
+local Playfield = Roact.Component:extend("Playfield")
 
-Playfield2D.defaultProps = {
-    XOffset = 0.2;
+Playfield.defaultProps = {
+    mode = PlayfieldMode.TwoDimensional;
+    XOffset = 0.1;
 }
 
-function Playfield2D:init()
-    self.motor = Flipper.SingleMotor.new(0)
-    self.motorBinding = RoactFlipper.getBinding(self.motor)
+function Playfield:init()
+
 end
 
-function Playfield2D:render()
+function Playfield:render()
+    if self.props.mode ~= PlayfieldMode.TwoDimensional then
+        return nil
+    end
+
     local hitObjs = {}
 
     for _, itrHitObj in ipairs(self.props.hitObjects) do
@@ -27,7 +31,7 @@ function Playfield2D:render()
                 alpha = itrHitObj.pressAlpha;
                 numberOfLanes = 4;
                 lane = itrHitObj.lane;
-                Image = "rbxassetid://5571834044";
+                Image = "rbxassetid://6405683288";
                 rotateArrow = true;
                 playfield = self.playfield3D;
                 poolId = itrHitObj.poolId;
@@ -39,7 +43,7 @@ function Playfield2D:render()
                 releaseAlpha = itrHitObj.releaseAlpha;
                 lane = itrHitObj.lane;
                 releasedEarly = itrHitObj.releasedEarly;
-                Image = "rbxassetid://5571834044";
+                Image = "rbxassetid://6405683288";
                 playfield = self.playfield3D;
                 poolId = itrHitObj.poolId;
             })
@@ -61,32 +65,24 @@ function Playfield2D:render()
             BackgroundTransparency = self.props.receptorBackgroundTransparency or 1;
         }, {
             Receptora = Roact.createElement(Receptor, {
-                Image = "rbxassetid://5571834044";
+                Image = "rbxassetid://6405686835";
                 lane = 1;
                 numberOfLanes = 4;
-                keyToDarken = Enum.KeyCode.G;
-                rotateArrow = true;
             });
             Receptorb = Roact.createElement(Receptor, {
-                Image = "rbxassetid://5571834044";
+                Image = "rbxassetid://6405687326";
                 lane = 2;
                 numberOfLanes = 4;
-                keyToDarken = Enum.KeyCode.G;
-                rotateArrow = true;
             });
             Receptorc = Roact.createElement(Receptor, {
-                Image = "rbxassetid://5571834044";
+                Image = "rbxassetid://6405687877";
                 lane = 3;
                 numberOfLanes = 4;
-                keyToDarken = Enum.KeyCode.G;
-                rotateArrow = true;
             });
             Receptord = Roact.createElement(Receptor, {
-                Image = "rbxassetid://5571834044";
+                Image = "rbxassetid://6405688589";
                 lane = 4;
                 numberOfLanes = 4;
-                keyToDarken = Enum.KeyCode.G;
-                rotateArrow = true;
             });
         });
         HitObjs = Roact.createElement("Frame", {
@@ -97,4 +93,4 @@ function Playfield2D:render()
     })
 end
 
-return Playfield2D
+return Playfield
