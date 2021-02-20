@@ -165,7 +165,7 @@ function Score.new(props)
 			self.data.chain = self.data.chain + 1
 			self.data.greats =  self.data.greats + 1
 		elseif noteResult == 2 then
-			self.data.chain = self.data.chain + 1
+			--self.data.chain = self.data.chain + 1
 			self.data.goods = self.data.goods + 1
 		elseif noteResult == 1 then
 			self.data.bads = self.data.bads + 1
