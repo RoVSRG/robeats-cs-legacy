@@ -72,7 +72,7 @@ function GameplayMain:init()
 			goods = 0;
 			bads = 0;
 			misses = 0;
-			combo = 0;
+			chain = 0;
 			accuracy = 0;
             maxCombo = 0;
         };
@@ -179,7 +179,7 @@ function GameplayMain:render()
                 return UDim2.new(0.5*(2-a),0,0.5,0);
             end);
             Size = UDim2.new(1,0,0.2,0);
-            combo = self.state.stats.combo;
+            combo = self.state.stats.chain;
         });
         SpreadDisplay = Roact.createElement(SpreadDisplay, {
             Position = self.motorBinding:map(function(a)
