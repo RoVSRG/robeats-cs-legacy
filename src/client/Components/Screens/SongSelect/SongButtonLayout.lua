@@ -23,6 +23,7 @@ function SongButtonLayout:init()
     self:setState({
         search = "";
         found = {};
+        numberFound =  0;
     })
     self.on_button_click = self.props.on_button_click
 
